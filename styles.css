@@ -131,11 +131,11 @@ header h1 {
 @media (max-width: 600px) {
   header h1 {
     font-size: 1.2em;
-    margin-top: 10px;
+    margin-top: 5px;
   }
 
   header p {
-    font-size: 0.8em;
+    font-size: 1.2em;
   }
 
   /* Скрываем логотипы Sirius с левой стороны */
@@ -145,9 +145,9 @@ header h1 {
 
   /* Увеличиваем правый логотип и настраиваем его позиционирование */
   .logo {
-    height: 80px;
-    right: 10px;
-    top: 20px;
+    height: 100px;
+    right: 0px;
+    top: 40px;
   }
 
   /* Скрываем кнопку "Админка" на мобильных устройствах */
@@ -169,7 +169,7 @@ header h1 {
   }
 
   .mode-card p {
-    font-size: 0.9em;
+    font-size: 1em;
   }
 
   .fixed-buttons {
