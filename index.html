@@ -4,19 +4,22 @@
   <link rel="icon" type="image/png" href="images/favicon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Викторина по птицам</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="header">
-  <h1>Викторина по птицам</h1>
-  <p>Угадай птицу</p>
-  <div class="logo-container">
+    <h1>Викторина по птицам</h1>
+    <p>Угадайте птицу</p>
+   <div class="logo-container">
     <img src="images/sirius.jpg" alt="Логотип Sirius" class="sirius-logo">
     <img src="images/siriusnew.png" alt="Новый логотип Sirius" class="sirius-new-logo">
   </div>
-  <img src="images/IMG_541.jpg" alt="Логотип викторины" class="logo">
-  <button class="admin-button" onclick="window.location.href='admin.html'">Админка</button>
+    <img src="images/IMG_541.jpg" alt="Логотип викторины" class="logo"> <!-- Логотип справа -->
+    <button class="admin-button" onclick="window.location.href='admin.html'">Админка</button> <!-- Кнопка админки -->
+  </header>
+
   <main class="quiz-modes">
     <div class="mode-card" id="photo-quiz" tabindex="0" role="button" aria-label="Режим викторины по фотографиям">
       <img src="images/bird1.jpg" alt="Фотография птицы 1">

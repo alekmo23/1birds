@@ -20,28 +20,30 @@ header h1 {
 
 .logo {
   position: absolute;
-  right: 0px; /* Логотип викторины справа */
+  right: 0px;
   top: 50%;
   transform: translateY(-50%);
-  height: 126px; /* Увеличил размер логотипа */
+  height: 126px;
 }
-/* Контейнер для логотипов Sirius */
+
 .logo-container {
   position: absolute;
-  left: 0px; /* Размещаем контейнер слева */
+  left: 0px;
   top: 50%;
   transform: translateY(-50%);
-  display: flex; /* Используем flex для выравнивания изображений */
-  align-items: center; /* Выравниваем изображения по центру по вертикали */
-  gap: 10px; /* Расстояние между изображениями */
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
+
 .sirius-logo {
-   height: 126px; /* Увеличиваем размер логотипа */
+  height: 126px;
 }
-/* Новый логотип Sirius */
+
 .sirius-new-logo {
-  height: 126px; /* Такая же высота, как у sirius.jpg */
+  height: 126px;
 }
+
 .quiz-modes {
   display: flex;
   flex-wrap: wrap;
@@ -55,7 +57,7 @@ header h1 {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: 10px;
-  width: 320px; /* Увеличил ширину карточки */
+  width: 320px;
   text-align: center;
   padding: 20px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -70,7 +72,7 @@ header h1 {
 .mode-card img {
   width: 100%;
   border-radius: 10px;
-  height: 220px; /* Увеличил высоту изображения */
+  height: 220px;
   object-fit: cover;
 }
 
@@ -88,42 +90,6 @@ header h1 {
   margin-top: 10px;
 }
 
-  @media (max-width: 600px) {
-  .logo {
-    height: 80px; /* Уменьшаем размер логотипа */
-    right: 10px; /* Сдвигаем логотип ближе к краю */
-    top: 20px; /* Поднимаем логотип выше */
-  }
-
-  .logo-container {
-    left: 10px; /* Сдвигаем контейнер с логотипами ближе к краю */
-    top: 20px; /* Поднимаем контейнер выше */
-    gap: 5px; /* Уменьшаем расстояние между логотипами */
-  }
-
-  .sirius-logo, .sirius-new-logo {
-    height: 80px; /* Уменьшаем размер логотипов Sirius */
-  }
-
-  header h1 {
-    font-size: 1.5em; /* Уменьшаем размер заголовка */
-    margin-top: 10px; /* Добавляем отступ сверху */
-  }
-
-  header p {
-    font-size: 0.9em; /* Уменьшаем размер подзаголовка */
-  }
-
-  .admin-button {
-    top: 80px; /* Сдвигаем кнопку админки ниже */
-    right: 10px; /* Сдвигаем кнопку ближе к краю */
-    padding: 2px 20px; /* Уменьшаем размер кнопки */
-    font-size: 0.8em; /* Уменьшаем размер текста кнопки */
-  }
-}
-}
-
-/* Фиксированные кнопки */
 .fixed-buttons {
   position: fixed;
   bottom: 20px;
@@ -142,12 +108,12 @@ header h1 {
 .admin-button {
   position: absolute;
   top: 106px;
-  right: 0px; /* Перемещаем кнопку вправо */
+  right: 0px;
   padding: 2px 34px;
   background-color: #4CAF50;
   text-align: center;
   color: white;
-  border: 2px solid #a04945; /* Добавляем окантовку */
+  border: 2px solid #a04945;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
@@ -160,4 +126,65 @@ header h1 {
 
 .admin-button:active {
   transform: scale(0.98);
+}
+
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 1.2em;
+    margin-top: 10px;
+  }
+
+  header p {
+    font-size: 0.8em;
+  }
+
+  .logo {
+    height: 60px;
+    right: 10px;
+    top: 20px;
+  }
+
+  .logo-container {
+    left: 10px;
+    top: 20px;
+    gap: 5px;
+  }
+
+  .sirius-logo, .sirius-new-logo {
+    height: 60px;
+  }
+
+  .admin-button {
+    top: 80px;
+    right: 10px;
+    padding: 2px 20px;
+    font-size: 0.8em;
+  }
+
+  .mode-card {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .mode-card img {
+    height: 150px;
+  }
+
+  .mode-card h2 {
+    font-size: 1.2em;
+  }
+
+  .mode-card p {
+    font-size: 0.9em;
+  }
+
+  .fixed-buttons {
+    bottom: 10px;
+    max-width: 90%;
+  }
+
+  .fixed-buttons button {
+    padding: 6px;
+    font-size: 0.8em;
+  }
 }
