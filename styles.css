@@ -138,29 +138,21 @@ header h1 {
     font-size: 0.8em;
   }
 
-  .logo {
-    height: 60px;
-    right: 10px;
-    top: 20px;
-  }
-
+  /* Скрываем логотипы Sirius с левой стороны */
   .logo-container {
-    left: 10px;
-    top: 20px;
-    gap: 5px;
+    display: none;
   }
 
-  .sirius-logo, .sirius-new-logo {
-    height: 60px;
-  }
-.admin-button {
-    display: none; /* Скрываем кнопку "Админка" на мобильных устройствах */
-  }
-  .admin-button {
-    top: 80px;
+  /* Увеличиваем правый логотип и настраиваем его позиционирование */
+  .logo {
+    height: 80px;
     right: 10px;
-    padding: 2px 20px;
-    font-size: 0.8em;
+    top: 20px;
+  }
+
+  /* Скрываем кнопку "Админка" на мобильных устройствах */
+  .admin-button {
+    display: none;
   }
 
   .mode-card {
