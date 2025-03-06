@@ -153,7 +153,9 @@ header h1 {
   .sirius-logo, .sirius-new-logo {
     height: 60px;
   }
-
+.admin-button {
+    display: none; /* Скрываем кнопку "Админка" на мобильных устройствах */
+  }
   .admin-button {
     top: 80px;
     right: 10px;
