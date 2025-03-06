@@ -1,0 +1,134 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  text-align: center;
+  padding: 20px;
+  background-color: #4CAF50;
+  color: white;
+  position: relative;
+}
+
+header h1 {
+  margin: 0;
+  display: inline-block;
+}
+
+.logo {
+  position: absolute;
+  right: 0px; /* Логотип викторины справа */
+  top: 50%;
+  transform: translateY(-50%);
+  height: 126px; /* Увеличил размер логотипа */
+}
+/* Контейнер для логотипов Sirius */
+.logo-container {
+  position: absolute;
+  left: 0px; /* Размещаем контейнер слева */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex; /* Используем flex для выравнивания изображений */
+  align-items: center; /* Выравниваем изображения по центру по вертикали */
+  gap: 10px; /* Расстояние между изображениями */
+}
+.sirius-logo {
+   height: 126px; /* Увеличиваем размер логотипа */
+}
+/* Новый логотип Sirius */
+.sirius-new-logo {
+  height: 126px; /* Такая же высота, как у sirius.jpg */
+}
+.quiz-modes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+  gap: 20px;
+}
+
+.mode-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  width: 320px; /* Увеличил ширину карточки */
+  text-align: center;
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.mode-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.mode-card img {
+  width: 100%;
+  border-radius: 10px;
+  height: 220px; /* Увеличил высоту изображения */
+  object-fit: cover;
+}
+
+.mode-card h2 {
+  margin: 15px 0 10px;
+  font-size: 1.5em;
+}
+
+.mode-card p {
+  color: #555;
+}
+
+.mode-card audio {
+  width: 100%;
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .mode-card {
+    width: 100%;
+  }
+}
+
+/* Фиксированные кнопки */
+.fixed-buttons {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.fixed-buttons button {
+  padding: 8px;
+  font-size: 0.9em;
+}
+
+.admin-button {
+  position: absolute;
+  top: 106px;
+  right: 0px; /* Перемещаем кнопку вправо */
+  padding: 2px 34px;
+  background-color: #4CAF50;
+  text-align: center;
+  color: white;
+  border: 2px solid #a04945; /* Добавляем окантовку */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.admin-button:hover {
+  background-color: #45a049;
+  transform: scale(1.02);
+}
+
+.admin-button:active {
+  transform: scale(0.98);
+}
