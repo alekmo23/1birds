@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Случайный режим викторины</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Основные стили */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #2c3e50;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    /* Контейнеры */
+    .settings, .quiz-container, .results {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      margin-bottom: 20px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .settings:hover, .quiz-container:hover, .results:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Форма настроек */
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+      color: #34495e;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: border-color 0.3s ease;
+    }
+
+    select:focus, input:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+      transform: scale(1.02);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    /* Викторина */
+    .quiz-container img, .quiz-container audio {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .option:hover {
+      background-color: #45a049;
+      transform: translateY(-3px);
+    }
+
+    .option:active {
+      transform: translateY(0);
+    }
+
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .timer {
+      text-align: center;
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #e74c3c;
+    }
+
+    /* Результаты */
+    .results {
+      display: none;
+    }
+
+    .results h1 {
+      color: #4CAF50;
+    }
+
+    .
