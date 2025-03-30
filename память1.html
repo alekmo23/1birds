@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тренировка определения птиц</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+        }
+        .game-container {
+            display: grid;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px auto;
+        }
+        .card {
+            width: 100px;
+            height: 100px;
+            background-color: #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 24px;
+            color: white;
+            user-select: none;
+            background-size: cover;
+            background-position: center;
+        }
+        .card.flipped {
+            background-color: #FFD700;
+        }
+        .card.matched {
+            background-color: #FF6347;
+            cursor: default;
+        }
+        .player-select {
+            margin: 20px;
+        }
+        .player-select select, .player-select button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        .scores {
+            margin: 20px;
+            font-size: 20px;
+        }
+        .scores h2 {
+            margin-bottom: 10px;
+        }
+        .scores div {
+            margin: 5px 0;
+        }
+        .current-player {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF6347;
+            margin: 20px;
+        }
+        .fireworks {
+            font-size: 48px;
+            font-weight: bold;
+            color: #FF4500;
+            margin: 20px;
+            animation: salute 2s infinite;
+        }
+        @keyframes salute {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Тренировка определения птиц</h1>
+    <div class="player-select">
+        <label for="players">Количество игроков:</label>
+        <select id="players">
+            <option value="1">1 игрок</option>
+            <option value="2">2 игрока</option>
+            <option value="3">3 игрока</option>
+            <option value="4">4 игрока</option>
+        </select>
+        <label for="grid-size">Размер поля:</label>
+        <select id="grid-size">
+            <option value="6x6">6x6</option>
+            <option value="5x6">5x6</option>
+            <option value="4x6">4x6</option>
+        </select>
+        <button onclick="startGame()">Начать игру</button>
+    </div>
+    <div class="scores" id="scores">
+        <h2>Результаты</h2>
+        <div id="score-display"></div>
+    </div>
+    <div class="current-player" id="current-player"></div>
+    <div class="game-container" id="game-container"></div>
+    <div class="fireworks" id="fireworks" style="display: none;">Слава Александре!</div>
+
+    <script>
+        const imageFolder = 'images/'; // Папка с изображениями
+        const imageFiles = [
+            'bird1.jpg', 'bird2.jpg', 'bird3.jpg', 'bird4.jpg', 'bird5.jpg',
+            'bird6.jpg', 'bird7.jpg', 'bird8.jpg', 'bird9.jpg', 'bird10.jpg',
+            'bird11.jpg', 'bird12.jpg', 'bird13.jpg', 'bird14.jpg', 'bird15.jpg',
+            'bird16.jpg', 'bird17.jpg', 'bird18.jpg', 'bird19.jpg', 'bird20.jpg',
+            'bird21.jpg', 'bird22.jpg', 'bird23.jpg', 'bird24.jpg', 'bird25.jpg',
+            'bird26.jpg', 'bird27.jpg', 'bird28.jpg', 'bird29.jpg', 'bird30.jpg',
+            'bird31.jpg', 'bird32.jpg', 'bird33.jpg', 'bird34.jpg', 'bird35.jpg',
+            'bird36.jpg', 'bird37.jpg', 'bird38.jpg', 'bird39.jpg', 'bird40.jpg',
+            'bird41.jpg', 'bird42.jpg', 'bird43.jpg', 'bird44.jpg', 'bird45.jpg',
+            'bird46.jpg', 'bird47.jpg', 'bird48.jpg', 'bird49.jpg', 'bird50.jpg'
+        ]; // Список файлов изображений (до 50)
+        let cards = [];
+        let flippedCards = [];
+        let matchedCards = [];
+        let players = 1;
+        let currentPlayer = 1;
+        let scores = {};
+        let gridSize = '6x6';
+
+        function startGame() {
+            players = parseInt(document.getElementById('players').value);
+            gridSize = document.getElementById('grid-size').value;
+            currentPlayer = 1;
+            scores = {};
+            for (let i = 1; i <= players; i++) {
+                scores[i] = 0;
+            }
+            updateScores();
+            updateCurrentPlayer();
+            document.getElementById('fireworks').style.display = 'none';
+            initializeGame();
+        }
+
+        function initializeGame() {
+            const container = document.getElementById('game-container');
+            container.innerHTML = '';
+            cards = [];
+            flippedCards = [];
+            matchedCards = [];
+
+            // Определяем размеры сетки
+            const [rows, cols] = gridSize.split('x').map(Number);
+            container.style.gridTemplateColumns = `repeat(${cols}, 100px)`;
+            container.style.gridTemplateRows = `repeat(${rows}, 100px)`;
+
+            // Выбираем уникальные изображения для пар
+            const totalPairs = (rows * cols) / 2;
+            const uniqueImages = getRandomUniqueImages(totalPairs);
+
+            // Создаем пары изображений
+            let imagePairs = [];
+            for (let i = 0; i < uniqueImages.length; i++) {
+                imagePairs.push(uniqueImages[i], uniqueImages[i]); // Добавляем две одинаковые карточки для каждой пары
+            }
+            imagePairs = imagePairs.sort(() => Math.random() - 0.5); // Перемешиваем
+
+            // Создаем карточки
+            for (let i = 0; i < rows * cols; i++) {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.dataset.image = imagePairs[i];
+                card.addEventListener('click', flipCard);
+                container.appendChild(card);
+                cards.push(card);
+            }
+        }
+
+        // Функция для выбора уникальных изображений
+        function getRandomUniqueImages(count) {
+            const shuffledImages = imageFiles.sort(() => Math.random() - 0.5); // Перемешиваем изображения
+            return shuffledImages.slice(0, count); // Выбираем первые `count` уникальных изображений
+        }
+
+        function flipCard() {
+            if (flippedCards.length < 2 && !this.classList.contains('flipped') && !this.classList.contains('matched')) {
+                this.classList.add('flipped');
+                this.style.backgroundImage = `url(${imageFolder}${this.dataset.image})`;
+                flippedCards.push(this);
+
+                if (flippedCards.length === 2) {
+                    setTimeout(checkMatch, 1000);
+                }
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+
+            if (card1.dataset.image === card2.dataset.image) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedCards.push(card1, card2);
+                scores[currentPlayer] += 1;
+                updateScores();
+            } else {
+                setTimeout(() => {
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
+                    card1.style.backgroundImage = '';
+                    card2.style.backgroundImage = '';
+                }, 1000);
+                currentPlayer = currentPlayer % players + 1;
+                updateCurrentPlayer();
+            }
+
+            flippedCards = [];
+
+            if (matchedCards.length === cards.length) {
+                endGame();
+            }
+        }
+
+        function updateScores() {
+            const scoreDisplay = document.getElementById('score-display');
+            scoreDisplay.innerHTML = Object.entries(scores)
+                .map(([player, score]) => `Игрок ${player}: ${score} очков`)
+                .join('<br>');
+        }
+
+        function updateCurrentPlayer() {
+            const currentPlayerDisplay = document.getElementById('current-player');
+            currentPlayerDisplay.textContent = `Сейчас ходит: Игрок ${currentPlayer}`;
+        }
+
+        function endGame() {
+            const fireworks = document.getElementById('fireworks');
+            fireworks.style.display = 'block';
+
+            setTimeout(() => {
+                alert(`Игра окончена! Результаты:\n${Object.entries(scores).map(([player, score]) => `Игрок ${player}: ${score} очков`).join('\n')}`);
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
