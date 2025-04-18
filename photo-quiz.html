@@ -16,11 +16,6 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      transition: background-color 0.5s ease;
-    }
-
-    body.correct {
-      background-color: rgba(76, 175, 80, 0.2);
     }
 
     h1 {
@@ -93,11 +88,13 @@
 
     /* Викторина */
     .quiz-container img {
-      max-width: 100%;
-      max-height: 300px;
+      width: 500px;
+      height: 300px;
+      object-fit: cover;
       border-radius: 10px;
       margin-bottom: 20px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
     }
 
     .quiz-container audio {
@@ -202,8 +199,14 @@
       }
 
       .quiz-container img {
-        max-height: 200px;
+        width: 100%;
+        height: auto;
       }
+    }
+
+    /* Класс для правильного ответа */
+    .correct-answer {
+      background-color: rgba(76, 175, 80, 0.3);
     }
   </style>
 </head>
@@ -237,7 +240,7 @@
     <div class="progress" id="progress">Вопрос 1 из <span id="total-questions">10</span></div>
     <div class="timer" id="timer"></div>
     <img id="bird-image" src="" alt="Изображение птицы">
-    <audio id="bird-sound" controls style="display: none;"></audio>
+    <audio id="bird-audio" controls></audio>
     <div class="options" id="options"></div>
     <div class="result" id="result"></div>
   </div>
@@ -257,66 +260,66 @@
   <script>
     // Данные для викторины
     const birds = [
-     { name: "Белоглазый нырок", image: "images1/bird1.jpg", sound: "sounds1/birds/bird1.mp3" },
-{ name: "Белолобый гусь", image: "images1/bird2.jpg", sound: "sounds1/birds/bird2.mp3" },
-{ name: "Белощекая казарка", image: "images1/bird3.jpg", sound: "sounds1/birds/bird3.mp3" },
-{ name: "Белый аист", image: "images1/bird4.jpg", sound: "sounds1/birds/bird4.mp3" },
-{ name: "Большой баклан", image: "images1/bird5.jpg", sound: "sounds1/birds/bird5.mp3" },
-{ name: "Волчок (малая выпь)", image: "images1/bird6.jpg", sound: "sounds1/birds/bird6.mp3" },
-{ name: "Выпь (большая)", image: "images1/bird7.jpg", sound: "sounds1/birds/bird7.mp3" },
-{ name: "Гуменник", image: "images1/bird8.jpg", sound: "sounds1/birds/bird8.mp3" },
-{ name: "Египетская цапля", image: "images1/bird9.jpg", sound: "sounds1/birds/bird9.mp3" },
-{ name: "Желтая цапля", image: "images1/bird10.jpg", sound: "sounds1/birds/bird10.mp3" },
-{ name: "Канадская казарка", image: "images1/bird11.jpg", sound: "sounds1/birds/bird11.mp3" },
-{ name: "Каравайка", image: "images1/bird12.jpg", sound: "sounds1/birds/bird12.mp3" },
-{ name: "Колпица", image: "images1/bird13.jpg", sound: "sounds1/birds/bird13.mp3" },
-{ name: "Красноголовый нырок", image: "images1/bird14.jpg", sound: "sounds1/birds/bird14.mp3" },
-{ name: "Краснозобая гагара", image: "images1/bird15.jpg", sound: "sounds1/birds/bird15.mp3" },
-{ name: "Красноносый нырок", image: "images1/bird16.jpg", sound: "sounds1/birds/bird16.mp3" },
-{ name: "Красношейная поганка", image: "images1/bird17.jpg", sound: "sounds1/birds/bird17.mp3" },
-{ name: "Кряква", image: "images1/bird18.jpg", sound: "sounds1/birds/bird18.mp3" },
-{ name: "Кудрявый пеликан", image: "images1/bird19.jpg", sound: "sounds1/birds/bird19.mp3" },
-{ name: "Лебедь кликун", image: "images1/bird20.jpg", sound: "sounds1/birds/bird20.mp3" },
-{ name: "Лебедь шипун", image: "images1/bird21.jpg", sound: "sounds1/birds/bird21.mp3" },
-{ name: "Малая белая цапля", image: "images1/bird22.jpg", sound: "sounds1/birds/bird22.mp3" },
-{ name: "Малая поганка", image: "images1/bird23.jpg", sound: "sounds1/birds/bird23.mp3" },
-{ name: "Малый баклан", image: "images1/bird24.jpg", sound: "sounds1/birds/bird24.mp3" },
-{ name: "Морская чернеть", image: "images1/bird25.jpg", sound: "sounds1/birds/bird25.mp3" },
-{ name: "Обыкновенная гага", image: "images1/bird26.jpg", sound: "sounds1/birds/bird26.mp3" },
-{ name: "Обыкновенная кваква", image: "images1/bird27.jpg", sound: "sounds1/birds/bird27.mp3" },
-{ name: "Огарь", image: "images1/bird28.jpg", sound: "sounds1/birds/bird28.mp3" },
-{ name: "Пеганка", image: "images1/bird29.jpg", sound: "sounds1/birds/bird29.mp3" },
-{ name: "Пискулька", image: "images1/bird30.jpg", sound: "sounds1/birds/bird30.mp3" },
-{ name: "Розовый пеликан", image: "images1/bird31.jpg", sound: "sounds1/birds/bird31.mp3" },
-{ name: "Розовый фламинго", image: "images1/bird32.jpg", sound: "sounds1/birds/bird32.mp3" },
-{ name: "Рыжая цапля", image: "images1/bird33.jpg", sound: "sounds1/birds/bird33.mp3" },
-{ name: "Свиязь", image: "images1/bird34.jpg", sound: "sounds1/birds/bird34.mp3" },
-{ name: "Серая утка", image: "images1/bird35.jpg", sound: "sounds1/birds/bird35.mp3" },
-{ name: "Серая цапля", image: "images1/bird36.jpg", sound: "sounds1/birds/bird36.mp3" },
-{ name: "Серощекая поганка", image: "images1/bird37.jpg", sound: "sounds1/birds/bird37.mp3" },
-{ name: "Серый гусь", image: "images1/bird38.jpg", sound: "sounds1/birds/bird38.mp3" },
-{ name: "Сухонос", image: "images1/bird39.jpg", sound: "sounds1/birds/bird39.mp3" },
-{ name: "Турпан", image: "images1/bird40.jpg", sound: "sounds1/birds/bird40.mp3" },
-{ name: "Хохлатая чернеть", image: "images1/bird41.jpg", sound: "sounds1/birds/bird41.mp3" },
-{ name: "Хохлатый баклан", image: "images1/bird42.jpg", sound: "sounds1/birds/bird42.mp3" },
-{ name: "Черная казарка", image: "images1/bird43.jpg", sound: "sounds1/birds/bird43.mp3" },
-{ name: "Чернозобая гагара", image: "images1/bird44.jpg", sound: "sounds1/birds/bird44.mp3" },
-{ name: "Черношейная поганка", image: "images1/bird45.jpg", sound: "sounds1/birds/bird45.mp3" },
-{ name: "Черный аист", image: "images1/bird46.jpg", sound: "sounds1/birds/bird46.mp3" },
-{ name: "Чирок свистунок", image: "images1/bird47.jpg", sound: "sounds1/birds/bird47.mp3" },
-{ name: "Чирок трескунок", image: "images1/bird48.jpg", sound: "sounds1/birds/bird48.mp3" },
-{ name: "Чомга", image: "images1/bird49.jpg", sound: "sounds1/birds/bird49.mp3" },
-{ name: "Шилохвость", image: "images1/bird50.jpg", sound: "sounds1/birds/bird50.mp3" },
-{ name: "Широконоска", image: "images1/bird51.jpg", sound: "sounds1/birds/bird51.mp3" }
+      { name: "Белоглазый нырок", image: "images1/bird1.jpg", sound: "sounds1/birds/bird1.mp3" },
+      { name: "Белолобый гусь", image: "images1/bird2.jpg", sound: "sounds1/birds/bird2.mp3" },
+      { name: "Белощекая казарка", image: "images1/bird3.jpg", sound: "sounds1/birds/bird3.mp3" },
+      { name: "Белый аист", image: "images1/bird4.jpg", sound: "sounds1/birds/bird4.mp3" },
+      { name: "Большой баклан", image: "images1/bird5.jpg", sound: "sounds1/birds/bird5.mp3" },
+      { name: "Волчок (малая выпь)", image: "images1/bird6.jpg", sound: "sounds1/birds/bird6.mp3" },
+      { name: "Выпь (большая)", image: "images1/bird7.jpg", sound: "sounds1/birds/bird7.mp3" },
+      { name: "Гуменник", image: "images1/bird8.jpg", sound: "sounds1/birds/bird8.mp3" },
+      { name: "Египетская цапля", image: "images1/bird9.jpg", sound: "sounds1/birds/bird9.mp3" },
+      { name: "Желтая цапля", image: "images1/bird10.jpg", sound: "sounds1/birds/bird10.mp3" },
+      { name: "Канадская казарка", image: "images1/bird11.jpg", sound: "sounds1/birds/bird11.mp3" },
+      { name: "Каравайка", image: "images1/bird12.jpg", sound: "sounds1/birds/bird12.mp3" },
+      { name: "Колпица", image: "images1/bird13.jpg", sound: "sounds1/birds/bird13.mp3" },
+      { name: "Красноголовый нырок", image: "images1/bird14.jpg", sound: "sounds1/birds/bird14.mp3" },
+      { name: "Краснозобая гагара", image: "images1/bird15.jpg", sound: "sounds1/birds/bird15.mp3" },
+      { name: "Красноносый нырок", image: "images1/bird16.jpg", sound: "sounds1/birds/bird16.mp3" },
+      { name: "Красношейная поганка", image: "images1/bird17.jpg", sound: "sounds1/birds/bird17.mp3" },
+      { name: "Кряква", image: "images1/bird18.jpg", sound: "sounds1/birds/bird18.mp3" },
+      { name: "Кудрявый пеликан", image: "images1/bird19.jpg", sound: "sounds1/birds/bird19.mp3" },
+      { name: "Лебедь кликун", image: "images1/bird20.jpg", sound: "sounds1/birds/bird20.mp3" },
+      { name: "Лебедь шипун", image: "images1/bird21.jpg", sound: "sounds1/birds/bird21.mp3" },
+      { name: "Малая белая цапля", image: "images1/bird22.jpg", sound: "sounds1/birds/bird22.mp3" },
+      { name: "Малая поганка", image: "images1/bird23.jpg", sound: "sounds1/birds/bird23.mp3" },
+      { name: "Малый баклан", image: "images1/bird24.jpg", sound: "sounds1/birds/bird24.mp3" },
+      { name: "Морская чернеть", image: "images1/bird25.jpg", sound: "sounds1/birds/bird25.mp3" },
+      { name: "Обыкновенная гага", image: "images1/bird26.jpg", sound: "sounds1/birds/bird26.mp3" },
+      { name: "Обыкновенная кваква", image: "images1/bird27.jpg", sound: "sounds1/birds/bird27.mp3" },
+      { name: "Огарь", image: "images1/bird28.jpg", sound: "sounds1/birds/bird28.mp3" },
+      { name: "Пеганка", image: "images1/bird29.jpg", sound: "sounds1/birds/bird29.mp3" },
+      { name: "Пискулька", image: "images1/bird30.jpg", sound: "sounds1/birds/bird30.mp3" },
+      { name: "Розовый пеликан", image: "images1/bird31.jpg", sound: "sounds1/birds/bird31.mp3" },
+      { name: "Розовый фламинго", image: "images1/bird32.jpg", sound: "sounds1/birds/bird32.mp3" },
+      { name: "Рыжая цапля", image: "images1/bird33.jpg", sound: "sounds1/birds/bird33.mp3" },
+      { name: "Свиязь", image: "images1/bird34.jpg", sound: "sounds1/birds/bird34.mp3" },
+      { name: "Серая утка", image: "images1/bird35.jpg", sound: "sounds1/birds/bird35.mp3" },
+      { name: "Серая цапля", image: "images1/bird36.jpg", sound: "sounds1/birds/bird36.mp3" },
+      { name: "Серощекая поганка", image: "images1/bird37.jpg", sound: "sounds1/birds/bird37.mp3" },
+      { name: "Серый гусь", image: "images1/bird38.jpg", sound: "sounds1/birds/bird38.mp3" },
+      { name: "Сухонос", image: "images1/bird39.jpg", sound: "sounds1/birds/bird39.mp3" },
+      { name: "Турпан", image: "images1/bird40.jpg", sound: "sounds1/birds/bird40.mp3" },
+      { name: "Хохлатая чернеть", image: "images1/bird41.jpg", sound: "sounds1/birds/bird41.mp3" },
+      { name: "Хохлатый баклан", image: "images1/bird42.jpg", sound: "sounds1/birds/bird42.mp3" },
+      { name: "Черная казарка", image: "images1/bird43.jpg", sound: "sounds1/birds/bird43.mp3" },
+      { name: "Чернозобая гагара", image: "images1/bird44.jpg", sound: "sounds1/birds/bird44.mp3" },
+      { name: "Черношейная поганка", image: "images1/bird45.jpg", sound: "sounds1/birds/bird45.mp3" },
+      { name: "Черный аист", image: "images1/bird46.jpg", sound: "sounds1/birds/bird46.mp3" },
+      { name: "Чирок свистунок", image: "images1/bird47.jpg", sound: "sounds1/birds/bird47.mp3" },
+      { name: "Чирок трескунок", image: "images1/bird48.jpg", sound: "sounds1/birds/bird48.mp3" },
+      { name: "Чомга", image: "images1/bird49.jpg", sound: "sounds1/birds/bird49.mp3" },
+      { name: "Шилохвость", image: "images1/bird50.jpg", sound: "sounds1/birds/bird50.mp3" },
+      { name: "Широконоска", image: "images1/bird51.jpg", sound: "sounds1/birds/bird51.mp3" }
     ];
 
     let correctAnswers = 0;
     let incorrectAnswers = 0;
     let currentQuestion = 0;
     let totalQuestions = 10;
-    let timeLimit = 0; // По умолчанию без таймера
+    let timeLimit = 0;
     let timer;
-    let currentAudio = null;
+    let currentAudio;
 
     // Элементы DOM
     const settings = document.querySelector(".settings");
@@ -324,7 +327,7 @@
     const results = document.querySelector(".results");
     const timerDisplay = document.getElementById("timer");
     const birdImage = document.getElementById("bird-image");
-    const birdSound = document.getElementById("bird-sound");
+    const birdAudio = document.getElementById("bird-audio");
     const optionsContainer = document.getElementById("options");
     const resultDisplay = document.getElementById("result");
     const finalCorrect = document.getElementById("final-correct");
@@ -332,7 +335,6 @@
     const feedback = document.getElementById("feedback");
     const progress = document.getElementById("progress");
     const totalQuestionsDisplay = document.getElementById("total-questions");
-    const body = document.body;
 
     // Начать викторину
     document.getElementById("start-quiz").addEventListener("click", () => {
@@ -346,7 +348,7 @@
       }
 
       totalQuestions = questionsInput;
-      timeLimit = timingMode === "with-timer" ? timeInput : 0; // Если выбран режим без таймера, время = 0
+      timeLimit = timingMode === "with-timer" ? timeInput : 0;
       settings.style.display = "none";
       quizContainer.style.display = "block";
       totalQuestionsDisplay.textContent = totalQuestions;
@@ -362,9 +364,7 @@
       currentQuestion = 0;
       if (currentAudio) {
         currentAudio.pause();
-        currentAudio = null;
       }
-      body.classList.remove("correct");
     });
 
     // Функция для запуска викторины
@@ -374,10 +374,13 @@
         return;
       }
 
-      // Остановить предыдущий звук, если он есть
+      // Остановить предыдущее аудио, если оно есть
       if (currentAudio) {
         currentAudio.pause();
       }
+
+      // Убрать подсветку правильного ответа, если она была
+      birdImage.classList.remove("correct-answer");
 
       const randomBird = birds[Math.floor(Math.random() * birds.length)];
       
@@ -402,10 +405,9 @@
       birdImage.style.display = "block";
 
       // Воспроизведение звука птицы
-      birdSound.src = randomBird.sound;
-      birdSound.style.display = "block";
-      birdSound.play();
-      currentAudio = birdSound;
+      birdAudio.src = randomBird.sound;
+      birdAudio.play();
+      currentAudio = birdAudio;
 
       // Отображение текущего вопроса
       progress.textContent = `Вопрос ${currentQuestion + 1} из ${totalQuestions}`;
@@ -418,20 +420,18 @@
       // Обработка выбора ответа
       optionsContainer.querySelectorAll(".option").forEach(option => {
         option.addEventListener("click", () => {
-          // Остановить звук при выборе ответа
-          if (currentAudio) {
-            currentAudio.pause();
-          }
-
+          // Остановить воспроизведение звука при выборе ответа
+          birdAudio.pause();
+          
           const selectedBird = option.getAttribute("data-name");
           if (selectedBird === randomBird.name) {
-            resultDisplay.textContent = "Правильно!";
+            resultDisplay.textContent = "Правильно! 🎉";
             correctAnswers++;
             
-            // Добавляем зеленый фон на 3 секунды
-            body.classList.add("correct");
+            // Подсветить изображение зеленым на 3 секунды
+            birdImage.classList.add("correct-answer");
             setTimeout(() => {
-              body.classList.remove("correct");
+              birdImage.classList.remove("correct-answer");
             }, 3000);
           } else {
             resultDisplay.textContent = `Неправильно! Правильный ответ: ${randomBird.name}`;
@@ -439,7 +439,7 @@
           }
 
           currentQuestion++;
-          setTimeout(startQuiz, 2000);
+          setTimeout(startQuiz, 3000);
         });
       });
 
@@ -480,7 +480,6 @@
       if (currentAudio) {
         currentAudio.pause();
       }
-      body.classList.remove("correct");
 
       const percentage = (correctAnswers / totalQuestions) * 100;
       if (percentage < 50) {
