@@ -87,14 +87,19 @@
     }
 
     /* Викторина */
+    .image-container {
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      transition: background-color 0.3s ease;
+    }
+
     .quiz-container img {
       width: 500px;
       height: 300px;
       object-fit: cover;
       border-radius: 10px;
-      margin-bottom: 20px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.3s ease;
     }
 
     .quiz-container audio {
@@ -180,6 +185,11 @@
       font-size: 0.9em;
     }
 
+    /* Класс для правильного ответа */
+    .correct-frame {
+      background-color: white;
+    }
+
     /* Адаптивность */
     @media (max-width: 600px) {
       h1 {
@@ -202,11 +212,6 @@
         width: 100%;
         height: auto;
       }
-    }
-
-    /* Класс для правильного ответа */
-    .correct-answer {
-      background-color: rgba(76, 175, 80, 0.3);
     }
   </style>
 </head>
@@ -239,8 +244,10 @@
     <h1>Викторина</h1>
     <div class="progress" id="progress">Вопрос 1 из <span id="total-questions">10</span></div>
     <div class="timer" id="timer"></div>
-    <img id="bird-image" src="" alt="Изображение птицы">
-    <audio id="bird-audio" controls></audio>
+    <div class="image-container" id="image-container">
+      <img id="bird-image" src="" alt="Изображение птицы">
+    </div>
+    <audio id="bird-audio" controls controlsList="nodownload"></audio>
     <div class="options" id="options"></div>
     <div class="result" id="result"></div>
   </div>
@@ -335,6 +342,7 @@
     const feedback = document.getElementById("feedback");
     const progress = document.getElementById("progress");
     const totalQuestionsDisplay = document.getElementById("total-questions");
+    const imageContainer = document.getElementById("image-container");
 
     // Начать викторину
     document.getElementById("start-quiz").addEventListener("click", () => {
@@ -379,8 +387,8 @@
         currentAudio.pause();
       }
 
-      // Убрать подсветку правильного ответа, если она была
-      birdImage.classList.remove("correct-answer");
+      // Убрать подсветку фона, если она была
+      imageContainer.classList.remove("correct-frame");
 
       const randomBird = birds[Math.floor(Math.random() * birds.length)];
       
@@ -428,10 +436,10 @@
             resultDisplay.textContent = "Правильно! 🎉";
             correctAnswers++;
             
-            // Подсветить изображение зеленым на 3 секунды
-            birdImage.classList.add("correct-answer");
+            // Подсветить фон вокруг изображения белым на 3 секунды
+            imageContainer.classList.add("correct-frame");
             setTimeout(() => {
-              birdImage.classList.remove("correct-answer");
+              imageContainer.classList.remove("correct-frame");
             }, 3000);
           } else {
             resultDisplay.textContent = `Неправильно! Правильный ответ: ${randomBird.name}`;
