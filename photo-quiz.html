@@ -23,6 +23,27 @@
       font-size: 2.5em;
       margin-bottom: 20px;
     }
+ /* Контейнер для изображения */
+    .image-container {
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      background-color: transparent;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Класс для правильного ответа - зеленый фон */
+    .correct-answer {
+      background-color: #4CAF50;
+    }
+
+    .quiz-container img {
+      width: 500px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
 
     /* Контейнеры */
     .settings, .quiz-container, .results {
@@ -437,9 +458,9 @@
             correctAnswers++;
             
             // Подсветить фон вокруг изображения белым на 3 секунды
-            imageContainer.classList.add("correct-frame");
+            imageContainer.classList.add("correct-answer");
             setTimeout(() => {
-              imageContainer.classList.remove("correct-frame");
+              imageContainer.classList.remove("correct-answer");
             }, 3000);
           } else {
             resultDisplay.textContent = `Неправильно! Правильный ответ: ${randomBird.name}`;
