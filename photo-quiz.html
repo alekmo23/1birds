@@ -16,6 +16,11 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      transition: background-color 0.5s ease;
+    }
+
+    body.correct {
+      background-color: rgba(76, 175, 80, 0.2);
     }
 
     h1 {
@@ -88,17 +93,11 @@
 
     /* Викторина */
     .quiz-container img {
-      width: 500px; /* Фиксированная ширина */
-      height: 300px; /* Фиксированная высота */
-      object-fit: cover; /* Сохраняет пропорции изображения, обрезая лишнее */
+      max-width: 100%;
+      max-height: 300px;
       border-radius: 10px;
       margin-bottom: 20px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      transition: box-shadow 0.3s ease;
-    }
-
-    .quiz-container img.correct {
-      box-shadow: 0 0 0 4px #4CAF50;
     }
 
     .quiz-container audio {
@@ -203,8 +202,7 @@
       }
 
       .quiz-container img {
-        width: 100%; /* На мобильных устройствах изображение занимает всю ширину */
-        height: auto; /* Высота автоматически подстраивается */
+        max-height: 200px;
       }
     }
   </style>
@@ -334,6 +332,7 @@
     const feedback = document.getElementById("feedback");
     const progress = document.getElementById("progress");
     const totalQuestionsDisplay = document.getElementById("total-questions");
+    const body = document.body;
 
     // Начать викторину
     document.getElementById("start-quiz").addEventListener("click", () => {
@@ -365,6 +364,7 @@
         currentAudio.pause();
         currentAudio = null;
       }
+      body.classList.remove("correct");
     });
 
     // Функция для запуска викторины
@@ -400,7 +400,6 @@
       // Отображение изображения птицы
       birdImage.src = randomBird.image;
       birdImage.style.display = "block";
-      birdImage.classList.remove("correct"); // Удаляем класс с зеленой рамкой, если он был
 
       // Воспроизведение звука птицы
       birdSound.src = randomBird.sound;
@@ -429,10 +428,10 @@
             resultDisplay.textContent = "Правильно!";
             correctAnswers++;
             
-            // Добавляем зеленую рамку на 3 секунды
-            birdImage.classList.add("correct");
+            // Добавляем зеленый фон на 3 секунды
+            body.classList.add("correct");
             setTimeout(() => {
-              birdImage.classList.remove("correct");
+              body.classList.remove("correct");
             }, 3000);
           } else {
             resultDisplay.textContent = `Неправильно! Правильный ответ: ${randomBird.name}`;
@@ -481,6 +480,7 @@
       if (currentAudio) {
         currentAudio.pause();
       }
+      body.classList.remove("correct");
 
       const percentage = (correctAnswers / totalQuestions) * 100;
       if (percentage < 50) {
