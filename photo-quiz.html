@@ -94,6 +94,11 @@
       border-radius: 10px;
       margin-bottom: 20px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .quiz-container img.correct {
+      box-shadow: 0 0 0 4px #4CAF50;
     }
 
     .quiz-container audio {
@@ -234,6 +239,7 @@
     <div class="progress" id="progress">Вопрос 1 из <span id="total-questions">10</span></div>
     <div class="timer" id="timer"></div>
     <img id="bird-image" src="" alt="Изображение птицы">
+    <audio id="bird-sound" controls style="display: none;"></audio>
     <div class="options" id="options"></div>
     <div class="result" id="result"></div>
   </div>
@@ -312,6 +318,7 @@
     let totalQuestions = 10;
     let timeLimit = 0; // По умолчанию без таймера
     let timer;
+    let currentAudio = null;
 
     // Элементы DOM
     const settings = document.querySelector(".settings");
@@ -319,6 +326,7 @@
     const results = document.querySelector(".results");
     const timerDisplay = document.getElementById("timer");
     const birdImage = document.getElementById("bird-image");
+    const birdSound = document.getElementById("bird-sound");
     const optionsContainer = document.getElementById("options");
     const resultDisplay = document.getElementById("result");
     const finalCorrect = document.getElementById("final-correct");
@@ -353,6 +361,10 @@
       correctAnswers = 0;
       incorrectAnswers = 0;
       currentQuestion = 0;
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+      }
     });
 
     // Функция для запуска викторины
@@ -360,6 +372,11 @@
       if (currentQuestion >= totalQuestions) {
         endQuiz();
         return;
+      }
+
+      // Остановить предыдущий звук, если он есть
+      if (currentAudio) {
+        currentAudio.pause();
       }
 
       const randomBird = birds[Math.floor(Math.random() * birds.length)];
@@ -383,6 +400,13 @@
       // Отображение изображения птицы
       birdImage.src = randomBird.image;
       birdImage.style.display = "block";
+      birdImage.classList.remove("correct"); // Удаляем класс с зеленой рамкой, если он был
+
+      // Воспроизведение звука птицы
+      birdSound.src = randomBird.sound;
+      birdSound.style.display = "block";
+      birdSound.play();
+      currentAudio = birdSound;
 
       // Отображение текущего вопроса
       progress.textContent = `Вопрос ${currentQuestion + 1} из ${totalQuestions}`;
@@ -395,17 +419,21 @@
       // Обработка выбора ответа
       optionsContainer.querySelectorAll(".option").forEach(option => {
         option.addEventListener("click", () => {
+          // Остановить звук при выборе ответа
+          if (currentAudio) {
+            currentAudio.pause();
+          }
+
           const selectedBird = option.getAttribute("data-name");
           if (selectedBird === randomBird.name) {
-            resultDisplay.textContent = "Правильно! 🎉";
+            resultDisplay.textContent = "Правильно!";
             correctAnswers++;
-
-            // Воспроизведение звука птицы на 10 секунд
-            const audio = new Audio(randomBird.sound);
-            audio.play();
+            
+            // Добавляем зеленую рамку на 3 секунды
+            birdImage.classList.add("correct");
             setTimeout(() => {
-              audio.pause();
-            }, 10000); // Остановить через 10 секунд
+              birdImage.classList.remove("correct");
+            }, 3000);
           } else {
             resultDisplay.textContent = `Неправильно! Правильный ответ: ${randomBird.name}`;
             incorrectAnswers++;
@@ -434,6 +462,9 @@
         if (remainingTime <= 0) {
           clearInterval(timer);
           resultDisplay.textContent = "Время вышло!";
+          if (currentAudio) {
+            currentAudio.pause();
+          }
           currentQuestion++;
           setTimeout(startQuiz, 2000);
         }
@@ -447,6 +478,9 @@
       finalCorrect.textContent = correctAnswers;
       finalIncorrect.textContent = incorrectAnswers;
       clearInterval(timer);
+      if (currentAudio) {
+        currentAudio.pause();
+      }
 
       const percentage = (correctAnswers / totalQuestions) * 100;
       if (percentage < 50) {
