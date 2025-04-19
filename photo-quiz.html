@@ -36,7 +36,10 @@
     .correct-answer {
       background-color: #4CAF50;
     }
-
+ /* Класс для неправильного ответа - красный фон */
+    .wrong-answer {
+      background-color: #f44336;
+    }
     .quiz-container img {
       width: 500px;
       height: 300px;
@@ -409,7 +412,8 @@
       }
 
       // Убрать подсветку фона, если она была
-      imageContainer.classList.remove("correct-frame");
+      imageContainer.classList.remove("correct-answer", "wrong-answer");
+
 
       const randomBird = birds[Math.floor(Math.random() * birds.length)];
       
@@ -465,6 +469,11 @@
           } else {
             resultDisplay.textContent = `Неправильно! Правильный ответ: ${randomBird.name}`;
             incorrectAnswers++;
+			 // Подсветить фон вокруг изображения красным на 3 секунды
+            imageContainer.classList.add("wrong-answer");
+            setTimeout(() => {
+              imageContainer.classList.remove("wrong-answer");
+            }, 3000);
           }
 
           currentQuestion++;
