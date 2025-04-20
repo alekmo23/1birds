@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просмотр птиц</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Дополнительные стили для admin.html */
+        .container {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h1 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .exit-btn {
+            background-color: #dc3545;
+        }
+        .exit-btn:hover {
+            background-color: #a71d2a;
+        }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 60px; /* Уменьшили ширину поля ввода */
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .navigation p {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+ /* Фиксированный размер для изображений */
+    .bird-image {
+        width: 300px; /* Фиксированная ширина */
+        height: auto; /* Автоматическая высота для сохранения пропорций */
+        object-fit: contain; /* Сохраняет пропорции без обрезки */
+        border-radius: 10px;
+        margin: 10px auto;
+        display: block;
+        max-height: 300px; /* Максимальная высота */
+        }
+        /* Стили для строки с кнопками */
+        .button-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .button-row button {
+            padding: 8px 16px; /* Уменьшили размер кнопок */
+            font-size: 14px; /* Уменьшили размер текста */
+        }
+        /* Стили для стрелок */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 40px;
+            cursor: pointer;
+            color: #4CAF50;
+            user-select: none;
+        }
+        .arrow:hover {
+            color: #45a049;
+        }
+        .arrow-left {
+            left: -50px;
+        }
+        .arrow-right {
+            right: -50px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Просмотр птиц</h1>
+        <div class="logo-container">
+            <img src="images/sirius.jpg" alt="Логотип Sirius" class="sirius-logo">
+            <img src="images/siriusnew.png" alt="Новый логотип Sirius" class="sirius-new-logo">
+        </div>
+        <img src="images/IMG_541.jpg" alt="Логотип викторины" class="logo">
+        <button class="admin-button" onclick="window.location.href='index2.html'">На главную</button>
+    </header>
+
+    <div class="container">
+        <h1 id="bird-name">Название птицы</h1>
+        <!-- Стрелка влево -->
+        <div class="arrow arrow-left" onclick="prevBird()">&#10094;</div>
+        <img id="bird-image" class="bird-image" src="" alt="Изображение птицы">
+        <!-- Стрелка вправо -->
+        <div class="arrow arrow-right" onclick="nextBird()">&#10095;</div>
+        <audio id="bird-audio" controls>
+            <source src="" type="audio/mpeg">
+            Ваш браузер не поддерживает аудио элемент.
+        </audio>
+        <div class="navigation">
+            <p id="bird-index">Птица 1 из 55</p>
+        </div>
+        <div class="button-row">
+            <input type="number" id="bird-number" min="1" max="55" placeholder="Номер">
+            <button onclick="goToBird()">Перейти</button>
+            <button onclick="reportError()">Сообщить об ошибке</button>
+            <button onclick="downloadErrors()">Скачать ошибки</button>
+            <button class="exit-btn" onclick="redirectToHome()">Выход</button>
+        </div>
+    </div>
+
+    <script>
+        // Данные о птицах
+        const birds = [
+{ name: "Балобан", image: "images2/bird1.jpg", sound: "sounds2/birds/bird1.mp3" },
+{ name: "Белая куропатка", image: "images2/bird2.jpg", sound: "sounds2/birds/bird2.mp3" },
+{ name: "Белоголовый сип", image: "images2/bird3.jpg", sound: "sounds2/birds/bird3.mp3" },
+{ name: "Беркут", image: "images2/bird4.jpg", sound: "sounds2/birds/bird4.mp3" },
+{ name: "Болотный лунь", image: "images2/bird5.jpg", sound: "sounds2/birds/bird5.mp3" },
+{ name: "Большой крохаль", image: "images2/bird6.jpg", sound: "sounds2/birds/bird6.mp3" },
+{ name: "Бородач", image: "images2/bird7.jpg", sound: "sounds2/birds/bird7.mp3" },
+{ name: "Водяной пастушок", image: "images2/bird8.jpg", sound: "sounds2/birds/bird8.mp3" },
+{ name: "Глухарь", image: "images2/bird9.jpg", sound: "sounds2/birds/bird9.mp3" },
+{ name: "Дербник", image: "images2/bird10.jpg", sound: "sounds2/birds/bird10.mp3" },
+{ name: "Длинноносый крохаль", image: "images2/bird11.jpg", sound: "sounds2/birds/bird11.mp3" },
+{ name: "Зимняк", image: "images2/bird12.jpg", sound: "sounds2/birds/bird12.mp3" },
+{ name: "Змееяд", image: "images2/bird13.jpg", sound: "sounds2/birds/bird13.mp3" },
+{ name: "Канюк", image: "images2/bird14.jpg", sound: "sounds2/birds/bird14.mp3" },
+{ name: "Кеклик", image: "images2/bird15.jpg", sound: "sounds2/birds/bird15.mp3" },
+{ name: "Кобчик", image: "images2/bird16.jpg", sound: "sounds2/birds/bird16.mp3" },
+{ name: "Коростель", image: "images2/bird17.jpg", sound: "sounds2/birds/bird17.mp3" },
+{ name: "Красный коршун", image: "images2/bird18.jpg", sound: "sounds2/birds/bird18.mp3" },
+{ name: "Кречет", image: "images2/bird19.jpg", sound: "sounds2/birds/bird19.mp3" },
+{ name: "Курганник", image: "images2/bird20.jpg", sound: "sounds2/birds/bird20.mp3" },
+{ name: "Луговой лунь", image: "images2/bird21.jpg", sound: "sounds2/birds/bird21.mp3" },
+{ name: "Могильник", image: "images2/bird22.jpg", sound: "sounds2/birds/bird22.mp3" },
+{ name: "Морянка", image: "images2/bird23.jpg", sound: "sounds2/birds/bird23.mp3" },
+{ name: "Обыкновенный гоголь", image: "images2/bird24.jpg", sound: "sounds2/birds/bird24.mp3" },
+{ name: "Обыкновенный погоныш", image: "images2/bird25.jpg", sound: "sounds2/birds/bird25.mp3" },
+{ name: "Орел карлик", image: "images2/bird26.jpg", sound: "sounds2/birds/bird26.mp3" },
+{ name: "Орлан белохвост", image: "images2/bird27.jpg", sound: "sounds2/birds/bird27.mp3" },
+{ name: "Осоед", image: "images2/bird28.jpg", sound: "sounds2/birds/bird28.mp3" },
+{ name: "Перепел", image: "images2/bird29.jpg", sound: "sounds2/birds/bird29.mp3" },
+{ name: "Перепелятник", image: "images2/bird30.jpg", sound: "sounds2/birds/bird30.mp3" },
+{ name: "Полевой лунь", image: "images2/bird31.jpg", sound: "sounds2/birds/bird31.mp3" },
+{ name: "Пустельга", image: "images2/bird32.jpg", sound: "sounds2/birds/bird32.mp3" },
+{ name: "Рябчик", image: "images2/bird33.jpg", sound: "sounds2/birds/bird33.mp3" },
+{ name: "Савка", image: "images2/bird34.jpg", sound: "sounds2/birds/bird34.mp3" },
+{ name: "Сапсан", image: "images2/bird35.jpg", sound: "sounds2/birds/bird35.mp3" },
+{ name: "Серая куропатка", image: "images2/bird36.jpg", sound: "sounds2/birds/bird36.mp3" },
+{ name: "Серый журавль", image: "images2/bird37.jpg", sound: "sounds2/birds/bird37.mp3" },
+{ name: "Синьга", image: "images2/bird38.jpg", sound: "sounds2/birds/bird38.mp3" },
+{ name: "Скопа", image: "images2/bird39.jpg", sound: "sounds2/birds/bird39.mp3" },
+{ name: "Степная пустельга", image: "images2/bird40.jpg", sound: "sounds2/birds/bird40.mp3" },
+{ name: "Стервятник", image: "images2/bird41.jpg", sound: "sounds2/birds/bird41.mp3" },
+{ name: "Тетерев", image: "images2/bird42.jpg", sound: "sounds2/birds/bird42.mp3" },
+{ name: "Тетеревятник", image: "images2/bird43.jpg", sound: "sounds2/birds/bird43.mp3" },
+{ name: "Тундряная куропатка", image: "images2/bird44.jpg", sound: "sounds2/birds/bird44.mp3" },
+{ name: "Турпан", image: "images2/bird45.jpg", sound: "sounds2/birds/bird45.mp3" },
+{ name: "Тювик", image: "images2/bird46.jpg", sound: "sounds2/birds/bird46.mp3" },
+{ name: "Фазан", image: "images2/bird47.jpg", sound: "sounds2/birds/bird47.mp3" },
+{ name: "Чеглок", image: "images2/bird48.jpg", sound: "sounds2/birds/bird48.mp3" },
+{ name: "Черный гриф", image: "images2/bird49.jpg", sound: "sounds2/birds/bird49.mp3" },
+{ name: "Черный коршун", image: "images2/bird50.jpg", sound: "sounds2/birds/bird50.mp3" },
+        ];
+
+        // В admin.html, после объявления массива birds:
+        sessionStorage.setItem("birds", JSON.stringify(birds));
+        let currentIndex = parseInt(sessionStorage.getItem("currentIndex")) || 0;
+
+        // Функция для обновления отображаемых данных
+        function updateDisplay() {
+            const bird = birds[currentIndex];
+            document.getElementById("bird-name").textContent = bird.name;
+            document.getElementById("bird-index").textContent = `Птица ${currentIndex + 1} из ${birds.length}`;
+            document.getElementById("bird-image").src = bird.image;
+            document.getElementById("bird-audio").src = bird.sound;
+            document.getElementById("bird-audio").load();
+        }
+
+        // Функции для переключения между птицами
+        function nextBird() {
+            currentIndex = (currentIndex + 1) % birds.length;
+            sessionStorage.setItem("currentIndex", currentIndex);
+            updateDisplay();
+        }
+
+        function prevBird() {
+            currentIndex = (currentIndex - 1 + birds.length) % birds.length;
+            sessionStorage.setItem("currentIndex", currentIndex);
+            updateDisplay();
+        }
+
+        // Функция для перехода к выбранной птице
+        function goToBird() {
+            const input = document.getElementById("bird-number");
+            const number = parseInt(input.value, 10);
+
+            if (number >= 1 && number <= birds.length) {
+                currentIndex = number - 1;
+                sessionStorage.setItem("currentIndex", currentIndex);
+                updateDisplay();
+            } else {
+                alert("Пожалуйста, введите номер от 1 до " + birds.length);
+            }
+        }
+
+        // Функция для перехода на главную страницу
+        function redirectToHome() {
+            window.location.href = "index2.html";
+        }
+
+        // Функция для перехода на страницу с ошибками
+        function reportError() {
+            sessionStorage.setItem("currentIndex", currentIndex);
+            window.location.href = "error.html";
+        }
+
+        // Функция для скачивания файла с ошибками
+        function downloadErrors() {
+            const errors = JSON.parse(localStorage.getItem("errors")) || [];
+            if (errors.length === 0) {
+                alert("Нет ошибок для скачивания.");
+                return;
+            }
+
+            // Формируем содержимое файла, проверяя наличие данных
+            const content = errors.map((error, index) => {
+                // Проверяем, что error и error.bird существуют и имеют свойство name
+                if (error && error.bird && error.bird.name) {
+                    return `Ошибка ${index + 1}:\nПтица: ${error.bird.name}\nЗамечание: ${error.note}\n\n`;
+                } else {
+                    // Если данные повреждены, пропускаем эту запись или указываем, что данные отсутствуют
+                    return `Ошибка ${index + 1}:\nДанные о птице отсутствуют или повреждены.\nЗамечание: ${error.note}\n\n`;
+                }
+            }).join("");
+
+            // Создаем Blob и ссылку для скачивания
+            const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "ошибки.txt";
+            document.body.appendChild(a); // Добавляем ссылку в DOM
+            a.click(); // Программно нажимаем на ссылку
+            document.body.removeChild(a); // Удаляем ссылку из DOM
+            URL.revokeObjectURL(url); // Освобождаем память
+        }
+
+        // Листание картинок с помощью стрелок влево и вправо
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowLeft") {
+                prevBird();
+            } else if (event.key === "ArrowRight") {
+                nextBird();
+            }
+        });
+
+        // Инициализация при загрузке страницы
+        window.onload = updateDisplay;
+    </script>
+</body>
+</html>
