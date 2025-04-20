@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Случайный режим викторины</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Основные стили */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #2c3e50;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    /* Контейнеры */
+    .settings, .quiz-container, .results {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      margin-bottom: 20px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .settings:hover, .quiz-container:hover, .results:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Форма настроек */
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+      color: #34495e;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: border-color 0.3s ease;
+    }
+
+    select:focus, input:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+      transform: scale(1.02);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    /* Викторина */
+    .quiz-container img, .quiz-container audio {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .option:hover {
+      background-color: #45a049;
+      transform: translateY(-3px);
+    }
+
+    .option:active {
+      transform: translateY(0);
+    }
+
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .timer {
+      text-align: center;
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #e74c3c;
+    }
+
+    /* Результаты */
+    .results {
+      display: none;
+    }
+
+    .results h1 {
+      color: #4CAF50;
+    }
+
+    .results p {
+      font-size: 1.2em;
+      color: #34495e;
+    }
+
+    /* Фиксированные кнопки */
+    .fixed-buttons {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .fixed-buttons button {
+      padding: 8px;
+      font-size: 0.9em;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2em;
+      }
+
+      .settings, .quiz-container, .results {
+        padding: 20px;
+      }
+
+      button {
+        font-size: 1em;
+      }
+
+      .options {
+        flex-direction: column;
+      }
+
+      .quiz-container img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="settings">
+    <h1>Настройки викторины</h1>
+    <label for="questions">Количество вопросов:</label>
+    <select id="questions">
+      <option value="5">5</option>
+      <option value="10" selected>10</option>
+      <option value="15">15</option>
+      <option value="20">20</option>
+      <option value="30">30</option>
+    </select>
+
+    <label for="timing">Режим таймера:</label>
+    <select id="timing">
+      <option value="without-timer">Без таймера</option>
+      <option value="with-timer">С таймером</option>
+    </select>
+
+    <label for="time">Ограничение по времени (в секундах):</label>
+    <input type="number" id="time" min="0" value="30">
+
+    <button id="start-quiz">Начать викторину</button>
+  </div>
+
+  <div class="quiz-container" style="display: none;">
+    <h1>Случайный режим</h1>
+    <div class="timer" id="timer"></div>
+    <div id="media-container">
+      <!-- Здесь будет либо изображение, либо аудио -->
+    </div>
+    <div class="options" id="options"></div>
+    <div class="result" id="result"></div>
+    <div class="score">
+      Правильно: <span id="correct">0</span> | Неправильно: <span id="incorrect">0</span>
+    </div>
+    <div class="fixed-buttons">
+      <button class="home-button" id="home-button-quiz">На главную</button>
+    </div>
+  </div>
+
+  <div class="results" style="display: none;">
+    <h1>Результаты</h1>
+    <p>Правильных ответов: <span id="final-correct">0</span></p>
+    <p>Неправильных ответов: <span id="final-incorrect">0</span></p>
+    <p id="feedback"></p>
+    <div class="fixed-buttons">
+      <button id="restart">Начать заново</button>
+      <button class="home-button" id="home-button-results">На главную</button>
+    </div>
+  </div>
+
+  <script>
+    const birds = [
+{ name: "Балобан", image: "images2/bird1.jpg", sound: "sounds2/birds/bird1.mp3" },
+{ name: "Белая куропатка", image: "images2/bird2.jpg", sound: "sounds2/birds/bird2.mp3" },
+{ name: "Белоголовый сип", image: "images2/bird3.jpg", sound: "sounds2/birds/bird3.mp3" },
+{ name: "Беркут", image: "images2/bird4.jpg", sound: "sounds2/birds/bird4.mp3" },
+{ name: "Болотный лунь", image: "images2/bird5.jpg", sound: "sounds2/birds/bird5.mp3" },
+{ name: "Большой крохаль", image: "images2/bird6.jpg", sound: "sounds2/birds/bird6.mp3" },
+{ name: "Бородач", image: "images2/bird7.jpg", sound: "sounds2/birds/bird7.mp3" },
+{ name: "Водяной пастушок", image: "images2/bird8.jpg", sound: "sounds2/birds/bird8.mp3" },
+{ name: "Глухарь", image: "images2/bird9.jpg", sound: "sounds2/birds/bird9.mp3" },
+{ name: "Дербник", image: "images2/bird10.jpg", sound: "sounds2/birds/bird10.mp3" },
+{ name: "Длинноносый крохаль", image: "images2/bird11.jpg", sound: "sounds2/birds/bird11.mp3" },
+{ name: "Зимняк", image: "images2/bird12.jpg", sound: "sounds2/birds/bird12.mp3" },
+{ name: "Змееяд", image: "images2/bird13.jpg", sound: "sounds2/birds/bird13.mp3" },
+{ name: "Канюк", image: "images2/bird14.jpg", sound: "sounds2/birds/bird14.mp3" },
+{ name: "Кеклик", image: "images2/bird15.jpg", sound: "sounds2/birds/bird15.mp3" },
+{ name: "Кобчик", image: "images2/bird16.jpg", sound: "sounds2/birds/bird16.mp3" },
+{ name: "Коростель", image: "images2/bird17.jpg", sound: "sounds2/birds/bird17.mp3" },
+{ name: "Красный коршун", image: "images2/bird18.jpg", sound: "sounds2/birds/bird18.mp3" },
+{ name: "Кречет", image: "images2/bird19.jpg", sound: "sounds2/birds/bird19.mp3" },
+{ name: "Курганник", image: "images2/bird20.jpg", sound: "sounds2/birds/bird20.mp3" },
+{ name: "Луговой лунь", image: "images2/bird21.jpg", sound: "sounds2/birds/bird21.mp3" },
+{ name: "Могильник", image: "images2/bird22.jpg", sound: "sounds2/birds/bird22.mp3" },
+{ name: "Морянка", image: "images2/bird23.jpg", sound: "sounds2/birds/bird23.mp3" },
+{ name: "Обыкновенный гоголь", image: "images2/bird24.jpg", sound: "sounds2/birds/bird24.mp3" },
+{ name: "Обыкновенный погоныш", image: "images2/bird25.jpg", sound: "sounds2/birds/bird25.mp3" },
+{ name: "Орел карлик", image: "images2/bird26.jpg", sound: "sounds2/birds/bird26.mp3" },
+{ name: "Орлан белохвост", image: "images2/bird27.jpg", sound: "sounds2/birds/bird27.mp3" },
+{ name: "Осоед", image: "images2/bird28.jpg", sound: "sounds2/birds/bird28.mp3" },
+{ name: "Перепел", image: "images2/bird29.jpg", sound: "sounds2/birds/bird29.mp3" },
+{ name: "Перепелятник", image: "images2/bird30.jpg", sound: "sounds2/birds/bird30.mp3" },
+{ name: "Полевой лунь", image: "images2/bird31.jpg", sound: "sounds2/birds/bird31.mp3" },
+{ name: "Пустельга", image: "images2/bird32.jpg", sound: "sounds2/birds/bird32.mp3" },
+{ name: "Рябчик", image: "images2/bird33.jpg", sound: "sounds2/birds/bird33.mp3" },
+{ name: "Савка", image: "images2/bird34.jpg", sound: "sounds2/birds/bird34.mp3" },
+{ name: "Сапсан", image: "images2/bird35.jpg", sound: "sounds2/birds/bird35.mp3" },
+{ name: "Серая куропатка", image: "images2/bird36.jpg", sound: "sounds2/birds/bird36.mp3" },
+{ name: "Серый журавль", image: "images2/bird37.jpg", sound: "sounds2/birds/bird37.mp3" },
+{ name: "Синьга", image: "images2/bird38.jpg", sound: "sounds2/birds/bird38.mp3" },
+{ name: "Скопа", image: "images2/bird39.jpg", sound: "sounds2/birds/bird39.mp3" },
+{ name: "Степная пустельга", image: "images2/bird40.jpg", sound: "sounds2/birds/bird40.mp3" },
+{ name: "Стервятник", image: "images2/bird41.jpg", sound: "sounds2/birds/bird41.mp3" },
+{ name: "Тетерев", image: "images2/bird42.jpg", sound: "sounds2/birds/bird42.mp3" },
+{ name: "Тетеревятник", image: "images2/bird43.jpg", sound: "sounds2/birds/bird43.mp3" },
+{ name: "Тундряная куропатка", image: "images2/bird44.jpg", sound: "sounds2/birds/bird44.mp3" },
+{ name: "Турпан", image: "images2/bird45.jpg", sound: "sounds2/birds/bird45.mp3" },
+{ name: "Тювик", image: "images2/bird46.jpg", sound: "sounds2/birds/bird46.mp3" },
+{ name: "Фазан", image: "images2/bird47.jpg", sound: "sounds2/birds/bird47.mp3" },
+{ name: "Чеглок", image: "images2/bird48.jpg", sound: "sounds2/birds/bird48.mp3" },
+{ name: "Черный гриф", image: "images2/bird49.jpg", sound: "sounds2/birds/bird49.mp3" },
+{ name: "Черный коршун", image: "images2/bird50.jpg", sound: "sounds2/birds/bird50.mp3" }
+    ];
+
+    let correctAnswers = 0;
+    let incorrectAnswers = 0;
+    let totalQuestions = 10;
+    let currentQuestion = 0;
+    let timeLimit = 0; // По умолчанию без таймера
+    let timer;
+
+    const settings = document.querySelector(".settings");
+    const quizContainer = document.querySelector(".quiz-container");
+    const results = document.querySelector(".results");
+    const timerDisplay = document.getElementById("timer");
+    const mediaContainer = document.getElementById("media-container");
+    const optionsContainer = document.getElementById("options");
+    const resultDisplay = document.getElementById("result");
+    const correctDisplay = document.getElementById("correct");
+    const incorrectDisplay = document.getElementById("incorrect");
+    const finalCorrect = document.getElementById("final-correct");
+    const finalIncorrect = document.getElementById("final-incorrect");
+    const feedback = document.getElementById("feedback");
+
+    // Начать викторину
+    document.getElementById("start-quiz").addEventListener("click", () => {
+      const questionsInput = parseInt(document.getElementById("questions").value);
+      const timeInput = parseInt(document.getElementById("time").value);
+      const timingMode = document.getElementById("timing").value;
+
+      if (questionsInput < 1 || questionsInput > 50) {
+        alert("Количество вопросов должно быть от 1 до 50.");
+        return;
+      }
+
+      if (timeInput < 0) {
+        alert("Время не может быть отрицательным.");
+        return;
+      }
+
+      totalQuestions = questionsInput;
+      timeLimit = timingMode === "with-timer" ? timeInput : 0; // Если выбран режим без таймера, время = 0
+      settings.style.display = "none";
+      quizContainer.style.display = "block";
+      startQuiz();
+    });
+
+    // Перезапустить викторину
+    document.getElementById("restart").addEventListener("click", () => {
+      results.style.display = "none";
+      settings.style.display = "block";
+      correctAnswers = 0;
+      incorrectAnswers = 0;
+      currentQuestion = 0;
+      correctDisplay.textContent = 0;
+      incorrectDisplay.textContent = 0;
+    });
+
+    function startQuiz() {
+      if (currentQuestion >= totalQuestions) {
+        endQuiz();
+        return;
+      }
+
+      const randomBird = birds[Math.floor(Math.random() * birds.length)];
+      const otherBirds = birds.filter(bird => bird.name !== randomBird.name);
+      const options = [randomBird, ...otherBirds.slice(0, 3)].sort(() => Math.random() - 0.5);
+
+      mediaContainer.innerHTML = "";
+
+      const isImage = Math.random() > 0.5;
+
+      if (isImage) {
+        const img = document.createElement("img");
+        img.src = randomBird.image;
+        img.alt = "Изображение птицы";
+        mediaContainer.appendChild(img);
+      } else {
+        const audio = document.createElement("audio");
+        audio.src = randomBird.sound;
+        audio.controls = true;
+        mediaContainer.appendChild(audio);
+      }
+
+      optionsContainer.innerHTML = options
+        .map(bird => `<div class="option" data-name="${bird.name}">${bird.name}</div>`)
+        .join("");
+
+      optionsContainer.querySelectorAll(".option").forEach(option => {
+        option.addEventListener("click", () => {
+          const selectedBird = option.getAttribute("data-name");
+          if (selectedBird === randomBird.name) {
+            resultDisplay.textContent = "Правильно! 🎉";
+            correctAnswers++;
+          } else {
+            resultDisplay.textContent = `Неправильно! Правильный ответ: ${randomBird.name}`;
+            incorrectAnswers++;
+          }
+          correctDisplay.textContent = correctAnswers;
+          incorrectDisplay.textContent = incorrectAnswers;
+
+          currentQuestion++;
+          setTimeout(startQuiz, 2000);
+        });
+      });
+
+      // Запуск таймера, если выбран режим с таймером
+      if (timeLimit > 0) {
+        startTimer(timeLimit);
+      }
+    }
+
+    function startTimer(seconds) {
+      let remainingTime = seconds;
+      timerDisplay.textContent = `Осталось времени: ${remainingTime} сек.`;
+
+      timer = setInterval(() => {
+        remainingTime--;
+        timerDisplay.textContent = `Осталось времени: ${remainingTime} сек.`;
+
+        if (remainingTime <= 0) {
+          clearInterval(timer);
+          resultDisplay.textContent = "Время вышло!";
+          currentQuestion++;
+          setTimeout(startQuiz, 2000);
+        }
+      }, 1000);
+    }
+
+    function endQuiz() {
+      quizContainer.style.display = "none";
+      results.style.display = "block";
+      finalCorrect.textContent = correctAnswers;
+      finalIncorrect.textContent = incorrectAnswers;
+
+      const percentage = (correctAnswers / totalQuestions) * 100;
+      if (percentage < 50) {
+        feedback.textContent = "Попробуйте еще раз, чтобы улучшить результат!";
+      } else if (percentage >= 50 && percentage < 80) {
+        feedback.textContent = "Хороший результат, но есть куда стремиться!";
+      } else {
+        feedback.textContent = "Отличный результат! Вы настоящий эксперт!";
+      }
+    }
+
+    document.querySelectorAll(".home-button").forEach(button => {
+      button.addEventListener("click", () => {
+        window.location.href = "index2.html";
+      });
+    });
+  </script>
+</body>
+</html>
