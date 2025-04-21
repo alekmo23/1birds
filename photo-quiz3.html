@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Викторина по птицам 3</title>
+  <style>
+    /* Основные стили */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #2c3e50;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+ /* Контейнер для изображения */
+    .image-container {
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      background-color: transparent;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Класс для правильного ответа - зеленый фон */
+    .correct-answer {
+      background-color: #4CAF50;
+    }
+ /* Класс для неправильного ответа - красный фон */
+    .wrong-answer {
+      background-color: #f44336;
+    }
+    .quiz-container img {
+      width: 500px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Контейнеры */
+    .settings, .quiz-container, .results {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      margin-bottom: 20px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .settings:hover, .quiz-container:hover, .results:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Форма настроек */
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+      color: #34495e;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: border-color 0.3s ease;
+    }
+
+    select:focus, input:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+      transform: scale(1.02);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    /* Викторина */
+    .image-container {
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    .quiz-container img {
+      width: 500px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .quiz-container audio {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .options {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .option {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      flex: 1;
+      text-align: center;
+    }
+
+    .option:hover {
+      background-color: #45a049;
+      transform: translateY(-3px);
+    }
+
+    .option:active {
+      transform: translateY(0);
+    }
+
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .timer {
+      text-align: center;
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #e74c3c;
+    }
+
+    .progress {
+      margin-bottom: 20px;
+      font-size: 1.1em;
+      color: #34495e;
+    }
+
+    /* Результаты */
+    .results {
+      display: none;
+    }
+
+    .results h1 {
+      color: #4CAF50;
+    }
+
+    .results p {
+      font-size: 1.2em;
+      color: #34495e;
+    }
+
+    /* Фиксированные кнопки */
+    .fixed-buttons {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .fixed-buttons button {
+      padding: 8px;
+      font-size: 0.9em;
+    }
+
+    /* Класс для правильного ответа */
+    .correct-frame {
+      background-color: white;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2em;
+      }
+
+      .settings, .quiz-container, .results {
+        padding: 20px;
+      }
+
+      button {
+        font-size: 1em;
+      }
+
+      .options {
+        flex-direction: column;
+      }
+
+      .quiz-container img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="settings">
+    <h1>Настройки викторины</h1>
+   
+    <label for="questions">Количество вопросов:</label>
+    <select id="questions">
+      <option value="5">5</option>
+      <option value="10" selected>10</option>
+      <option value="15">15</option>
+      <option value="20">20</option>
+      <option value="30">30</option>
+    </select>
+
+    <label for="timing">Режим таймера:</label>
+    <select id="timing">
+      <option value="without-timer">Без таймера</option>
+      <option value="with-timer">С таймером</option>
+    </select>
+
+    <label for="time">Ограничение по времени (в секундах):</label>
+    <input type="number" id="time" min="0" value="30">
+
+    <button id="start-quiz">Начать викторину</button>
+  </div>
+
+  <div class="quiz-container" style="display: none;">
+    <h1>Викторина</h1>
+    <div class="progress" id="progress">Вопрос 1 из <span id="total-questions">10</span></div>
+    <div class="timer" id="timer"></div>
+    <div class="image-container" id="image-container">
+      <img id="bird-image" src="" alt="Изображение птицы">
+    </div>
+    <audio id="bird-audio" controls controlsList="nodownload"></audio>
+    <div class="options" id="options"></div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <div class="results">
+    <h1>Результаты</h1>
+    <p>Правильных ответов: <span id="final-correct">0</span></p>
+    <p>Неправильных ответов: <span id="final-incorrect">0</span></p>
+    <p id="feedback"></p>
+    <button id="restart">Начать заново</button>
+  </div>
+
+  <div class="fixed-buttons">
+    <button class="home-button" id="home-button">На главную</button>
+  </div>
+
+  <script>
+    // Данные для викторины
+    const birds = [
+		{ name: "Балобан", image: "images2/bird1.jpg", sound: "sounds2/birds/bird1.mp3" },
+		{ name: "Белая куропатка", image: "images2/bird2.jpg", sound: "sounds2/birds/bird2.mp3" },
+		{ name: "Белоголовый сип", image: "images2/bird3.jpg", sound: "sounds2/birds/bird3.mp3" },
+		{ name: "Беркут", image: "images2/bird4.jpg", sound: "sounds2/birds/bird4.mp3" },
+		{ name: "Болотный лунь", image: "images2/bird5.jpg", sound: "sounds2/birds/bird5.mp3" },
+		{ name: "Большой крохаль", image: "images2/bird6.jpg", sound: "sounds2/birds/bird6.mp3" },
+		{ name: "Бородач", image: "images2/bird7.jpg", sound: "sounds2/birds/bird7.mp3" },
+		{ name: "Водяной пастушок", image: "images2/bird8.jpg", sound: "sounds2/birds/bird8.mp3" },
+		{ name: "Глухарь", image: "images2/bird9.jpg", sound: "sounds2/birds/bird9.mp3" },
+		{ name: "Дербник", image: "images2/bird10.jpg", sound: "sounds2/birds/bird10.mp3" },
+		{ name: "Длинноносый крохаль", image: "images2/bird11.jpg", sound: "sounds2/birds/bird11.mp3" },
+		{ name: "Зимняк", image: "images2/bird12.jpg", sound: "sounds2/birds/bird12.mp3" },
+		{ name: "Змееяд", image: "images2/bird13.jpg", sound: "sounds2/birds/bird13.mp3" },
+		{ name: "Канюк", image: "images2/bird14.jpg", sound: "sounds2/birds/bird14.mp3" },
+		{ name: "Кеклик", image: "images2/bird15.jpg", sound: "sounds2/birds/bird15.mp3" },
+		{ name: "Кобчик", image: "images2/bird16.jpg", sound: "sounds2/birds/bird16.mp3" },
+		{ name: "Коростель", image: "images2/bird17.jpg", sound: "sounds2/birds/bird17.mp3" },
+		{ name: "Красный коршун", image: "images2/bird18.jpg", sound: "sounds2/birds/bird18.mp3" },
+		{ name: "Кречет", image: "images2/bird19.jpg", sound: "sounds2/birds/bird19.mp3" },
+		{ name: "Курганник", image: "images2/bird20.jpg", sound: "sounds2/birds/bird20.mp3" },
+		{ name: "Луговой лунь", image: "images2/bird21.jpg", sound: "sounds2/birds/bird21.mp3" },
+		{ name: "Могильник", image: "images2/bird22.jpg", sound: "sounds2/birds/bird22.mp3" },
+		{ name: "Морянка", image: "images2/bird23.jpg", sound: "sounds2/birds/bird23.mp3" },
+		{ name: "Обыкновенный гоголь", image: "images2/bird24.jpg", sound: "sounds2/birds/bird24.mp3" },
+		{ name: "Обыкновенный погоныш", image: "images2/bird25.jpg", sound: "sounds2/birds/bird25.mp3" },
+		{ name: "Орел карлик", image: "images2/bird26.jpg", sound: "sounds2/birds/bird26.mp3" },
+		{ name: "Орлан белохвост", image: "images2/bird27.jpg", sound: "sounds2/birds/bird27.mp3" },
+		{ name: "Осоед", image: "images2/bird28.jpg", sound: "sounds2/birds/bird28.mp3" },
+		{ name: "Перепел", image: "images2/bird29.jpg", sound: "sounds2/birds/bird29.mp3" },
+		{ name: "Перепелятник", image: "images2/bird30.jpg", sound: "sounds2/birds/bird30.mp3" },
+		{ name: "Полевой лунь", image: "images2/bird31.jpg", sound: "sounds2/birds/bird31.mp3" },
+		{ name: "Пустельга", image: "images2/bird32.jpg", sound: "sounds2/birds/bird32.mp3" },
+		{ name: "Рябчик", image: "images2/bird33.jpg", sound: "sounds2/birds/bird33.mp3" },
+		{ name: "Савка", image: "images2/bird34.jpg", sound: "sounds2/birds/bird34.mp3" },
+		{ name: "Сапсан", image: "images2/bird35.jpg", sound: "sounds2/birds/bird35.mp3" },
+		{ name: "Серая куропатка", image: "images2/bird36.jpg", sound: "sounds2/birds/bird36.mp3" },
+		{ name: "Серый журавль", image: "images2/bird37.jpg", sound: "sounds2/birds/bird37.mp3" },
+		{ name: "Синьга", image: "images2/bird38.jpg", sound: "sounds2/birds/bird38.mp3" },
+		{ name: "Скопа", image: "images2/bird39.jpg", sound: "sounds2/birds/bird39.mp3" },
+		{ name: "Степная пустельга", image: "images2/bird40.jpg", sound: "sounds2/birds/bird40.mp3" },
+		{ name: "Стервятник", image: "images2/bird41.jpg", sound: "sounds2/birds/bird41.mp3" },
+		{ name: "Тетерев", image: "images2/bird42.jpg", sound: "sounds2/birds/bird42.mp3" },
+		{ name: "Тетеревятник", image: "images2/bird43.jpg", sound: "sounds2/birds/bird43.mp3" },
+		{ name: "Тундряная куропатка", image: "images2/bird44.jpg", sound: "sounds2/birds/bird44.mp3" },
+		{ name: "Турпан", image: "images2/bird45.jpg", sound: "sounds2/birds/bird45.mp3" },
+		{ name: "Тювик", image: "images2/bird46.jpg", sound: "sounds2/birds/bird46.mp3" },
+		{ name: "Фазан", image: "images2/bird47.jpg", sound: "sounds2/birds/bird47.mp3" },
+		{ name: "Чеглок", image: "images2/bird48.jpg", sound: "sounds2/birds/bird48.mp3" },
+		{ name: "Черный гриф", image: "images2/bird49.jpg", sound: "sounds2/birds/bird49.mp3" },
+		{ name: "Черный коршун", image: "images2/bird50.jpg", sound: "sounds2/birds/bird50.mp3" }
+
+    ];
+
+    let correctAnswers = 0;
+    let incorrectAnswers = 0;
+    let currentQuestion = 0;
+    let totalQuestions = 10;
+    let timeLimit = 0;
+    let timer;
+    let currentAudio;
+
+    // Элементы DOM
+    const settings = document.querySelector(".settings");
+    const quizContainer = document.querySelector(".quiz-container");
+    const results = document.querySelector(".results");
+    const timerDisplay = document.getElementById("timer");
+    const birdImage = document.getElementById("bird-image");
+    const birdAudio = document.getElementById("bird-audio");
+    const optionsContainer = document.getElementById("options");
+    const resultDisplay = document.getElementById("result");
+    const finalCorrect = document.getElementById("final-correct");
+    const finalIncorrect = document.getElementById("final-incorrect");
+    const feedback = document.getElementById("feedback");
+    const progress = document.getElementById("progress");
+    const totalQuestionsDisplay = document.getElementById("total-questions");
+    const imageContainer = document.getElementById("image-container");
+
+    // Начать викторину
+    document.getElementById("start-quiz").addEventListener("click", () => {
+      const questionsInput = parseInt(document.getElementById("questions").value);
+      const timeInput = parseInt(document.getElementById("time").value);
+      const timingMode = document.getElementById("timing").value;
+
+      if (timeInput < 0) {
+        alert("Время не может быть отрицательным.");
+        return;
+      }
+
+      totalQuestions = questionsInput;
+      timeLimit = timingMode === "with-timer" ? timeInput : 0;
+      settings.style.display = "none";
+      quizContainer.style.display = "block";
+      totalQuestionsDisplay.textContent = totalQuestions;
+      startQuiz();
+    });
+
+    // Перезапустить викторину
+    document.getElementById("restart").addEventListener("click", () => {
+      results.style.display = "none";
+      settings.style.display = "block";
+      correctAnswers = 0;
+      incorrectAnswers = 0;
+      currentQuestion = 0;
+      if (currentAudio) {
+        currentAudio.pause();
+      }
+    });
+
+    // Функция для запуска викторины
+    function startQuiz() {
+      if (currentQuestion >= totalQuestions) {
+        endQuiz();
+        return;
+      }
+
+      // Остановить предыдущее аудио, если оно есть
+      if (currentAudio) {
+        currentAudio.pause();
+      }
+
+      // Убрать подсветку фона, если она была
+      imageContainer.classList.remove("correct-answer", "wrong-answer");
+
+
+      const randomBird = birds[Math.floor(Math.random() * birds.length)];
+      
+      // Создаем массив для вариантов ответов, исключая текущую птицу
+      const otherBirds = birds.filter(bird => bird.name !== randomBird.name);
+      
+      // Выбираем три уникальных варианта ответа
+      const uniqueOptions = [];
+      while (uniqueOptions.length < 3) {
+        const randomIndex = Math.floor(Math.random() * otherBirds.length);
+        const selectedBird = otherBirds[randomIndex];
+        if (!uniqueOptions.includes(selectedBird)) {
+          uniqueOptions.push(selectedBird);
+        }
+      }
+
+      // Добавляем правильный ответ в массив вариантов
+      const options = [randomBird, ...uniqueOptions].sort(() => Math.random() - 0.5);
+
+      // Отображение изображения птицы
+      birdImage.src = randomBird.image;
+      birdImage.style.display = "block";
+
+      // Воспроизведение звука птицы
+      birdAudio.src = randomBird.sound;
+      birdAudio.play();
+      currentAudio = birdAudio;
+
+      // Отображение текущего вопроса
+      progress.textContent = `Вопрос ${currentQuestion + 1} из ${totalQuestions}`;
+
+      // Отображение вариантов ответов
+      optionsContainer.innerHTML = options
+        .map(bird => `<div class="option" data-name="${bird.name}">${bird.name}</div>`)
+        .join("");
+
+      // Обработка выбора ответа
+      optionsContainer.querySelectorAll(".option").forEach(option => {
+        option.addEventListener("click", () => {
+          // Остановить воспроизведение звука при выборе ответа
+          birdAudio.pause();
+          
+          const selectedBird = option.getAttribute("data-name");
+          if (selectedBird === randomBird.name) {
+            resultDisplay.textContent = "Правильно!";
+            correctAnswers++;
+            
+            // Подсветить фон вокруг изображения белым на 3 секунды
+            imageContainer.classList.add("correct-answer");
+            setTimeout(() => {
+              imageContainer.classList.remove("correct-answer");
+            }, 3000);
+          } else {
+            resultDisplay.textContent = `Неправильно! Правильный ответ: ${randomBird.name}`;
+            incorrectAnswers++;
+			 // Подсветить фон вокруг изображения красным на 3 секунды
+            imageContainer.classList.add("wrong-answer");
+            setTimeout(() => {
+              imageContainer.classList.remove("wrong-answer");
+            }, 3000);
+          }
+
+          currentQuestion++;
+          setTimeout(startQuiz, 3000);
+        });
+      });
+
+      // Запуск таймера, если выбран режим с таймером
+      if (timeLimit > 0) {
+        startTimer(timeLimit);
+      }
+    }
+
+    // Функция для запуска таймера
+    function startTimer(seconds) {
+      let remainingTime = seconds;
+      timerDisplay.textContent = `Осталось времени: ${remainingTime} сек.`;
+
+      timer = setInterval(() => {
+        remainingTime--;
+        timerDisplay.textContent = `Осталось времени: ${remainingTime} сек.`;
+
+        if (remainingTime <= 0) {
+          clearInterval(timer);
+          resultDisplay.textContent = "Время вышло!";
+          if (currentAudio) {
+            currentAudio.pause();
+          }
+          currentQuestion++;
+          setTimeout(startQuiz, 2000);
+        }
+      }, 1000);
+    }
+
+    // Функция для завершения викторины
+    function endQuiz() {
+      quizContainer.style.display = "none";
+      results.style.display = "block";
+      finalCorrect.textContent = correctAnswers;
+      finalIncorrect.textContent = incorrectAnswers;
+      clearInterval(timer);
+      if (currentAudio) {
+        currentAudio.pause();
+      }
+
+      const percentage = (correctAnswers / totalQuestions) * 100;
+      if (percentage < 50) {
+        feedback.textContent = "Попробуйте еще раз, чтобы улучшить результат!";
+      } else if (percentage >= 50 && percentage < 80) {
+        feedback.textContent = "Хороший результат, но есть куда стремиться!";
+      } else {
+        feedback.textContent = "Отличный результат! Вы настоящий эксперт!";
+      }
+    }
+
+    // Обработка кнопки "На главную"
+    document.querySelectorAll(".home-button").forEach(button => {
+      button.addEventListener("click", () => {
+        window.location.href = "index3.html";
+      });
+    });
+  </script>
+</body>
+</html>
