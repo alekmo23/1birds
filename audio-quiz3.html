@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Викторина по птицам 3</title>
+  <title>Викторина по звукам птиц 3</title>
   <style>
     /* Основные стили */
     body {
@@ -22,30 +22,6 @@
       color: #2c3e50;
       font-size: 2.5em;
       margin-bottom: 20px;
-    }
- /* Контейнер для изображения */
-    .image-container {
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      background-color: transparent;
-      transition: background-color 0.3s ease;
-    }
-
-    /* Класс для правильного ответа - зеленый фон */
-    .correct-answer {
-      background-color: #4CAF50;
-    }
- /* Класс для неправильного ответа - красный фон */
-    .wrong-answer {
-      background-color: #f44336;
-    }
-    .quiz-container img {
-      width: 500px;
-      height: 300px;
-      object-fit: cover;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
 
     /* Контейнеры */
@@ -111,21 +87,6 @@
     }
 
     /* Викторина */
-    .image-container {
-      padding: 10px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      transition: background-color 0.3s ease;
-    }
-
-    .quiz-container img {
-      width: 500px;
-      height: 300px;
-      object-fit: cover;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
     .quiz-container audio {
       width: 100%;
       border-radius: 10px;
@@ -209,11 +170,6 @@
       font-size: 0.9em;
     }
 
-    /* Класс для правильного ответа */
-    .correct-frame {
-      background-color: white;
-    }
-
     /* Адаптивность */
     @media (max-width: 600px) {
       h1 {
@@ -231,11 +187,58 @@
       .options {
         flex-direction: column;
       }
+    }
 
-      .quiz-container img {
-        width: 100%;
-        height: auto;
-      }
+    /* Изображение птицы и карточка */
+    .bird-card {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      perspective: 1000px;
+      margin-bottom: 20px;
+    }
+
+    .bird-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+
+    .bird-card.flipped .bird-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .bird-card-front, .bird-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bird-card-front {
+      background-color: #fff;
+    }
+
+    .bird-card-back {
+      background-color: #4CAF50;
+      color: white;
+      transform: rotateY(180deg);
+      font-size: 1.5em; /* Крупная надпись */
+      font-weight: bold;
+    }
+
+    .bird-image {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 10px;
     }
   </style>
 </head>
@@ -268,10 +271,20 @@
     <h1>Викторина</h1>
     <div class="progress" id="progress">Вопрос 1 из <span id="total-questions">10</span></div>
     <div class="timer" id="timer"></div>
-    <div class="image-container" id="image-container">
-      <img id="bird-image" src="" alt="Изображение птицы">
+    <audio id="bird-sound" controls>
+      Ваш браузер не поддерживает аудио.
+    </audio>
+    <audio id="disappointment-sound" src="sounds/disappointment.mp3"></audio> <!-- Добавлен звук разочарования -->
+    <div class="bird-card flipped" id="bird-card">
+      <div class="bird-card-inner">
+        <div class="bird-card-front">
+          <img id="bird-image" class="bird-image" src="" alt="Изображение птицы">
+        </div>
+        <div class="bird-card-back">
+          <p>Угадай птицу по голосу</p>
+        </div>
+      </div>
     </div>
-    <audio id="bird-audio" controls controlsList="nodownload"></audio>
     <div class="options" id="options"></div>
     <div class="result" id="result"></div>
   </div>
@@ -291,7 +304,7 @@
   <script>
     // Данные для викторины
     const birds = [
-		{ name: "Авдотка", image: "images3/bird1.jpg", sound: "sounds3/birds/bird1.mp3" },
+{ name: "Авдотка", image: "images3/bird1.jpg", sound: "sounds3/birds/bird1.mp3" },
 { name: "Бекас", image: "images3/bird2.jpg", sound: "sounds3/birds/bird2.mp3" },
 { name: "Белохвостый песочник", image: "images3/bird3.jpg", sound: "sounds3/birds/bird3.mp3" },
 { name: "Большой веретенник", image: "images3/bird4.jpg", sound: "sounds3/birds/bird4.mp3" },
@@ -347,17 +360,16 @@
     let incorrectAnswers = 0;
     let currentQuestion = 0;
     let totalQuestions = 10;
-    let timeLimit = 0;
+    let timeLimit = 0; // По умолчанию без таймера
     let timer;
-    let currentAudio;
 
     // Элементы DOM
     const settings = document.querySelector(".settings");
     const quizContainer = document.querySelector(".quiz-container");
     const results = document.querySelector(".results");
     const timerDisplay = document.getElementById("timer");
-    const birdImage = document.getElementById("bird-image");
-    const birdAudio = document.getElementById("bird-audio");
+    const birdSound = document.getElementById("bird-sound");
+    const disappointmentSound = document.getElementById("disappointment-sound"); // Звук разочарования
     const optionsContainer = document.getElementById("options");
     const resultDisplay = document.getElementById("result");
     const finalCorrect = document.getElementById("final-correct");
@@ -365,7 +377,8 @@
     const feedback = document.getElementById("feedback");
     const progress = document.getElementById("progress");
     const totalQuestionsDisplay = document.getElementById("total-questions");
-    const imageContainer = document.getElementById("image-container");
+    const birdCard = document.getElementById("bird-card");
+    const birdImage = document.getElementById("bird-image");
 
     // Начать викторину
     document.getElementById("start-quiz").addEventListener("click", () => {
@@ -373,13 +386,18 @@
       const timeInput = parseInt(document.getElementById("time").value);
       const timingMode = document.getElementById("timing").value;
 
+      if (questionsInput < 1 || questionsInput > 50) {
+        alert("Количество вопросов должно быть от 1 до 50.");
+        return;
+      }
+
       if (timeInput < 0) {
         alert("Время не может быть отрицательным.");
         return;
       }
 
       totalQuestions = questionsInput;
-      timeLimit = timingMode === "with-timer" ? timeInput : 0;
+      timeLimit = timingMode === "with-timer" ? timeInput : 0; // Если выбран режим без таймера, время = 0
       settings.style.display = "none";
       quizContainer.style.display = "block";
       totalQuestionsDisplay.textContent = totalQuestions;
@@ -393,9 +411,6 @@
       correctAnswers = 0;
       incorrectAnswers = 0;
       currentQuestion = 0;
-      if (currentAudio) {
-        currentAudio.pause();
-      }
     });
 
     // Функция для запуска викторины
@@ -404,15 +419,6 @@
         endQuiz();
         return;
       }
-
-      // Остановить предыдущее аудио, если оно есть
-      if (currentAudio) {
-        currentAudio.pause();
-      }
-
-      // Убрать подсветку фона, если она была
-      imageContainer.classList.remove("correct-answer", "wrong-answer");
-
 
       const randomBird = birds[Math.floor(Math.random() * birds.length)];
       
@@ -432,14 +438,9 @@
       // Добавляем правильный ответ в массив вариантов
       const options = [randomBird, ...uniqueOptions].sort(() => Math.random() - 0.5);
 
-      // Отображение изображения птицы
-      birdImage.src = randomBird.image;
-      birdImage.style.display = "block";
-
-      // Воспроизведение звука птицы
-      birdAudio.src = randomBird.sound;
-      birdAudio.play();
-      currentAudio = birdAudio;
+      // Отображение звука птицы
+      birdSound.src = randomBird.sound;
+      birdSound.play();
 
       // Отображение текущего вопроса
       progress.textContent = `Вопрос ${currentQuestion + 1} из ${totalQuestions}`;
@@ -449,34 +450,53 @@
         .map(bird => `<div class="option" data-name="${bird.name}">${bird.name}</div>`)
         .join("");
 
+      // Блокировка кнопок на 3 секунды
+      optionsContainer.querySelectorAll(".option").forEach(option => {
+        option.style.pointerEvents = "none"; // Блокируем клики
+      });
+
+      // Разблокировка кнопок через 3 секунды
+      setTimeout(() => {
+        optionsContainer.querySelectorAll(".option").forEach(option => {
+          option.style.pointerEvents = "auto"; // Разблокируем клики
+        });
+      }, 2000);
+
       // Обработка выбора ответа
       optionsContainer.querySelectorAll(".option").forEach(option => {
         option.addEventListener("click", () => {
-          // Остановить воспроизведение звука при выборе ответа
-          birdAudio.pause();
-          
+          // Останавливаем предыдущую аудиозапись
+          birdSound.pause();
+          birdSound.currentTime = 0;
+
           const selectedBird = option.getAttribute("data-name");
           if (selectedBird === randomBird.name) {
             resultDisplay.textContent = "Правильно!";
             correctAnswers++;
-            
-            // Подсветить фон вокруг изображения белым на 3 секунды
-            imageContainer.classList.add("correct-answer");
+
+            // Показываем изображение птицы на 3 секунды
+            birdImage.src = randomBird.image;
+            birdCard.classList.remove("flipped"); // Показываем лицевую сторону
             setTimeout(() => {
-              imageContainer.classList.remove("correct-answer");
+              birdCard.classList.add("flipped"); // Переворачиваем карточку через 3 секунды
+              currentQuestion++; // Увеличиваем счетчик вопросов
+              if (currentQuestion < totalQuestions) {
+                setTimeout(startQuiz, 1000); // Запускаем следующий вопрос через 1 секунду после переворота
+              } else {
+                endQuiz(); // Завершаем викторину, если вопросы закончились
+              }
             }, 3000);
           } else {
             resultDisplay.textContent = `Неправильно! Правильный ответ: ${randomBird.name}`;
             incorrectAnswers++;
-			 // Подсветить фон вокруг изображения красным на 3 секунды
-            imageContainer.classList.add("wrong-answer");
-            setTimeout(() => {
-              imageContainer.classList.remove("wrong-answer");
-            }, 3000);
+            disappointmentSound.play(); // Воспроизводим звук разочарования
+            currentQuestion++; // Увеличиваем счетчик вопросов
+            if (currentQuestion < totalQuestions) {
+              setTimeout(startQuiz, 2000); // Запускаем следующий вопрос через 2 секунды
+            } else {
+              endQuiz(); // Завершаем викторину, если вопросы закончились
+            }
           }
-
-          currentQuestion++;
-          setTimeout(startQuiz, 3000);
         });
       });
 
@@ -498,11 +518,12 @@
         if (remainingTime <= 0) {
           clearInterval(timer);
           resultDisplay.textContent = "Время вышло!";
-          if (currentAudio) {
-            currentAudio.pause();
-          }
           currentQuestion++;
-          setTimeout(startQuiz, 2000);
+          if (currentQuestion < totalQuestions) {
+            setTimeout(startQuiz, 2000);
+          } else {
+            endQuiz();
+          }
         }
       }, 1000);
     }
@@ -514,9 +535,6 @@
       finalCorrect.textContent = correctAnswers;
       finalIncorrect.textContent = incorrectAnswers;
       clearInterval(timer);
-      if (currentAudio) {
-        currentAudio.pause();
-      }
 
       const percentage = (correctAnswers / totalQuestions) * 100;
       if (percentage < 50) {
