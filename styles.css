@@ -129,13 +129,15 @@ header h1 {
 }
 
 @media (max-width: 600px) {
- .header {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Выравниваем содержимое по левому краю */
+  .header {
+    display: grid;
+    grid-template-areas: 
+      "title logo"
+      "subtitle logo";
+    grid-template-columns: 1fr auto;
+    align-items: center;
     padding: 15px;
-    text-align: left;
-  }  
+  }
 //  header h1 {
 //    font-size: 1.5em;
 //    margin-top: 10px;
