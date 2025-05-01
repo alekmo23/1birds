@@ -56,15 +56,24 @@
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
             border-radius: 50%;
         }
-		
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 15px;
+        }
+        
         .header h1 {
             font-family: 'Montserrat', sans-serif;
             font-size: 2.8rem;
-            margin: 0 0 15px;
+            margin: 0;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
             position: relative;
             display: inline-block;
             letter-spacing: 1px;
+            flex-shrink: 0;
         }
         
         .header h1::after {
@@ -84,18 +93,12 @@
             max-width: 700px;
             margin: 0 auto 30px;
             opacity: 0.9;
-        }							  
-        .logo-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 30px auto 0;
-            max-width: 800px;
-            position: relative;
         }
         
-        .logo-circle {
-            border-radius: 50%;
+        .logo-oval {
+            width: 100px;
+            height: 140px;
+            border-radius: 50% / 60% 60% 40% 40%;
             overflow: hidden;
             border: 4px solid white;
             display: flex;
@@ -104,17 +107,19 @@
             background-color: white;
             box-shadow: 0 8px 20px rgba(0,0,0,0.2);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex-shrink: 0;
         }
         
-        .logo-circle:hover {
+        .logo-oval:hover {
             transform: translateY(-5px) scale(1.05);
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
         
-        .logo-circle img {
-            width: 120%;
-            height: 120%;
+        .logo-oval img {
+            width: 110%;
+            height: 110%;
             object-fit: contain;
+            transform: translateY(-5%);
         }
         
         .section {
@@ -238,13 +243,24 @@
         }
         
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
             }
             
-            .logo-circle {
+            .header h1 {
+                font-size: 2rem;
+                order: 1;
+            }
+            
+            .logo-oval {
                 width: 80px;
-                height: 80px;
+                height: 110px;
+                order: 2;
+            }
+            
+            .logo-oval:first-child {
+                order: 0;
             }
             
             .links-grid {
@@ -256,16 +272,16 @@
 <body>
     <div class="header">
         <div class="container">
-            <h1>Орнитологические ресурсы</h1>
-            <p>Изучайте мир птиц с нашими образовательными материалами</p>
-            <div class="logo-container">
-                <div class="logo-circle">
+            <div class="header-content">
+                <div class="logo-oval">
                     <img src="images/sirius.jpg" alt="Логотип Sirius">
                 </div>
-                <div class="logo-circle">
+                <h1>Орнитологические ресурсы</h1>
+                <div class="logo-oval">
                     <img src="images/IMG_541.jpg" alt="Логотип викторины">
                 </div>
             </div>
+            <p>Изучайте мир птиц с нашими образовательными материалами</p>
         </div>
     </div>
 
