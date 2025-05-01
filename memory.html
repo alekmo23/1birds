@@ -25,42 +25,42 @@
 
         h1 {
             color: var(--primary-color);
-            margin-bottom: 30px;
-            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-size: 2.2em;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
         .game-container {
             display: grid;
-            gap: 15px;
+            gap: 10px;
             justify-content: center;
             margin: 20px auto;
             max-width: 90%;
         }
 
         .card {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             background-color: var(--primary-color);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 24px;
             color: white;
             user-select: none;
             background-size: cover;
             background-position: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             position: relative;
             overflow: hidden;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
 
         .card::before {
@@ -71,7 +71,7 @@
             right: 0;
             bottom: 0;
             background: rgba(0,0,0,0.3);
-            border-radius: 10px;
+            border-radius: 8px;
             transition: opacity 0.3s ease;
         }
 
@@ -93,7 +93,7 @@
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
 
@@ -101,30 +101,30 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
-            margin: 30px auto;
+            gap: 15px;
+            margin: 20px auto;
             max-width: 800px;
-            padding: 20px;
+            padding: 15px;
             background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .control-group {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         label {
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 0.95em;
         }
 
         select, button {
-            padding: 12px 15px;
-            font-size: 16px;
+            padding: 8px 12px;
+            font-size: 14px;
             border-radius: 5px;
             border: 1px solid #ddd;
             background-color: white;
@@ -133,7 +133,7 @@
         }
 
         select {
-            min-width: 150px;
+            min-width: 120px;
         }
 
         button {
@@ -141,100 +141,59 @@
             color: white;
             border: none;
             font-weight: bold;
-            padding: 12px 25px;
+            padding: 8px 20px;
         }
 
         button:hover {
             background-color: #45a049;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
         }
 
-        button:active {
-            transform: translateY(0);
-        }
-
-        .scores {
-            margin: 30px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            max-width: 800px;
-        }
-
-        .scores h2 {
-            margin-bottom: 20px;
-            color: var(--primary-color);
-            font-size: 1.8em;
-        }
-
-        .score-board {
+        .game-info {
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
+            align-items: center;
             gap: 20px;
-        }
-
-        .player-score {
-            background-color: #f8f9fa;
-            padding: 15px 25px;
+            margin: 15px auto;
+            padding: 10px 15px;
+            background-color: white;
             border-radius: 8px;
-            min-width: 150px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            max-width: 800px;
+            flex-wrap: wrap;
         }
 
-        .player-score.active {
-            background-color: #e9f7ef;
-            border: 2px solid var(--primary-color);
+        .game-info-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.95em;
         }
 
-        .player-score h3 {
-            margin: 0 0 10px 0;
-            color: var(--primary-color);
-        }
-
-        .player-score p {
-            margin: 0;
-            font-size: 1.5em;
+        .game-info-item span {
             font-weight: bold;
+            color: var(--primary-color);
         }
 
         .current-player {
-            font-size: 1.5em;
-            font-weight: bold;
             color: var(--highlight-color);
-            margin: 20px;
-            padding: 15px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: inline-block;
+            font-weight: bold;
         }
 
         .fireworks {
-            font-size: 3em;
+            font-size: 2em;
             font-weight: bold;
             color: var(--highlight-color);
-            margin: 30px;
+            margin: 20px;
             animation: salute 2s infinite;
-            text-shadow: 0 0 10px rgba(255,69,0,0.5);
+            text-shadow: 0 0 8px rgba(255,69,0,0.4);
         }
 
         @keyframes salute {
             0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.3); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 1; }
             100% { transform: scale(1); opacity: 0.8; }
-        }
-
-        .timer {
-            font-size: 1.2em;
-            margin: 20px;
-            padding: 10px 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: inline-block;
         }
 
         .modal {
@@ -252,57 +211,39 @@
 
         .modal-content {
             background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 500px;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 450px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
             animation: modalFadeIn 0.3s;
         }
 
         @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
+            from { opacity: 0; transform: translateY(-15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .modal h2 {
             color: var(--primary-color);
             margin-top: 0;
+            font-size: 1.5em;
         }
 
         .modal button {
-            margin-top: 20px;
-        }
-
-        .difficulty-selector {
-            margin: 15px 0;
-        }
-
-        .difficulty-btn {
-            padding: 8px 15px;
-            margin: 0 5px;
-            background-color: #e0e0e0;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .difficulty-btn.active {
-            background-color: var(--primary-color);
-            color: white;
+            margin-top: 15px;
         }
 
         @media (max-width: 768px) {
             .card {
-                width: 80px;
-                height: 80px;
+                width: 70px;
+                height: 70px;
             }
 
             .controls {
                 flex-direction: column;
-                gap: 15px;
+                gap: 10px;
             }
 
             .control-group {
@@ -312,16 +253,31 @@
             select, button {
                 width: 100%;
             }
+
+            .game-info {
+                gap: 10px;
+                padding: 8px 10px;
+            }
+
+            .game-info-item {
+                font-size: 0.85em;
+            }
         }
 
         @media (max-width: 480px) {
             .card {
-                width: 70px;
-                height: 70px;
+                width: 60px;
+                height: 60px;
             }
 
             h1 {
                 font-size: 1.8em;
+            }
+
+            .game-info {
+                flex-direction: column;
+                gap: 5px;
+                align-items: center;
             }
         }
     </style>
@@ -330,35 +286,38 @@
     <h1> Птичья память </h1>
     <div class="controls">
         <div class="control-group">
-            <label for="players">Количество игроков:</label>
+            <label for="players">Игроки:</label>
             <select id="players">
-                <option value="1">1 игрок</option>
-                <option value="2">2 игрока</option>
-                <option value="3">3 игрока</option>
-                <option value="4">4 игрока</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
             </select>
         </div>
         <div class="control-group">
-            <label for="grid-size">Размер поля:</label>
+            <label for="grid-size">Поле:</label>
             <select id="grid-size">
-                <option value="4x4">4x4 (легко)</option>
-                <option value="4x5">4x5</option>
-                <option value="5x6">5x6</option>
-                <option value="6x6" selected>6x6 (сложно)</option>
+                <option value="4x4">4×4</option>
+                <option value="4x5">4×5</option>
+                <option value="5x6">5×6</option>
+                <option value="6x6" selected>6×6</option>
             </select>
         </div>
         <div class="control-group">
-            <label>Действие:</label>
             <button onclick="startGame()">Начать игру</button>
         </div>
     </div>
 
-    <div class="timer" id="timer">Время: 00:00</div>
-    <div class="current-player" id="current-player"></div>
-
-    <div class="scores">
-        <h2>Результаты</h2>
-        <div class="score-board" id="score-display"></div>
+    <div class="game-info">
+        <div class="game-info-item">
+            ⏱️ Время: <span id="timer">00:00</span>
+        </div>
+        <div class="game-info-item">
+            🎯 Ход: <span id="current-player" class="current-player">-</span>
+        </div>
+        <div class="game-info-item">
+            🏆 Очки: <span id="scores-display">-</span>
+        </div>
     </div>
 
     <div class="game-container" id="game-container"></div>
@@ -367,13 +326,10 @@
     <div class="modal" id="instructions-modal">
         <div class="modal-content">
             <h2>Как играть?</h2>
-            <p>Цель игры - найти все пары одинаковых птиц.</p>
-            <p>1. Нажмите на карточку, чтобы перевернуть ее</p>
-            <p>2. Найдите две одинаковые карточки</p>
-            <p>3. Если карточки совпадают, они останутся открытыми</p>
-            <p>4. Если нет - они перевернутся обратно</p>
-            <p>5. В многопользовательской игре ход переходит к следующему игроку после неудачной попытки</p>
-            <p>6. Игра заканчивается, когда все пары найдены</p>
+            <p>Найдите все пары одинаковых птиц!</p>
+            <p>• Кликайте по карточкам, чтобы перевернуть их</p>
+            <p>• Найдите две одинаковые карточки</p>
+            <p>• В мультиплеере ход переходит после ошибки</p>
             <button onclick="closeModal('instructions-modal')">Понятно!</button>
         </div>
     </div>
@@ -417,27 +373,23 @@
         // Инициализация игры при загрузке страницы
         window.onload = function() {
             showModal('instructions-modal');
-            updatePlayerScoresDisplay(); // Инициализируем отображение счетов
+            updateGameInfo();
         };
 
         function startGame() {
-            // Сброс состояния игры
             gameActive = true;
             players = parseInt(document.getElementById('players').value);
             gridSize = document.getElementById('grid-size').value;
             currentPlayer = 1;
             scores = {};
             
-            // Инициализация счетов игроков
             for (let i = 1; i <= players; i++) {
                 scores[i] = 0;
             }
             
-            updatePlayerScoresDisplay();
-            updateCurrentPlayer();
+            updateGameInfo();
             document.getElementById('fireworks').style.display = 'none';
             
-            // Сброс и запуск таймера
             clearInterval(timerInterval);
             gameTime = 0;
             updateTimerDisplay();
@@ -458,25 +410,20 @@
             flippedCards = [];
             matchedCards = [];
 
-            // Определяем размеры сетки
             const [rows, cols] = gridSize.split('x').map(Number);
-            container.style.gridTemplateColumns = `repeat(${cols}, 100px)`;
-            container.style.gridTemplateRows = `repeat(${rows}, 100px)`;
+            container.style.gridTemplateColumns = `repeat(${cols}, 90px)`;
+            container.style.gridTemplateRows = `repeat(${rows}, 90px)`;
 
-            // Выбираем уникальные изображения для пар
             const totalPairs = (rows * cols) / 2;
             const uniqueImages = getRandomUniqueImages(totalPairs);
 
-            // Создаем пары изображений
             let imagePairs = [];
             for (let i = 0; i < uniqueImages.length; i++) {
                 imagePairs.push(uniqueImages[i], uniqueImages[i]);
             }
             
-            // Перемешиваем карточки
             imagePairs = shuffleArray(imagePairs);
 
-            // Создаем карточки
             for (let i = 0; i < rows * cols; i++) {
                 const card = document.createElement('div');
                 card.classList.add('card');
@@ -488,7 +435,6 @@
             }
         }
 
-        // Функция для перемешивания массива
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -497,7 +443,6 @@
             return array;
         }
 
-        // Функция для выбора уникальных изображений
         function getRandomUniqueImages(count) {
             const shuffledImages = shuffleArray([...imageFiles]);
             return shuffledImages.slice(0, count);
@@ -506,17 +451,14 @@
         function flipCard() {
             if (!gameActive) return;
             
-            // Проверяем, можно ли перевернуть карточку
             if (flippedCards.length < 2 && 
                 !this.classList.contains('flipped') && 
                 !this.classList.contains('matched')) {
                 
-                // Анимация переворота
                 this.classList.add('flipped');
                 this.style.backgroundImage = `url(${imageFolder}${this.dataset.image})`;
                 flippedCards.push(this);
 
-                // Если перевернуто две карточки, проверяем совпадение
                 if (flippedCards.length === 2) {
                     setTimeout(checkMatch, 800);
                 }
@@ -529,31 +471,26 @@
             const [card1, card2] = flippedCards;
 
             if (card1.dataset.image === card2.dataset.image) {
-                // Совпадение найдено
                 card1.classList.add('matched');
                 card2.classList.add('matched');
                 matchedCards.push(card1, card2);
                 
-                // Начисляем очки текущему игроку
                 scores[currentPlayer] += 1;
-                updatePlayerScoresDisplay();
+                updateGameInfo();
                 
-                // Проверяем, не закончилась ли игра
                 if (matchedCards.length === cards.length) {
                     endGame();
                 }
             } else {
-                // Нет совпадения - переворачиваем обратно
                 setTimeout(() => {
                     card1.classList.remove('flipped');
                     card2.classList.remove('flipped');
                     card1.style.backgroundImage = '';
                     card2.style.backgroundImage = '';
                     
-                    // Передаем ход следующему игроку (если игроков больше одного)
                     if (players > 1) {
                         currentPlayer = currentPlayer % players + 1;
-                        updateCurrentPlayer();
+                        updateGameInfo();
                     }
                 }, 1000);
             }
@@ -561,42 +498,34 @@
             flippedCards = [];
         }
 
-        function updatePlayerScoresDisplay() {
-            const scoreDisplay = document.getElementById('score-display');
-            scoreDisplay.innerHTML = '';
+        function updateGameInfo() {
+            // Обновляем таймер
+            updateTimerDisplay();
             
-            Object.entries(scores).forEach(([player, score]) => {
-                const playerScoreElement = document.createElement('div');
-                playerScoreElement.className = `player-score ${parseInt(player) === currentPlayer ? 'active' : ''}`;
-                playerScoreElement.innerHTML = `
-                    <h3>Игрок ${player}</h3>
-                    <p>${score} очков</p>
-                `;
-                scoreDisplay.appendChild(playerScoreElement);
-            });
-        }
-
-        function updateCurrentPlayer() {
-            const currentPlayerDisplay = document.getElementById('current-player');
-            currentPlayerDisplay.textContent = `Сейчас ходит: Игрок ${currentPlayer}`;
-            updatePlayerScoresDisplay(); // Обновляем выделение активного игрока
+            // Обновляем текущего игрока
+            document.getElementById('current-player').textContent = players > 1 ? `Игрок ${currentPlayer}` : 'Ваш ход';
+            
+            // Обновляем очки
+            if (players === 1) {
+                document.getElementById('scores-display').textContent = `${scores[1] || 0}`;
+            } else {
+                const scoresText = Object.entries(scores).map(([p, s]) => `И${p}:${s}`).join(' ');
+                document.getElementById('scores-display').textContent = scoresText;
+            }
         }
 
         function updateTimerDisplay() {
             const minutes = Math.floor(gameTime / 60).toString().padStart(2, '0');
             const seconds = (gameTime % 60).toString().padStart(2, '0');
-            document.getElementById('timer').textContent = `Время: ${minutes}:${seconds}`;
+            document.getElementById('timer').textContent = `${minutes}:${seconds}`;
         }
 
         function endGame() {
             gameActive = false;
             clearInterval(timerInterval);
             
-            // Показываем праздничное сообщение
-            const fireworks = document.getElementById('fireworks');
-            fireworks.style.display = 'block';
+            document.getElementById('fireworks').style.display = 'block';
             
-            // Определяем победителя (для многопользовательской игры)
             let winnerText = '';
             if (players > 1) {
                 const maxScore = Math.max(...Object.values(scores));
@@ -604,31 +533,22 @@
                     .filter(([_, score]) => score === maxScore)
                     .map(([player]) => `Игрок ${player}`);
                 
-                if (winners.length === 1) {
-                    winnerText = `<p>Победитель: ${winners[0]} с ${maxScore} очками!</p>`;
-                } else {
-                    winnerText = `<p>Ничья между: ${winners.join(', ')} с ${maxScore} очками!</p>`;
-                }
+                winnerText = winners.length === 1 
+                    ? `<p>🏆 Победитель: ${winners[0]} (${maxScore} очков)</p>`
+                    : `<p>🏆 Ничья: ${winners.join(', ')} (${maxScore} очков)</p>`;
             }
             
-            // Формируем текст результатов
             const minutes = Math.floor(gameTime / 60).toString().padStart(2, '0');
             const seconds = (gameTime % 60).toString().padStart(2, '0');
             
             const resultsHTML = `
                 ${winnerText}
-                <p>Общее время: ${minutes}:${seconds}</p>
-                <h3>Результаты:</h3>
-                <ul style="list-style-type: none; padding: 0;">
-                    ${Object.entries(scores).map(([player, score]) => 
-                        `<li>Игрок ${player}: ${score} очков</li>`
-                    ).join('')}
-                </ul>
+                <p>⏱️ Время: ${minutes}:${seconds}</p>
+                ${players > 1 ? '<p>Результаты: ' + Object.entries(scores).map(([p, s]) => `И${p}:${s}`).join(' ') + '</p>' : ''}
             `;
             
             document.getElementById('final-results').innerHTML = resultsHTML;
             
-            // Показываем модальное окно с результатами
             setTimeout(() => {
                 showModal('game-over-modal');
             }, 1500);
