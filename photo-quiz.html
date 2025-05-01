@@ -237,9 +237,11 @@
         height: auto;
       }
     }
+    /* ... */
   </style>
 </head>
 <body>
+  <!-- HTML-структура остается без изменений -->
   <div class="settings">
     <h1>Настройки викторины</h1>
    
@@ -286,7 +288,7 @@
 
   <div class="fixed-buttons">
     <button class="home-button" id="home-button">На главную</button>
-  </div>
+  </div>			
 
   <script>
     // Данные для викторины
@@ -351,8 +353,9 @@
     let timeLimit = 0;
     let timer;
     let currentAudio;
+    let availableBirds = [...birds]; // Копия массива birds для доступных вопросов
 
-    // Элементы DOM
+    // Элементы DOM остаются без изменений
     const settings = document.querySelector(".settings");
     const quizContainer = document.querySelector(".quiz-container");
     const results = document.querySelector(".results");
@@ -367,7 +370,6 @@
     const progress = document.getElementById("progress");
     const totalQuestionsDisplay = document.getElementById("total-questions");
     const imageContainer = document.getElementById("image-container");
-
     // Начать викторину
     document.getElementById("start-quiz").addEventListener("click", () => {
       const questionsInput = parseInt(document.getElementById("questions").value);
@@ -379,29 +381,22 @@
         return;
       }
 
-      totalQuestions = questionsInput;
+      // Сбросить доступных птиц при начале новой викторины
+      availableBirds = [...birds];
+      totalQuestions = Math.min(questionsInput, availableBirds.length); // Не больше, чем доступно птиц
       timeLimit = timingMode === "with-timer" ? timeInput : 0;
       settings.style.display = "none";
       quizContainer.style.display = "block";
       totalQuestionsDisplay.textContent = totalQuestions;
-      startQuiz();
-    });
-
-    // Перезапустить викторину
-    document.getElementById("restart").addEventListener("click", () => {
-      results.style.display = "none";
-      settings.style.display = "block";
       correctAnswers = 0;
       incorrectAnswers = 0;
       currentQuestion = 0;
-      if (currentAudio) {
-        currentAudio.pause();
-      }
+      startQuiz();
     });
 
     // Функция для запуска викторины
     function startQuiz() {
-      if (currentQuestion >= totalQuestions) {
+      if (currentQuestion >= totalQuestions || availableBirds.length === 0) {
         endQuiz();
         return;
       }
@@ -414,9 +409,13 @@
       // Убрать подсветку фона, если она была
       imageContainer.classList.remove("correct-answer", "wrong-answer");
 
-
-      const randomBird = birds[Math.floor(Math.random() * birds.length)];
+      // Выбрать случайную птицу из доступных
+      const randomIndex = Math.floor(Math.random() * availableBirds.length);
+      const randomBird = availableBirds[randomIndex];
       
+      // Удалить выбранную птицу из доступных
+      availableBirds.splice(randomIndex, 1);
+
       // Создаем массив для вариантов ответов, исключая текущую птицу
       const otherBirds = birds.filter(bird => bird.name !== randomBird.name);
       
@@ -461,28 +460,26 @@
             resultDisplay.textContent = "Правильно!";
             correctAnswers++;
             
-            // Подсветить фон вокруг изображения белым на 3 секунды
+            // Подсветить фон вокруг изображения зеленым на 3 секунды
             imageContainer.classList.add("correct-answer");
-            setTimeout(() => {
-              imageContainer.classList.remove("correct-answer");
-            }, 3000);
           } else {
             resultDisplay.textContent = `Неправильно! Правильный ответ: ${randomBird.name}`;
             incorrectAnswers++;
-			 // Подсветить фон вокруг изображения красным на 3 секунды
+            // Подсветить фон вокруг изображения красным на 3 секунды
             imageContainer.classList.add("wrong-answer");
-            setTimeout(() => {
-              imageContainer.classList.remove("wrong-answer");
-            }, 3000);
           }
 
-          currentQuestion++;
-          setTimeout(startQuiz, 3000);
+          setTimeout(() => {
+            imageContainer.classList.remove("correct-answer", "wrong-answer");
+            currentQuestion++;
+            startQuiz();
+          }, 3000);
         });
       });
 
       // Запуск таймера, если выбран режим с таймером
       if (timeLimit > 0) {
+        clearInterval(timer); // Очистить предыдущий таймер
         startTimer(timeLimit);
       }
     }
