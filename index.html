@@ -1,559 +1,69 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <link rel="icon" type="image/png" href="images/favicon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Викторина по птицам</title>
-  <style>
-    /* Основные стили */
-    body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
-
-    h1 {
-      color: #2c3e50;
-      font-size: 2.5em;
-      margin-bottom: 20px;
-    }
-    /* Контейнер для изображения */
-    .image-container {
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      background-color: transparent;
-      transition: background-color 0.3s ease;
-    }
-
-    /* Класс для правильного ответа - зеленый фон */
-    .correct-answer {
-      background-color: #4CAF50;
-    }
-    /* Класс для неправильного ответа - красный фон */
-    .wrong-answer {
-      background-color: #f44336;
-    }
-    .quiz-container img {
-      width: 500px;
-      height: 300px;
-      object-fit: cover;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Контейнеры */
-    .settings, .quiz-container, .results {
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      padding: 30px;
-      margin-bottom: 20px;
-      max-width: 500px;
-      width: 100%;
-      text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .settings:hover, .quiz-container:hover, .results:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Форма настроек */
-    label {
-      display: block;
-      margin: 15px 0 5px;
-      font-weight: bold;
-      color: #34495e;
-    }
-
-    select, input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 1em;
-      transition: border-color 0.3s ease;
-    }
-
-    select:focus, input:focus {
-      border-color: #4CAF50;
-      outline: none;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.1em;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-
-    button:hover {
-      background-color: #45a049;
-      transform: scale(1.02);
-    }
-
-    button:active {
-      transform: scale(0.98);
-    }
-
-    /* Викторина */
-    .image-container {
-      padding: 10px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      transition: background-color 0.3s ease;
-    }
-
-    .quiz-container img {
-      width: 500px;
-      height: 300px;
-      object-fit: cover;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .quiz-container audio {
-      width: 100%;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .options {
-      display: flex;
-      flex-direction: row;
-      gap: 10px;
-      justify-content: center;
-    }
-
-    .option {
-      background-color: #4CAF50;
-      color: white;
-      padding: 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      flex: 1;
-      text-align: center;
-    }
-
-    .option:hover {
-      background-color: #45a049;
-      transform: translateY(-3px);
-    }
-
-    .option:active {
-      transform: translateY(0);
-    }
-
-    .result {
-      margin-top: 20px;
-      font-weight: bold;
-      color: #2c3e50;
-    }
-
-    .timer {
-      text-align: center;
-      font-size: 1.2em;
-      margin-bottom: 20px;
-      color: #e74c3c;
-    }
-
-    .progress {
-      margin-bottom: 20px;
-      font-size: 1.1em;
-      color: #34495e;
-    }
-
-    /* Результаты */
-    .results {
-      display: none;
-    }
-
-    .results h1 {
-      color: #4CAF50;
-    }
-
-    .results p {
-      font-size: 1.2em;
-      color: #34495e;
-    }
-
-    /* Фиксированные кнопки */
-    .fixed-buttons {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 500px;
-      text-align: center;
-    }
-
-    .fixed-buttons button {
-      padding: 8px;
-      font-size: 0.9em;
-    }
-
-    /* Класс для правильного ответа */
-    .correct-frame {
-      background-color: white;
-    }
-
-    /* Адаптивность */
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 2em;
-      }
-
-      .settings, .quiz-container, .results {
-        padding: 20px;
-      }
-
-      button {
-        font-size: 1em;
-      }
-
-      .options {
-        flex-direction: column;
-      }
-
-      .quiz-container img {
-        width: 100%;
-        height: auto;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="settings">
-    <h1>Настройки викторины</h1>
-   
-    <label for="questions">Количество вопросов:</label>
-    <select id="questions">
-      <option value="5">5</option>
-      <option value="10" selected>10</option>
-      <option value="15">15</option>
-      <option value="20">20</option>
-      <option value="30">30</option>
-    </select>
-
-    <label for="timing">Режим таймера:</label>
-    <select id="timing">
-      <option value="without-timer">Без таймера</option>
-      <option value="with-timer">С таймером</option>
-    </select>
-
-    <label for="time">Ограничение по времени (в секундах):</label>
-    <input type="number" id="time" min="0" value="30">
-
-    <button id="start-quiz">Начать викторину</button>
+  <header class="header">
+    <h1>Викторина по птицам</h1>
+    <p>Определите птицу</p>
+   <div class="logo-container">
+    <img src="images/sirius.jpg" alt="Логотип Sirius" class="sirius-logo">
+    <img src="images/siriusnew.png" alt="Новый логотип Sirius" class="sirius-new-logo">
   </div>
+    <img src="images/IMG_541.jpg" alt="Логотип викторины" class="logo"> <!-- Логотип справа -->
+    <button class="admin-button" onclick="window.location.href='admin.html'">Админка</button> <!-- Кнопка админки -->
+  </header>
 
-  <div class="quiz-container" style="display: none;">
-    <h1>Викторина</h1>
-    <div class="progress" id="progress">Вопрос 1 из <span id="total-questions">10</span></div>
-    <div class="timer" id="timer"></div>
-    <div class="image-container" id="image-container">
-      <img id="bird-image" src="" alt="Изображение птицы">
+  <main class="quiz-modes">
+    <div class="mode-card" id="photo-quiz" tabindex="0" role="button" aria-label="Режим викторины по фотографиям">
+      <img src="images/bird1.jpg" alt="Фотография птицы 1">
+      <h2>По фотографиям</h2>
+      <p>Определите птицу по её изображению.</p>
     </div>
-    <audio id="bird-audio" controls controlsList="nodownload"></audio>
-    <div class="options" id="options"></div>
-    <div class="result" id="result"></div>
-  </div>
 
-  <div class="results">
-    <h1>Результаты</h1>
-    <p>Правильных ответов: <span id="final-correct">0</span></p>
-    <p>Неправильных ответов: <span id="final-incorrect">0</span></p>
-    <p id="feedback"></p>
-    <button id="restart">Начать заново</button>
-  </div>
+    <div class="mode-card" id="audio-quiz" tabindex="0" role="button" aria-label="Режим викторины по звукам">
+      <img src="images/bird2.jpg" alt="Фотография птицы 2">
+      <h2>По звукам</h2>
+      <p>Определите птицу по её пению.</p>
+      <audio controls>
+        <source src="sounds/birds/bird1.mp3" type="audio/mpeg">
+        Ваш браузер не поддерживает аудио.
+      </audio>
+    </div>
 
-  <div class="fixed-buttons">
-    <button class="home-button" id="home-button">На главную</button>
-  </div>
+    <div class="mode-card" id="random-quiz" tabindex="0" role="button" aria-label="Случайный режим викторины">
+      <img src="images/bird3.jpg" alt="Фотография птицы 3">
+      <h2>Случайный режим</h2>
+      <p>Комбинация фотографий и звуков.</p>
+      <audio controls>
+        <source src="sounds/birds/bird2.mp3" type="audio/mpeg">
+        Ваш браузер не поддерживает аудио.
+      </audio>
+    </div>
+  </main>
 
+  <script src="scripts.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js"></script>
   <script>
-    // Данные для викторины
-    const birds = [
-      { name: "Белоглазый нырок", image: "images1/bird1.jpg", sound: "sounds1/birds/bird1.mp3" },
-      { name: "Белолобый гусь", image: "images1/bird2.jpg", sound: "sounds1/birds/bird2.mp3" },
-      { name: "Белощекая казарка", image: "images1/bird3.jpg", sound: "sounds1/birds/bird3.mp3" },
-      { name: "Белый аист", image: "images1/bird4.jpg", sound: "sounds1/birds/bird4.mp3" },
-      { name: "Большой баклан", image: "images1/bird5.jpg", sound: "sounds1/birds/bird5.mp3" },
-      { name: "Волчок (малая выпь)", image: "images1/bird6.jpg", sound: "sounds1/birds/bird6.mp3" },
-      { name: "Выпь (большая)", image: "images1/bird7.jpg", sound: "sounds1/birds/bird7.mp3" },
-      { name: "Гуменник", image: "images1/bird8.jpg", sound: "sounds1/birds/bird8.mp3" },
-      { name: "Египетская цапля", image: "images1/bird9.jpg", sound: "sounds1/birds/bird9.mp3" },
-      { name: "Желтая цапля", image: "images1/bird10.jpg", sound: "sounds1/birds/bird10.mp3" },
-      { name: "Канадская казарка", image: "images1/bird11.jpg", sound: "sounds1/birds/bird11.mp3" },
-      { name: "Каравайка", image: "images1/bird12.jpg", sound: "sounds1/birds/bird12.mp3" },
-      { name: "Колпица", image: "images1/bird13.jpg", sound: "sounds1/birds/bird13.mp3" },
-      { name: "Красноголовый нырок", image: "images1/bird14.jpg", sound: "sounds1/birds/bird14.mp3" },
-      { name: "Краснозобая гагара", image: "images1/bird15.jpg", sound: "sounds1/birds/bird15.mp3" },
-      { name: "Красноносый нырок", image: "images1/bird16.jpg", sound: "sounds1/birds/bird16.mp3" },
-      { name: "Красношейная поганка", image: "images1/bird17.jpg", sound: "sounds1/birds/bird17.mp3" },
-      { name: "Кряква", image: "images1/bird18.jpg", sound: "sounds1/birds/bird18.mp3" },
-      { name: "Кудрявый пеликан", image: "images1/bird19.jpg", sound: "sounds1/birds/bird19.mp3" },
-      { name: "Лебедь кликун", image: "images1/bird20.jpg", sound: "sounds1/birds/bird20.mp3" },
-      { name: "Лебедь шипун", image: "images1/bird21.jpg", sound: "sounds1/birds/bird21.mp3" },
-      { name: "Малая белая цапля", image: "images1/bird22.jpg", sound: "sounds1/birds/bird22.mp3" },
-      { name: "Малая поганка", image: "images1/bird23.jpg", sound: "sounds1/birds/bird23.mp3" },
-      { name: "Малый баклан", image: "images1/bird24.jpg", sound: "sounds1/birds/bird24.mp3" },
-      { name: "Морская чернеть", image: "images1/bird25.jpg", sound: "sounds1/birds/bird25.mp3" },
-      { name: "Обыкновенная гага", image: "images1/bird26.jpg", sound: "sounds1/birds/bird26.mp3" },
-      { name: "Обыкновенная кваква", image: "images1/bird27.jpg", sound: "sounds1/birds/bird27.mp3" },
-      { name: "Огарь", image: "images1/bird28.jpg", sound: "sounds1/birds/bird28.mp3" },
-      { name: "Пеганка", image: "images1/bird29.jpg", sound: "sounds1/birds/bird29.mp3" },
-      { name: "Пискулька", image: "images1/bird30.jpg", sound: "sounds1/birds/bird30.mp3" },
-      { name: "Розовый пеликан", image: "images1/bird31.jpg", sound: "sounds1/birds/bird31.mp3" },
-      { name: "Розовый фламинго", image: "images1/bird32.jpg", sound: "sounds1/birds/bird32.mp3" },
-      { name: "Рыжая цапля", image: "images1/bird33.jpg", sound: "sounds1/birds/bird33.mp3" },
-      { name: "Свиязь", image: "images1/bird34.jpg", sound: "sounds1/birds/bird34.mp3" },
-      { name: "Серая утка", image: "images1/bird35.jpg", sound: "sounds1/birds/bird35.mp3" },
-      { name: "Серая цапля", image: "images1/bird36.jpg", sound: "sounds1/birds/bird36.mp3" },
-      { name: "Серощекая поганка", image: "images1/bird37.jpg", sound: "sounds1/birds/bird37.mp3" },
-      { name: "Серый гусь", image: "images1/bird38.jpg", sound: "sounds1/birds/bird38.mp3" },
-      { name: "Сухонос", image: "images1/bird39.jpg", sound: "sounds1/birds/bird39.mp3" },
-      { name: "Турпан", image: "images1/bird40.jpg", sound: "sounds1/birds/bird40.mp3" },
-      { name: "Хохлатая чернеть", image: "images1/bird41.jpg", sound: "sounds1/birds/bird41.mp3" },
-      { name: "Хохлатый баклан", image: "images1/bird42.jpg", sound: "sounds1/birds/bird42.mp3" },
-      { name: "Черная казарка", image: "images1/bird43.jpg", sound: "sounds1/birds/bird43.mp3" },
-      { name: "Чернозобая гагара", image: "images1/bird44.jpg", sound: "sounds1/birds/bird44.mp3" },
-      { name: "Черношейная поганка", image: "images1/bird45.jpg", sound: "sounds1/birds/bird45.mp3" },
-      { name: "Черный аист", image: "images1/bird46.jpg", sound: "sounds1/birds/bird46.mp3" },
-      { name: "Чирок свистунок", image: "images1/bird47.jpg", sound: "sounds1/birds/bird47.mp3" },
-      { name: "Чирок трескунок", image: "images1/bird48.jpg", sound: "sounds1/birds/bird48.mp3" },
-      { name: "Чомга", image: "images1/bird49.jpg", sound: "sounds1/birds/bird49.mp3" },
-      { name: "Шилохвость", image: "images1/bird50.jpg", sound: "sounds1/birds/bird50.mp3" },
-      { name: "Широконоска", image: "images1/bird51.jpg", sound: "sounds1/birds/bird51.mp3" }
-    ];
+    // Загрузка базы данных
+    async function loadDatabase() {
+        const response = await fetch('birds.db');
+        const buffer = await response.arrayBuffer();
+        const SQL = await initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/${file}` });
+        const db = new SQL.Database(new Uint8Array(buffer));
 
-    let correctAnswers = 0;
-    let incorrectAnswers = 0;
-    let currentQuestion = 0;
-    let totalQuestions = 10;
-    let timeLimit = 0;
-    let timer;
-    let currentAudio;
-    let usedBirds = []; // Массив для хранения уже использованных птиц
-    let availableBirds = [...birds]; // Копия массива birds для доступных вопросов
-
-    // Элементы DOM
-    const settings = document.querySelector(".settings");
-    const quizContainer = document.querySelector(".quiz-container");
-    const results = document.querySelector(".results");
-    const timerDisplay = document.getElementById("timer");
-    const birdImage = document.getElementById("bird-image");
-    const birdAudio = document.getElementById("bird-audio");
-    const optionsContainer = document.getElementById("options");
-    const resultDisplay = document.getElementById("result");
-    const finalCorrect = document.getElementById("final-correct");
-    const finalIncorrect = document.getElementById("final-incorrect");
-    const feedback = document.getElementById("feedback");
-    const progress = document.getElementById("progress");
-    const totalQuestionsDisplay = document.getElementById("total-questions");
-    const imageContainer = document.getElementById("image-container");
-
-    // Начать викторину
-    document.getElementById("start-quiz").addEventListener("click", () => {
-      const questionsInput = parseInt(document.getElementById("questions").value);
-      const timeInput = parseInt(document.getElementById("time").value);
-      const timingMode = document.getElementById("timing").value;
-
-      if (timeInput < 0) {
-        alert("Время не может быть отрицательным.");
-        return;
-      }
-
-      // Сбросить использованные птицы и доступные вопросы
-      usedBirds = [];
-      availableBirds = [...birds];
-      
-      totalQuestions = Math.min(questionsInput, availableBirds.length); // Не больше, чем доступно птиц
-      timeLimit = timingMode === "with-timer" ? timeInput : 0;
-      settings.style.display = "none";
-      quizContainer.style.display = "block";
-      totalQuestionsDisplay.textContent = totalQuestions;
-      correctAnswers = 0;
-      incorrectAnswers = 0;
-      currentQuestion = 0;
-      startQuiz();
-    });
-
-    // Перезапустить викторину
-    document.getElementById("restart").addEventListener("click", () => {
-      results.style.display = "none";
-      settings.style.display = "block";
-      if (currentAudio) {
-        currentAudio.pause();
-      }
-    });
-
-    // Функция для запуска викторины
-    function startQuiz() {
-      if (currentQuestion >= totalQuestions) {
-        endQuiz();
-        return;
-      }
-
-      // Остановить предыдущее аудио, если оно есть
-      if (currentAudio) {
-        currentAudio.pause();
-      }
-
-      // Убрать подсветку фона, если она была
-      imageContainer.classList.remove("correct-answer", "wrong-answer");
-
-      // Если нет доступных птиц, завершить викторину
-      if (availableBirds.length === 0) {
-        endQuiz();
-        return;
-      }
-
-      // Выбрать случайную птицу из доступных
-      const randomIndex = Math.floor(Math.random() * availableBirds.length);
-      const randomBird = availableBirds[randomIndex];
-      
-      // Удалить выбранную птицу из доступных и добавить в использованные
-      availableBirds.splice(randomIndex, 1);
-      usedBirds.push(randomBird);
-
-      // Создаем массив для вариантов ответов, исключая текущую птицу
-      const otherBirds = birds.filter(bird => bird.name !== randomBird.name);
-      
-      // Выбираем три уникальных варианта ответа
-      const uniqueOptions = [];
-      while (uniqueOptions.length < 3) {
-        const randomIndex = Math.floor(Math.random() * otherBirds.length);
-        const selectedBird = otherBirds[randomIndex];
-        if (!uniqueOptions.includes(selectedBird)) {
-          uniqueOptions.push(selectedBird);
-        }
-      }
-
-      // Добавляем правильный ответ в массив вариантов
-      const options = [randomBird, ...uniqueOptions].sort(() => Math.random() - 0.5);
-
-      // Отображение изображения птицы
-      birdImage.src = randomBird.image;
-      birdImage.style.display = "block";
-
-      // Воспроизведение звука птицы
-      birdAudio.src = randomBird.sound;
-      birdAudio.play();
-      currentAudio = birdAudio;
-
-      // Отображение текущего вопроса
-      progress.textContent = `Вопрос ${currentQuestion + 1} из ${totalQuestions}`;
-
-      // Отображение вариантов ответов
-      optionsContainer.innerHTML = options
-        .map(bird => `<div class="option" data-name="${bird.name}">${bird.name}</div>`)
-        .join("");
-
-      // Обработка выбора ответа
-      optionsContainer.querySelectorAll(".option").forEach(option => {
-        option.addEventListener("click", () => {
-          // Остановить воспроизведение звука при выборе ответа
-          birdAudio.pause();
-          
-          const selectedBird = option.getAttribute("data-name");
-          if (selectedBird === randomBird.name) {
-            resultDisplay.textContent = "Правильно!";
-            correctAnswers++;
-            
-            // Подсветить фон вокруг изображения зеленым на 3 секунды
-            imageContainer.classList.add("correct-answer");
-            setTimeout(() => {
-              imageContainer.classList.remove("correct-answer");
-            }, 3000);
-          } else {
-            resultDisplay.textContent = `Неправильно! Правильный ответ: ${randomBird.name}`;
-            incorrectAnswers++;
-            // Подсветить фон вокруг изображения красным на 3 секунды
-            imageContainer.classList.add("wrong-answer");
-            setTimeout(() => {
-              imageContainer.classList.remove("wrong-answer");
-            }, 3000);
-          }
-
-          currentQuestion++;
-          setTimeout(startQuiz, 3000);
-        });
-      });
-
-      // Запуск таймера, если выбран режим с таймером
-      if (timeLimit > 0) {
-        clearInterval(timer); // Очистить предыдущий таймер
-        startTimer(timeLimit);
-      }
+        // Выполнение запроса
+        const result = db.exec("SELECT * FROM birds");
+        console.log(result);
     }
 
-    // Функция для запуска таймера
-    function startTimer(seconds) {
-      let remainingTime = seconds;
-      timerDisplay.textContent = `Осталось времени: ${remainingTime} сек.`;
-
-      timer = setInterval(() => {
-        remainingTime--;
-        timerDisplay.textContent = `Осталось времени: ${remainingTime} сек.`;
-
-        if (remainingTime <= 0) {
-          clearInterval(timer);
-          resultDisplay.textContent = "Время вышло!";
-          if (currentAudio) {
-            currentAudio.pause();
-          }
-          incorrectAnswers++;
-          currentQuestion++;
-          setTimeout(startQuiz, 2000);
-        }
-      }, 1000);
-    }
-
-    // Функция для завершения викторины
-    function endQuiz() {
-      quizContainer.style.display = "none";
-      results.style.display = "block";
-      finalCorrect.textContent = correctAnswers;
-      finalIncorrect.textContent = incorrectAnswers;
-      clearInterval(timer);
-      if (currentAudio) {
-        currentAudio.pause();
-      }
-
-      const percentage = (correctAnswers / totalQuestions) * 100;
-      if (percentage < 50) {
-        feedback.textContent = "Попробуйте еще раз, чтобы улучшить результат!";
-      } else if (percentage >= 50 && percentage < 80) {
-        feedback.textContent = "Хороший результат, но есть куда стремиться!";
-      } else {
-        feedback.textContent = "Отличный результат! Вы настоящий эксперт!";
-      }
-    }
-
-    // Обработка кнопки "На главную"
-    document.querySelectorAll(".home-button").forEach(button => {
-      button.addEventListener("click", () => {
-        window.location.href = "index.html";
-      });
-    });
+    loadDatabase();
   </script>
 </body>
 </html>
