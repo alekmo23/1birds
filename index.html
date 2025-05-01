@@ -3,45 +3,48 @@
 <head>
   <link rel="icon" type="image/png" href="images/favicon.png">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Викторина по птицам</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="header">
-    <h1>Викторина по птицам</h1>
-    <p>Определите птицу</p>
-   <div class="logo-container">
-    <img src="images/sirius.jpg" alt="Логотип Sirius" class="sirius-logo">
-    <img src="images/siriusnew.png" alt="Новый логотип Sirius" class="sirius-new-logo">
-  </div>
-    <img src="images/IMG_541.jpg" alt="Логотип викторины" class="logo"> <!-- Логотип справа -->
-    <button class="admin-button" onclick="window.location.href='admin.html'">Админка</button> <!-- Кнопка админки -->
+    <div class="header-content">
+      <div class="header-text">
+        <h1>Викторина по птицам</h1>
+        <p>Определите птицу</p>
+      </div>
+      <div class="logo-container">
+        <img src="images/sirius.jpg" alt="Логотип Sirius" class="sirius-logo">
+        <img src="images/siriusnew.png" alt="Новый логотип Sirius" class="sirius-new-logo">
+      </div>
+      <img src="images/IMG_541.jpg" alt="Логотип викторины" class="logo">
+      <button class="admin-button" onclick="window.location.href='admin.html'">Админка</button>
+    </div>
   </header>
 
   <main class="quiz-modes">
     <div class="mode-card" id="photo-quiz" tabindex="0" role="button" aria-label="Режим викторины по фотографиям">
-      <img src="images/bird1.jpg" alt="Фотография птицы 1">
+      <img src="images/bird1.jpg" alt="Фотография птицы 1" loading="lazy">
       <h2>По фотографиям</h2>
       <p>Определите птицу по её изображению.</p>
     </div>
 
     <div class="mode-card" id="audio-quiz" tabindex="0" role="button" aria-label="Режим викторины по звукам">
-      <img src="images/bird2.jpg" alt="Фотография птицы 2">
+      <img src="images/bird2.jpg" alt="Фотография птицы 2" loading="lazy">
       <h2>По звукам</h2>
       <p>Определите птицу по её пению.</p>
-      <audio controls>
+      <audio controls controlsList="nodownload">
         <source src="sounds/birds/bird1.mp3" type="audio/mpeg">
         Ваш браузер не поддерживает аудио.
       </audio>
     </div>
 
     <div class="mode-card" id="random-quiz" tabindex="0" role="button" aria-label="Случайный режим викторины">
-      <img src="images/bird3.jpg" alt="Фотография птицы 3">
+      <img src="images/bird3.jpg" alt="Фотография птицы 3" loading="lazy">
       <h2>Случайный режим</h2>
       <p>Комбинация фотографий и звуков.</p>
-      <audio controls>
+      <audio controls controlsList="nodownload">
         <source src="sounds/birds/bird2.mp3" type="audio/mpeg">
         Ваш браузер не поддерживает аудио.
       </audio>
@@ -63,7 +66,10 @@
         console.log(result);
     }
 
-    loadDatabase();
+    // Отложенная загрузка базы данных после загрузки страницы
+    if (window.innerWidth > 768) {
+      document.addEventListener('DOMContentLoaded', loadDatabase);
+    }
   </script>
 </body>
 </html>
