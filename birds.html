@@ -70,10 +70,6 @@
 			position: relative;
 			top: 55px; /* Сдвигаем логотипы вниз на 15px */
 		}
-	    	.logo-right img {
-				width: 140%;
-			    	height: 140%;
-			    	transform: translateY(-10%);
 
 		/* Для мобильной версии */
 		@media (max-width: 768px) {
@@ -113,8 +109,8 @@
         }
         
         .logo-oval {
-            width: 130px;
-            height: 180px;
+            width: 100px;
+            height: 140px;
             border-radius: 50% / 60% 60% 40% 40%;
             overflow: hidden;
             border: 4px solid white;
@@ -258,6 +254,21 @@
             margin: 0 auto;
             padding: 0 20px;
         }
+				/* Увеличение правого логотипа */
+		.logo-right img {
+			width: 140%;
+			height: 140%;
+			transform: translateY(-10%);
+		}
+
+		/* Адаптация для мобильных */
+		@media (max-width: 768px) {
+			.logo-right img {
+				width: 130%;
+				height: 130%;
+				transform: translateY(-5%);
+			}
+		}
         
         @media (max-width: 768px) {
             .header-content {
@@ -275,7 +286,11 @@
                 height: 110px;
                 order: 2;
             }
-            
+			.logo-right img {
+				width: 140%;
+				height: 140%;
+				transform: translateY(-10%);
+						
             .logo-oval:first-child {
                 order: 0;
             }
@@ -294,7 +309,7 @@
                     <img src="images/sirius.jpg" alt="Логотип Sirius">
                 </div>
                 <h1>Орнитологические ресурсы</h1>
-                <div class="logo-oval">
+                <div class="logo-oval logo-right">
                     <img src="images/IMG_541.jpg" alt="Логотип викторины">
                 </div>
             </div>
