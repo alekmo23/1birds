@@ -58,12 +58,25 @@
         }
         
         .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 15px;
-        }
+			display: flex;
+			align-items: center; /* Основное выравнивание по центру */
+			justify-content: center;
+			gap: 40px;
+			margin-bottom: 15px;
+		}
+
+		.logo-oval {
+			/* предыдущие стили остаются без изменений */
+			position: relative;
+			top: 55px; /* Сдвигаем логотипы вниз на 15px */
+		}
+
+		/* Для мобильной версии */
+		@media (max-width: 768px) {
+			.logo-oval {
+				top: 10px; /* Меньший сдвиг на мобильных */
+			}
+		}
         
         .header h1 {
             font-family: 'Montserrat', sans-serif;
@@ -96,8 +109,8 @@
         }
         
         .logo-oval {
-            width: 120px;
-            height: 170px;
+            width: 100px;
+            height: 140px;
             border-radius: 50% / 60% 60% 40% 40%;
             overflow: hidden;
             border: 4px solid white;
@@ -116,8 +129,8 @@
         }
         
         .logo-oval img {
-            width: 120%;
-            height: 120%;
+            width: 110%;
+            height: 110%;
             object-fit: contain;
             transform: translateY(-5%);
         }
