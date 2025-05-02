@@ -80,7 +80,6 @@
             flex-shrink: 0;
             position: relative;
             top: 55px;
-            cursor: pointer;
         }
         
         /* Специальные стили для правого логотипа */
@@ -251,165 +250,6 @@
             margin: 0 auto;
             padding: 0 20px;
         }
-
-        /* Модальное окно */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 30px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            position: relative;
-        }
-
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #aaa;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: #333;
-        }
-
-        .modal-title {
-            margin-top: 0;
-            color: var(--secondary-color);
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #2980b9;
-        }
-
-        .access-control {
-            margin-top: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .access-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .access-item:last-child {
-            border-bottom: none;
-        }
-
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--primary-color);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-
-        .admin-message {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--accent-color);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            z-index: 1000;
-            display: none;
-            font-weight: bold;
-        }
         
         @media (max-width: 768px) {
             .header-content {
@@ -436,10 +276,11 @@
             .links-grid {
                 grid-template-columns: 1fr;
             }
-        }
+        }							   
     </style>
 </head>
 <body>
+    <!-- Весь HTML остаётся таким же, только добавляем data-id к ссылкам -->
     <div class="header">
         <div class="container">
             <div class="header-content">
@@ -478,15 +319,15 @@
             <h2 class="section-title">Поиск птиц в Яндекс</h2>
             <div class="links-grid">
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/1birds/poiskbird" target="_blank" class="resource-link" data-id="search1">Поиск птиц 1</a>
+                    <a href="https://alekmo23.github.io/1birds/poiskbird" target="_blank">Поиск птиц 1</a>
                     <p>Простые поисковые запросы о птицах для быстрого нахождения информации</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/1birds/poiskbird1" target="_blank" class="resource-link" data-id="search2">Поиск птиц 2</a>
+                    <a href="https://alekmo23.github.io/1birds/poiskbird1" target="_blank">Поиск птиц 2</a>
                     <p>Дополнительные поисковые запросы для углубленного изучения</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/1birds/poiskbird3" target="_blank" class="resource-link" data-id="search3">Поиск птиц 3</a>
+                    <a href="https://alekmo23.github.io/1birds/poiskbird3" target="_blank">Поиск птиц 3</a>
                     <p>Дополнительные поисковые запросы для углубленного изучения</p>
                 </div>
             </div>
@@ -496,36 +337,45 @@
             <h2 class="section-title">Тренажеры по семействам</h2>
             <div class="links-grid">
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/trainer/" target="_blank" class="resource-link" data-id="trainer1">Воробьиные</a>
+                    <a href="https://alekmo23.github.io/trainer/" target="_blank">Воробьиные</a>
                     <p>Интерактивный тренажер по птицам семейства Воробьиные</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/trainer1/" target="_blank" class="resource-link" data-id="trainer2">Воробьиные 2</a>
+                    <a href="https://alekmo23.github.io/trainer1/" target="_blank">Воробьиные 2</a>
                     <p>Дополнительный тренажер по Воробьиным с тестами и викторинами</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/trainer2/index-woodpeckers" target="_blank" class="resource-link" data-id="trainer3">Дятлы</a>
+                    <a href="https://alekmo23.github.io/trainer2/index-woodpeckers" target="_blank">Дятлы</a>
                     <p>Тренажер по птицам семейства Дятлы с аудиозаписями их стука</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/trainer3/" target="_blank" class="resource-link" data-id="trainer4">Ночные хищники</a>
+                    <a href="https://alekmo23.github.io/trainer3/" target="_blank">Ночные хищники</a>
                     <p>Тренажер по ночным хищным птицам с особенностями их биологии</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/bi1/bi15/index" target="_blank" class="resource-link" data-id="trainer5">Дополнительный ресурс</a>
+                    <a href="https://alekmo23.github.io/bi1/bi15/index" target="_blank">Дополнительный ресурс</a>
                     <p>Биологический тренажер с комплексными заданиями</p>
                 </div>
             </div>
         </div>
 
+																		   
+										
         <div class="section">
             <h2 class="section-title">Игры для тренировки памяти</h2>
+																			  
             <div class="links-grid">
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/1birds/memory" target="_blank" class="resource-link" data-id="game1">Найди пары птиц</a>
+                    <a href="https://alekmo23.github.io/1birds/memory" target="_blank">Найди пары птиц</a>
                     <p>Игра на память - находите парные карточки с изображениями птиц</p>
                 </div>
+																	  
             </div>
+																				   
+																				   
+											
+																														  
+				  
         </div>
     </div>
 
@@ -573,9 +423,9 @@
             const adminMessage = document.getElementById('admin-message');
             
             // Пароль администратора (можно изменить)
-            const ADMIN_PASSWORD = "admin90545";
+            const ADMIN_PASSWORD = "admin123";
             
-            // Состояние доступа к ресурсам
+            // Состояние доступа к ресурсам (хранится в памяти)
             let accessState = {};
             
             // Список всех ресурсов
@@ -594,9 +444,9 @@
                 { id: "game1", name: "Найди пары птиц", url: "https://alekmo23.github.io/1birds/memory" }
             ];
             
-            // Загружаем состояние доступа из localStorage
+            // Загружаем состояние доступа из sessionStorage (работает только в текущей сессии)
             function loadAccessState() {
-                const savedState = localStorage.getItem('resourceAccessState');
+                const savedState = sessionStorage.getItem('resourceAccessState');
                 if (savedState) {
                     accessState = JSON.parse(savedState);
                 } else {
@@ -604,13 +454,12 @@
                     resources.forEach(resource => {
                         accessState[resource.id] = true;
                     });
-                    saveAccessState();
                 }
             }
             
-            // Сохраняем состояние доступа в localStorage
+            // Сохраняем состояние доступа в sessionStorage
             function saveAccessState() {
-                localStorage.setItem('resourceAccessState', JSON.stringify(accessState));
+                sessionStorage.setItem('resourceAccessState', JSON.stringify(accessState));
             }
             
             // Обновляем интерфейс управления доступом
@@ -701,7 +550,7 @@
                     });
                     saveAccessState();
                     modal.style.display = 'none';
-                    alert('Изменения сохранены!');
+                    alert('Изменения сохранены для текущей сессии!');
                 });
                 
                 // Закрываем модальное окно при клике вне его
