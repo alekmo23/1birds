@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Энциклопедия птиц России с фильтрами</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #ffcb05;
+            --accent: #e63946;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+        
+        body {
+            font-family: 'Merriweather', Georgia, serif;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.8;
+            background-color: #fefefe;
+            color: var(--dark);
+            background-image: radial-gradient(#e3e3e3 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .subtitle {
+            color: var(--gray);
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+        
+        .filters-container {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .filter-select {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+        
+        .search-container {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 1.5rem 0;
+            z-index: 100;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Остальные стили остаются как в предыдущей версии */
+        .birds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .bird-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #eee;
+        }
+        
+        .bird-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .bird-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .bird-family {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 0.2rem;
+        }
+        
+        /* ... остальные стили остаются без изменений ... */
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Энциклопедия птиц России</h1>
+        <div class="subtitle">Исчерпывающий справочник с фильтрами по семействам</div>
+    </header>
+    
+    <div class="filter-group">
+            <label for="quick-search" class="filter-label">Поиск по названию:</label>
+            <input type="text" id="quick-search" class="filter-select" placeholder="Введите название птицы...">
+     </div>
+	
+	<div class="filters-container">
+        <div class="filter-group">
+            <label for="family-filter" class="filter-label">Семейство:</label>
+            <select id="family-filter" class="filter-select">
+                <option value="">Все семейства</option>
+                <!-- Опции будут добавлены скриптом -->
+            </select>
+        </div>
+        
+        
+    </div>
+    
+    <div class="counter">Всего видов: <span id="total-count">0</span> • Найдено: <span id="filtered-count">0</span></div>
+    
+    <div class="birds-grid" id="birds-container"></div>
+    
+    <div id="no-results" class="no-results">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <p>Птиц с такими параметрами не найдено</p>
+    </div>
+    
+    <script>
+        // Данные о птицах с семействами
+        const birdsData = [
+			  { "name": "Авдотка", "family": "семейство авдотковые (Burhinidae)" },
+			  { "name": "Альпийская галка", "family": "семейство врановые (Corvidae)" },
+			  { "name": "Альпийская завирушка", "family": "семейство завирушковые (Prunellidae)" },
+			  { "name": "Балобан", "family": "семейство соколиные (Falconidae)" },
+			  { "name": "Белая куропатка", "family": "семейство тетеревиные (Tetraonidae)" },
+			  { "name": "Белая сова", "family": "семейство совиные (Strigidae)" },
+			  { "name": "Белая трясогузка", "family": "семейство трясогузковые (Motacillidae)" },
+			  { "name": "Белобрюхий стриж", "family": "семейство стрижиные (Apodidae)" },
+			  { "name": "Белобровик", "family": "семейство дроздовые (Turdidae)" },
+			  { "name": "Белоголовый сип", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Белоглазый нырок", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Белозобый дрозд", "family": "семейство дроздовые (Turdidae)" },
+			  { "name": "Белокрылая крачка", "family": "семейство крачковые (Laridae)" },
+			  { "name": "Белокрылый клест", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Белолобый гусь", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Белоспинный дятел", "family": "семейство дятловые (Picidae)" },
+			  { "name": "Белощёкая казарка", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Белощёкая крачка", "family": "семейство крачковые (Laridae)" },
+			  { "name": "Белый аист", "family": "семейство аистовые (Ciconiidae)" },
+			  { "name": "Беркут", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Бледная пересмешка", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Болотная камышовка", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Болотная сова", "family": "семейство совиные (Strigidae)" },
+			  { "name": "Болотный лунь", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Бородатая неясыть", "family": "семейство совиные (Strigidae)" },
+			  { "name": "Бородач", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Большая синица", "family": "семейство синицевые (Paridae)" },
+			  { "name": "Большой баклан", "family": "семейство баклановые (Phalacrocoracidae)" },
+			  { "name": "Большой веретенник", "family": "семейство бекасовые (Scolopacidae)" },
+			  { "name": "Большой кроншнеп", "family": "семейство бекасовые (Scolopacidae)" },
+			  { "name": "Большой крохаль", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Большой пёстрый дятел", "family": "семейство дятловые (Picidae)" },
+			  { "name": "Большой поморник", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Большой улит", "family": "семейство бекасовые (Scolopacidae)" },
+			  { "name": "Бургомистр", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Буроголовая гаичка", "family": "семейство синицевые (Paridae)" },
+			  { "name": "Варакушка", "family": "семейство мухоловковые (Muscicapidae)" },
+			  { "name": "Вертишейка", "family": "семейство дятловые (Picidae)" },
+			  { "name": "Вертлявая камышовка", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Водяной пастушок", "family": "семейство пастушковые (Rallidae)" },
+			  { "name": "Волчок", "family": "семейство цаплевые (Ardeidae)" },
+			  { "name": "Воробьиный сычик", "family": "семейство совиные (Strigidae)" },
+			  { "name": "Ворон", "family": "семейство врановые (Corvidae)" },
+			  { "name": "Вяхирь", "family": "семейство голубиные (Columbidae)" },
+			  { "name": "Выпь", "family": "семейство цаплевые (Ardeidae)" },
+			  { "name": "Гагарка", "family": "семейство чистиковые (Alcidae)" },
+			  { "name": "Галстучник", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Гаршнеп", "family": "семейство бекасовые (Scolopacidae)" },
+			  { "name": "Глухарь", "family": "семейство тетеревиные (Tetraonidae)" },
+			  { "name": "Голубая сорока", "family": "семейство вороновые (Corvidae)" },
+			  { "name": "Горная трясогузка", "family": "семейство трясогузковые (Motacillidae)" },
+			  { "name": "Горная чечётка", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Горная овсянка", "family": "семейство овсянковые (Emberizidae)" },
+			  { "name": "Горный дупель", "family": "семейство бекасовые (Scolopacidae)" },
+			  { "name": "Горный конек", "family": "семейство трясогузковые (Motacillidae)" },
+			  { "name": "Грач", "family": "семейство врановые (Corvidae)" },
+			  { "name": "Грязовик", "family": "семейство бекасовые (Scolopacidae)" },
+			  { "name": "Гуменник", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Деревенская ласточка", "family": "семейство ласточковые (Hirundinidae)" },
+			  { "name": "Дербник", "family": "семейство соколиные (Falconidae)" },
+			  { "name": "Деряба", "family": "семейство дроздовые (Turdidae)" },
+			  { "name": "Длинноносый крохаль", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Длиннохвостая неясыть", "family": "семейство совиные (Strigidae)" },
+			  { "name": "Длиннохвостый поморник", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Домовый воробей", "family": "семейство ткачиковые (Passeridae)" },
+			  { "name": "Домовый сыч", "family": "семейство совиные (Strigidae)" },
+			  { "name": "Дрофа", "family": "семейство дрофиные (Otididae)" },
+			  { "name": "Дроздовидная камышовка", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Дубровник", "family": "семейство овсянковые (Emberizidae)" },
+			  { "name": "Дупель", "family": "семейство бекасовые (Scolopacidae)" },
+			  { "name": "Египетская цапля", "family": "семейство цаплевые (Ardeidae)" },
+			  { "name": "Желна", "family": "семейство дятловые (Picidae)" },
+			  { "name": "Жёлтая цапля", "family": "семейство цаплевые (Ardeidae)" },
+			  { "name": "Жёлтая трясогузка", "family": "семейство трясогузковые (Motacillidae)" },
+			  { "name": "Жёлтоголовый королёк", "family": "семейство корольковые (Regulidae)" },
+			  { "name": "Зарянка", "family": "семейство мухоловковые (Muscicapidae)" },
+			  { "name": "Зелёная пеночка", "family": "семейство пеночковые (Phylloscopidae)" },
+			  { "name": "Зимняк", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Зимородок", "family": "семейство зимородковые (Alcedinidae)" },
+			  { "name": "Змееяд", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Золотистая ржанка", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Золотистая щурка", "family": "семейство щурковые (Meropidae)" },
+			  { "name": "Зяблик", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Канадская казарка", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Каменка обыкновенная", "family": "семейство трясогузковые (Motacillidae)" },
+			  { "name": "Каменка плешанка", "family": "семейство трясогузковые (Motacillidae)" },
+			  { "name": "Каменка плясунья", "family": "семейство трясогузковые (Motacillidae)" },
+			  { "name": "Каменный воробей", "family": "семейство ткачиковые (Passeridae)" },
+			  { "name": "Камышевка барсучок", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Камышовая овсянка", "family": "семейство овсянковые (Emberizidae)" },
+			  { "name": "Камышница", "family": "семейство пастушковые (Rallidae)" },
+			  { "name": "Канареечный вьюрок", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Камнешарка", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Канюк", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Каравайка", "family": "семейство ибисовые (Threskiornithidae)" },
+			  { "name": "Кедровка", "family": "семейство врановые (Corvidae)" },
+			  { "name": "Кеклик", "family": "семейство фазановые (Phasianidae)" },
+			  { "name": "Клест еловик", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Клест сосновик", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Клинтух", "family": "семейство голубиные (Columbidae)" },
+			  { "name": "Клуша", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Клушица", "family": "семейство врановые (Corvidae)" },
+			  { "name": "Кобчик", "family": "семейство соколиные (Falconidae)" },
+			  { "name": "Колпица", "family": "семейство ибисовые (Threskiornithidae)" },
+			  { "name": "Коростель", "family": "семейство пастушковые (Rallidae)" },
+			  { "name": "Короткопалая пищуха", "family": "семейство пищуховые (Certhiidae)" },
+			  { "name": "Короткохвостый поморник", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Краснозобая гагара", "family": "семейство гагаровые (Gaviidae)" },
+			  { "name": "Краснозобый конек", "family": "семейство трясогузковые (Motacillidae)" },
+			  { "name": "Красноголовый королёк", "family": "семейство корольковые (Regulidae)" },
+			  { "name": "Красноголовый нырок", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Краснокрылый стенолаз", "family": "семейство стенолазовые (Tichodromidae)" },
+			  { "name": "Красный коршун", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Красноносый нырок", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Красношейная поганка", "family": "семейство поганковые (Podicipedidae)" },
+			  { "name": "Крапивник", "family": "семейство крапивниковые (Troglodytidae)" },
+			  { "name": "Кречет", "family": "семейство соколиные (Falconidae)" },
+			  { "name": "Кроншнеп средний", "family": "семейство бекасовые (Scolopacidae)" },
+			  { "name": "Круглоносый плавунчик", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Кряква", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Кулик воробей", "family": "семейство бекасовые (Scolopacidae)" },
+			  { "name": "Кулик-воробей", "family": "семейство бекасовые (Scolopacidae)" },
+			  { "name": "Кулик-воровка", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Кулик-сорока", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Кукша", "family": "семейство врановые (Corvidae)" },
+			  { "name": "Курганник", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Лапландский подорожник", "family": "семейство овсянковые (Emberizidae)" },
+			  { "name": "Лазоревка", "family": "семейство синицевые (Paridae)" },
+			  { "name": "Лебедь-кликун", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Лебедь-шипун", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Лесная завирушка", "family": "семейство завирушковые (Prunellidae)" },
+			  { "name": "Лесной дупель", "family": "семейство бекасовые (Scolopacidae)" },
+			  { "name": "Лесной конек", "family": "семейство трясогузковые (Motacillidae)" },
+			  { "name": "Луговая тиркушка", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Луговой конек", "family": "семейство трясогузковые (Motacillidae)" },
+			  { "name": "Луговой чекан", "family": "семейство мухоловковые (Muscicapidae)" },
+			  { "name": "Лысуха", "family": "семейство пастушковые (Rallidae)" },
+			  { "name": "Люрик", "family": "семейство чистиковые (Alcidae)" },
+			  { "name": "Малая белая цапля", "family": "семейство цаплевые (Ardeidae)" },
+			  { "name": "Малая выпь", "family": "семейство цаплевые (Ardeidae)" },
+			  { "name": "Малая крачка", "family": "семейство крачковые (Laridae)" },
+			  { "name": "Малая мухоловка", "family": "семейство мухоловковые (Muscicapidae)" },
+			  { "name": "Малая поганка", "family": "семейство поганковые (Podicipedidae)" },
+			  { "name": "Малая чайка", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Малый баклан", "family": "семейство баклановые (Phalacrocoracidae)" },
+			  { "name": "Малый веретенник", "family": "семейство бекасовые (Scolopacidae)" },
+			  { "name": "Малый жаворонок", "family": "семейство жаворонковые (Alaudidae)" },
+			  { "name": "Малый зуёк", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Малый лебедь", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Малый пестрый дятел", "family": "семейство дятловые (Picidae)" },
+			  { "name": "Малый подорлик", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Малый погоныш", "family": "семейство пастушковые (Rallidae)" },
+			  { "name": "Могильник", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Морская чернеть", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Морская чайка", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Морской голубок", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Морской зуёк", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Морянка", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Московка", "family": "семейство синицевые (Paridae)" },
+			  { "name": "Мохноногий сыч", "family": "семейство совиные (Strigidae)" },
+			  { "name": "Мухоловка-белошейка", "family": "семейство мухоловковые (Muscicapidae)" },
+			  { "name": "Мухоловка-пеструшка", "family": "семейство мухоловковые (Muscicapidae)" },
+			  { "name": "Обыкновенная гага", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Обыкновенная горлица", "family": "семейство голубиные (Columbidae)" },
+			  { "name": "Обыкновенная зеленушка", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Обыкновенная каменка", "family": "семейство трясогузковые (Motacillidae)" },
+			  { "name": "Обыкновенная кваква", "family": "семейство цаплевые (Ardeidae)" },
+			  { "name": "Обыкновенная кукушка", "family": "семейство кукушковые (Cuculidae)" },
+			  { "name": "Обыкновенная моевка", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Обыкновенная овсянка", "family": "семейство овсянковые (Emberizidae)" },
+			  { "name": "Обыкновенная оляпка", "family": "семейство оляпковые (Cinclidae)" },
+			  { "name": "Обыкновенная пересмешка", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Обыкновенная пищуха", "family": "семейство пищуховые (Certhiidae)" },
+			  { "name": "Обыкновенная пустельга", "family": "семейство соколиные (Falconidae)" },
+			  { "name": "Обыкновенная сипуха", "family": "семейство сипуховые (Tytonidae)" },
+			  { "name": "Обыкновенная славка", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Обыкновенная чечётка", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Обыкновенный гоголь", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Обыкновенный дубонос", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Обыкновенный жулан", "family": "семейство мухоловковые (Muscicapidae)" },
+			  { "name": "Обыкновенный зимородок", "family": "семейство зимородковые (Alcedinidae)" },
+			  { "name": "Обыкновенный канюк", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Обыкновенный козодой", "family": "семейство козодоевые (Caprimulgidae)" },
+			  { "name": "Обыкновенный поползень", "family": "семейство поползневые (Sittidae)" },
+			  { "name": "Обыкновенный ремез", "family": "семейство ремезовые (Remizidae)" },
+			  { "name": "Обыкновенный сверчок", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Обыкновенный скворец", "family": "семейство скворцовые (Sturnidae)" },
+			  { "name": "Обыкновенный снегирь", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Обыкновенный соловей", "family": "семейство мухоловковые (Muscicapidae)" },
+			  { "name": "Обыкновенный филин", "family": "семейство совиные (Strigidae)" },
+			  { "name": "Обыкновенный чистик", "family": "семейство чистиковые (Alcidae)" },
+			  { "name": "Овсянка крошка", "family": "семейство овсянковые (Emberizidae)" },
+			  { "name": "Овсянка ремез", "family": "семейство овсянковые (Emberizidae)" },
+			  { "name": "Овсянка-крошка", "family": "семейство овсянковые (Emberizidae)" },
+			  { "name": "Овсянка-ремез", "family": "семейство овсянковые (Emberizidae)" },
+			  { "name": "Огарь", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Озерная чайка", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Ополовник", "family": "семейство синицевые (Paridae)" },
+			  { "name": "Орел-карлик", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Орлан-белохвост", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Осоед", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Пеганка", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Пепельная чечётка", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Пёстрый дятел", "family": "семейство дятловые (Picidae)" },
+			  { "name": "Пёстрый каменный дрозд", "family": "семейство дроздовые (Turdidae)" },
+			  { "name": "Пискулька", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Погоныш крошка", "family": "семейство пастушковые (Rallidae)" },
+			  { "name": "Погоныш малый", "family": "семейство пастушковые (Rallidae)" },
+			  { "name": "Погоныш обыкновенный", "family": "семейство пастушковые (Rallidae)" },
+			  { "name": "Погоныш-крошка", "family": "семейство пастушковые (Rallidae)" },
+			  { "name": "Погоныш-малый", "family": "семейство пастушковые (Rallidae)" },
+			  { "name": "Полевой жаворонок", "family": "семейство жаворонковые (Alaudidae)" },
+			  { "name": "Полевой конек", "family": "семейство трясогузковые (Motacillidae)" },
+			  { "name": "Полевой лунь", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Полевой воробей", "family": "семейство ткачиковые (Passeridae)" },
+			  { "name": "Полярная крачка", "family": "семейство крачковые (Laridae)" },
+			  { "name": "Просянка", "family": "семейство овсянковые (Emberizidae)" },
+			  { "name": "Пуночка", "family": "семейство жаворонковые (Alaudidae)" },
+			  { "name": "Пустельга", "family": "семейство соколиные (Falconidae)" },
+			  { "name": "Пухляк", "family": "семейство синицевые (Paridae)" },
+			  { "name": "Пятнистый сверчок", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Речная крачка", "family": "семейство крачковые (Laridae)" },
+			  { "name": "Ремез", "family": "семейство ремезовые (Remizidae)" },
+			  { "name": "Рогатый жаворонок", "family": "семейство жаворонковые (Alaudidae)" },
+			  { "name": "Розовая чайка", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Розовый пеликан", "family": "семейство пеликановые (Pelecanidae)" },
+			  { "name": "Розовый фламинго", "family": "семейство фламинговые (Phoenicopteridae)" },
+			  { "name": "Рыжая цапля", "family": "семейство цаплевые (Ardeidae)" },
+			  { "name": "Рыжепоясничная ласточка", "family": "семейство ласточковые (Hirundinidae)" },
+			  { "name": "Рябинник", "family": "семейство дроздовые (Turdidae)" },
+			  { "name": "Рябчик", "family": "семейство тетеревиные (Tetraonidae)" },
+			  { "name": "Савка", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Савка белоглазая", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Сапсан", "family": "семейство соколиные (Falconidae)" },
+			  { "name": "Свиязь", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Седой дятел", "family": "семейство дятловые (Picidae)" },
+			  { "name": "Серая ворона", "family": "семейство врановые (Corvidae)" },
+			  { "name": "Серая куропатка", "family": "семейство фазановые (Phasianidae)" },
+			  { "name": "Серая мухоловка", "family": "семейство мухоловковые (Muscicapidae)" },
+			  { "name": "Серая неясыть", "family": "семейство совиные (Strigidae)" },
+			  { "name": "Серая славка", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Серая утка", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Серая цапля", "family": "семейство цаплевые (Ardeidae)" },
+			  { "name": "Серебристая чайка", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Серый гусь", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Серый журавль", "family": "семейство журавлиные (Gruidae)" },
+			  { "name": "Серый сорокопут", "family": "семейство сорокопутовые (Laniidae)" },
+			  { "name": "Серый чибис", "family": "семейство ржанковые (Charadriidae)" },
+			  { "name": "Серощёкая поганка", "family": "семейство поганковые (Podicipedidae)" },
+			  { "name": "Сибирская завирушка", "family": "семейство завирушковые (Prunellidae)" },
+			  { "name": "Сизая чайка", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Сизоворонка", "family": "семейство сизоворонковые (Coraciidae)" },
+			  { "name": "Сизый голубь", "family": "семейство голубиные (Columbidae)" },
+			  { "name": "Синий каменный дрозд", "family": "семейство дроздовые (Turdidae)" },
+			  { "name": "Сипуха", "family": "семейство сипуховые (Tytonidae)" },
+			  { "name": "Сирийский дятел", "family": "семейство дятловые (Picidae)" },
+			  { "name": "Скопа", "family": "семейство скопиные (Pandionidae)" },
+			  { "name": "Славка-завирушка", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Славка-чёрноголовка", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Снегирь", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Снежный воробей", "family": "семейство ткачиковые (Passeridae)" },
+			  { "name": "Сова ястребиная", "family": "семейство совиные (Strigidae)" },
+			  { "name": "Сойка", "family": "семейство врановые (Corvidae)" },
+			  { "name": "Соловьиный сверчок", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Сорока", "family": "семейство врановые (Corvidae)" },
+			  { "name": "Сплюшка", "family": "семейство совиные (Strigidae)" },
+			  { "name": "Средний кроншнеп", "family": "семейство бекасовые (Scolopacidae)" },
+			  { "name": "Средний пёстрый дятел", "family": "семейство дятловые (Picidae)" },
+			  { "name": "Степная пустельга", "family": "семейство соколиные (Falconidae)" },
+			  { "name": "Степной жаворонок", "family": "семейство жаворонковые (Alaudidae)" },
+			  { "name": "Степной лунь", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Стервятник", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Стрепет", "family": "семейство дрофиные (Otididae)" },
+			  { "name": "Сухонос", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Султанка", "family": "семейство пастушковые (Rallidae)" },
+			  { "name": "Тетерев", "family": "семейство тетеревиные (Tetraonidae)" },
+			  { "name": "Тетеревятник", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Толстоклювая кайра", "family": "семейство чистиковые (Alcidae)" },
+			  { "name": "Тонкоклювая кайра", "family": "семейство чистиковые (Alcidae)" },
+			  { "name": "Тонкоклювая камышовка", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Травник", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Трёхпалый дятел", "family": "семейство дятловые (Picidae)" },
+			  { "name": "Тростниковая камышовка", "family": "семейство славковые (Sylviidae)" },
+			  { "name": "Тулес", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Тундряная куропатка", "family": "семейство тетеревиные (Tetraonidae)" },
+			  { "name": "Турпан", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Турухтан", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Тупик", "family": "семейство чистиковые (Alcidae)" },
+			  { "name": "Удод", "family": "семейство удоды (Upupidae)" },
+			  { "name": "Усатая синица", "family": "семейство усатые синицы (Panuridae)" },
+			  { "name": "Ушастая сова", "family": "семейство совиные (Strigidae)" },
+			  { "name": "Фазан", "family": "семейство фазановые (Phasianidae)" },
+			  { "name": "Филин", "family": "семейство совиные (Strigidae)" },
+			  { "name": "Ходулочник", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Хохлатая синица", "family": "семейство синицевые (Paridae)" },
+			  { "name": "Хохлатая чернеть", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Хохлатый жаворонок", "family": "семейство жаворонковые (Alaudidae)" },
+			  { "name": "Хохлатый баклан", "family": "семейство баклановые (Phalacrocoracidae)" },
+			  { "name": "Хрустан", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Чайконосая крачка", "family": "семейство крачковые (Laridae)" },
+			  { "name": "Чеглок", "family": "семейство соколиные (Falconidae)" },
+			  { "name": "Чеграва", "family": "семейство крачковые (Laridae)" },
+			  { "name": "Чёрная казарка", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Чёрная крачка", "family": "семейство крачковые (Laridae)" },
+			  { "name": "Чёрная ворона", "family": "семейство врановые (Corvidae)" },
+			  { "name": "Чёрноголовая чайка", "family": "семейство чайковые (Laridae)" },
+			  { "name": "Чёрноголовая овсянка", "family": "семейство овсянковые (Emberizidae)" },
+			  { "name": "Чёрноголовый чекан", "family": "семейство мухоловковые (Muscicapidae)" },
+			  { "name": "Чернозобая гагара", "family": "семейство гагаровые (Gaviidae)" },
+			  { "name": "Чернозобик", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Черноклювая гагара", "family": "семейство гагаровые (Gaviidae)" },
+			  { "name": "Чёрношейная поганка", "family": "семейство поганковые (Podicipedidae)" },
+			  { "name": "Чёрный аист", "family": "семейство аистовые (Ciconiidae)" },
+			  { "name": "Чёрный гриф", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Чёрный дрозд", "family": "семейство дроздовые (Turdidae)" },
+			  { "name": "Чёрный коршун", "family": "семейство ястребиные (Accipitridae)" },
+			  { "name": "Чёрный стриж", "family": "семейство стрижиные (Apodidae)" },
+			  { "name": "Чёрныш", "family": "семейство бекасовые (Scolopacidae)" },
+			  { "name": "Чибис", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Чиж", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Чирок-свистунок", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Чирок-трескунок", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Чомга", "family": "семейство поганковые (Podicipedidae)" },
+			  { "name": "Шилоклювка", "family": "семейство куликовые (Charadriidae)" },
+			  { "name": "Широконоска", "family": "семейство утиные (Anatidae)" },
+			  { "name": "Щегол", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Щур", "family": "семейство вьюрковые (Fringillidae)" },
+			  { "name": "Юла", "family": "семейство жаворонковые (Alaudidae)" },
+			  { "name": "Юрок", "family": "семейство вьюрковые (Fringillidae)" }
+			];
+
+        // DOM элементы
+        const birdsContainer = document.getElementById('birds-container');
+        const familyFilter = document.getElementById('family-filter');
+        const quickSearch = document.getElementById('quick-search');
+        const noResults = document.getElementById('no-results');
+        const totalCount = document.getElementById('total-count');
+        const filteredCount = document.getElementById('filtered-count');
+
+        // Инициализация фильтра семейств
+        function initFamilyFilter() {
+            const families = new Set(birdsData.map(bird => bird.family));
+            const sortedFamilies = Array.from(families).sort();
+            
+            sortedFamilies.forEach(family => {
+                const option = document.createElement('option');
+                option.value = family;
+                option.textContent = family;
+                familyFilter.appendChild(option);
+            });
+        }
+
+        // Функция фильтрации птиц
+        function filterBirds() {
+            const familyValue = familyFilter.value;
+            const searchValue = quickSearch.value.toLowerCase();
+            
+            return birdsData.filter(bird => {
+                const matchesFamily = !familyValue || bird.family === familyValue;
+                const matchesSearch = !searchValue || 
+                    bird.name.toLowerCase().includes(searchValue);
+                
+                return matchesFamily && matchesSearch;
+            });
+        }
+
+        // Отображение птиц
+        function displayBirds() {
+            const filteredBirds = filterBirds();
+            
+            birdsContainer.innerHTML = '';
+            filteredCount.textContent = filteredBirds.length;
+            noResults.style.display = filteredBirds.length === 0 ? 'block' : 'none';
+            
+            filteredBirds.forEach((bird, index) => {
+                const card = document.createElement('div');
+                card.className = 'bird-card';
+                
+                card.innerHTML = `
+                    <div class="bird-header">
+                        <div class="bird-number">${index + 1}</div>
+                        <div>
+                            <div class="bird-name">${bird.name}</div>
+                            <div class="bird-family">${bird.family}</div>
+                        </div>
+                    </div>
+                    <div class="bird-body">
+                        <div class="search-actions">
+                            <button class="search-btn wiki-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                </svg>
+                                Википедия
+                            </button>
+                            <button class="search-btn yandex-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <path d="M21 21l-4.35-4.35"/>
+                                </svg>
+                                Яндекс
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                card.querySelector('.wiki-btn').addEventListener('click', () => 
+                    window.open(`https://ru.wikipedia.org/wiki/${encodeURIComponent(bird.name)}`, '_blank'));
+                
+                card.querySelector('.yandex-btn').addEventListener('click', () => 
+                    window.open(`https://yandex.ru/search/?text=${encodeURIComponent(bird.name + ' птица')}`, '_blank'));
+                
+                birdsContainer.appendChild(card);
+            });
+        }
+
+        // Инициализация
+        totalCount.textContent = birdsData.length;
+        initFamilyFilter();
+        displayBirds();
+
+        // Обработчики событий
+        familyFilter.addEventListener('change', displayBirds);
+        quickSearch.addEventListener('input', displayBirds);
+    </script>
+</body>
+</html>
