@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Энциклопедия птиц России с поиском через Яндекс</title>
+    <title>Энциклопедия птиц России с поиском</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -84,24 +84,35 @@
             font-size: 18px;
             flex-grow: 1;
         }
+        .search-buttons {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
         .search-btn {
             background-color: #FFCC00;
             color: #000;
             border: none;
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 8px;
-            flex-shrink: 0;
+            gap: 5px;
             white-space: nowrap;
         }
         .search-btn:hover {
             background-color: #e6b800;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .wikipedia-btn {
+            background-color: #6b6b6b;
+            color: white;
+        }
+        .wikipedia-btn:hover {
+            background-color: #5a5a5a;
         }
         .search-all {
             background-color: #4CAF50;
@@ -144,6 +155,11 @@
             width: 16px;
             height: 16px;
         }
+        .wikipedia-icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0.8;
+        }
         .birds-grid {
             column-count: 2;
             column-gap: 15px;
@@ -175,7 +191,7 @@
                 align-items: flex-start;
                 gap: 12px;
             }
-            .search-btn {
+            .search-buttons {
                 align-self: flex-end;
             }
         }
@@ -208,7 +224,7 @@
     </button>
     
     <script>
-        // Полный список птиц (ваш список)
+        // Полный список птиц
         const birdsList = [
             "Краснозобая гагара", 
             "Чернозобая гагара", 
@@ -572,6 +588,11 @@
             window.open(`https://yandex.ru/search/?text=${encodeURIComponent(query + ' птица')}`, '_blank');
         }
         
+        // Функция для поиска в Википедии
+        function searchWikipedia(query) {
+            window.open(`https://ru.wikipedia.org/w/index.php?search=${encodeURIComponent(query + ' птица')}`, '_blank');
+        }
+        
         // Функция отображения птиц с фильтрацией
         function displayBirds(filter = '') {
             birdsContainer.innerHTML = '';
@@ -597,19 +618,36 @@
                 birdName.className = 'bird-name';
                 birdName.textContent = bird;
                 
-                const searchBtn = document.createElement('button');
-                searchBtn.className = 'search-btn';
-                searchBtn.innerHTML = `
+                const searchButtons = document.createElement('div');
+                searchButtons.className = 'search-buttons';
+                
+                // Кнопка поиска в Википедии
+                const wikiBtn = document.createElement('button');
+                wikiBtn.className = 'search-btn wikipedia-btn';
+                wikiBtn.innerHTML = `
+                    <svg class="wikipedia-icon" viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="currentColor" d="M14.97,18.95L12.41,12.92C11.39,14.91 10.27,17 9.31,18.95C9.3,18.96 8.84,18.95 8.84,18.95C7.37,15.5 5.85,12.1 4.37,8.68C4.03,7.84 2.83,6.5 2,6.5C2,6.4 2,6.18 2,6.05H7.06V6.5C6.46,6.5 5.44,6.9 5.7,7.55C6.42,9.09 8.94,15.06 9.63,16.58C10.1,15.64 11.43,13.16 12,12.11C11.55,11.23 10.13,7.93 9.71,7.11C9.39,6.57 8.58,6.5 8.1,6.5C8.1,6.37 8.1,6.2 8.1,6.05L12.71,6.05V6.5C12,6.5 10.92,6.67 11.29,7.29C12.06,8.58 14.21,13.28 14.37,13.58C14.38,13.62 14.58,13.19 14.72,12.94C15.44,11.56 16.23,10.59 16.23,10.59L16.86,10.03C16.96,10.03 17.05,10.06 17.13,10.11L21.25,12.32C21.69,12.56 22.16,12.53 22.38,12.4C22.57,12.29 22.66,12.1 22.63,11.93C22.6,11.76 22.47,11.58 22.21,11.43L18.5,9.44C18.5,9.44 17.95,9.18 17.89,9.15C17.56,8.98 17.28,8.93 17.28,8.93H17.28C17.28,8.93 17.18,8.93 17.05,8.97C16.93,9 16.9,9.04 16.87,9.08C16.83,9.13 16.8,9.2 16.8,9.29C16.8,9.39 16.85,9.53 16.98,9.69C17.12,9.86 17.39,10.05 17.39,10.05L18.5,10.8V10.81L16.3,9.28C16.3,9.28 15.7,8.86 15.55,8.8C15.27,8.68 15.05,8.67 15.05,8.67C15.05,8.67 14.94,8.68 14.8,8.74C14.65,8.8 14.5,8.92 14.39,9.1C14.28,9.28 14.2,9.54 14.2,9.84C14.2,10.3 14.4,10.86 14.4,10.86L14.97,18.95M7.46,13.22C7.46,13.22 7.1,12.73 6.92,12.54C6.57,12.22 6.28,12.17 6.28,12.17C6.28,12.17 6,12.19 5.83,12.38C5.67,12.56 5.67,12.86 5.67,12.86C5.67,12.86 5.81,13.5 7.14,15.45C8.47,17.39 9.23,18.37 9.23,18.37L7.46,13.22Z" />
+                    </svg>
+                    Вики`;
+                wikiBtn.onclick = () => searchWikipedia(bird);
+                
+                // Кнопка поиска в Яндексе
+                const yandexBtn = document.createElement('button');
+                yandexBtn.className = 'search-btn';
+                yandexBtn.innerHTML = `
                     <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16">
                         <path fill="currentColor" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
                     </svg>
-                    Найти`;
-                searchBtn.onclick = () => searchYandex(bird);
+                    Яндекс`;
+                yandexBtn.onclick = () => searchYandex(bird);
+                
+                searchButtons.appendChild(wikiBtn);
+                searchButtons.appendChild(yandexBtn);
                 
                 birdInfo.appendChild(birdNumber);
                 birdInfo.appendChild(birdName);
                 birdElement.appendChild(birdInfo);
-                birdElement.appendChild(searchBtn);
+                birdElement.appendChild(searchButtons);
                 birdsContainer.appendChild(birdElement);
             });
         }
