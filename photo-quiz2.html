@@ -237,7 +237,7 @@
         height: auto;
       }
     }
-  </style>
+  </style>			   
 </head>
 <body>
   <div class="settings">
@@ -287,9 +287,8 @@
   <div class="fixed-buttons">
     <button class="home-button" id="home-button">На главную</button>
   </div>
-
   <script>
-    // Данные для викторины
+    // Данные для викторины (остаются без изменений)
     const birds = [
 		{ name: "Балобан", image: "images2/bird1.jpg", sound: "sounds2/birds/bird1.mp3" },
 		{ name: "Белая куропатка", image: "images2/bird2.jpg", sound: "sounds2/birds/bird2.mp3" },
@@ -341,7 +340,6 @@
 		{ name: "Чеглок", image: "images2/bird48.jpg", sound: "sounds2/birds/bird48.mp3" },
 		{ name: "Черный гриф", image: "images2/bird49.jpg", sound: "sounds2/birds/bird49.mp3" },
 		{ name: "Черный коршун", image: "images2/bird50.jpg", sound: "sounds2/birds/bird50.mp3" }
-
     ];
 
     let correctAnswers = 0;
@@ -351,6 +349,8 @@
     let timeLimit = 0;
     let timer;
     let currentAudio;
+    let shuffledBirds = []; // Массив для перемешанных птиц
+    let usedBirds = []; // Массив для уже использованных птиц
 
     // Элементы DOM
     const settings = document.querySelector(".settings");
@@ -367,7 +367,6 @@
     const progress = document.getElementById("progress");
     const totalQuestionsDisplay = document.getElementById("total-questions");
     const imageContainer = document.getElementById("image-container");
-
     // Начать викторину
     document.getElementById("start-quiz").addEventListener("click", () => {
       const questionsInput = parseInt(document.getElementById("questions").value);
@@ -381,22 +380,15 @@
 
       totalQuestions = questionsInput;
       timeLimit = timingMode === "with-timer" ? timeInput : 0;
+      
+      // Перемешиваем массив птиц и сохраняем его
+      shuffledBirds = [...birds].sort(() => Math.random() - 0.5);
+      usedBirds = []; // Очищаем массив использованных птиц
+      
       settings.style.display = "none";
       quizContainer.style.display = "block";
       totalQuestionsDisplay.textContent = totalQuestions;
       startQuiz();
-    });
-
-    // Перезапустить викторину
-    document.getElementById("restart").addEventListener("click", () => {
-      results.style.display = "none";
-      settings.style.display = "block";
-      correctAnswers = 0;
-      incorrectAnswers = 0;
-      currentQuestion = 0;
-      if (currentAudio) {
-        currentAudio.pause();
-      }
     });
 
     // Функция для запуска викторины
@@ -414,9 +406,10 @@
       // Убрать подсветку фона, если она была
       imageContainer.classList.remove("correct-answer", "wrong-answer");
 
+      // Выбираем следующую птицу из перемешанного массива
+      const randomBird = shuffledBirds[currentQuestion % shuffledBirds.length];
+      usedBirds.push(randomBird); // Добавляем птицу в использованные
 
-      const randomBird = birds[Math.floor(Math.random() * birds.length)];
-      
       // Создаем массив для вариантов ответов, исключая текущую птицу
       const otherBirds = birds.filter(bird => bird.name !== randomBird.name);
       
@@ -450,18 +443,15 @@
         .map(bird => `<div class="option" data-name="${bird.name}">${bird.name}</div>`)
         .join("");
 
-      // Обработка выбора ответа
+      // Обработка выбора ответа (остается без изменений)
       optionsContainer.querySelectorAll(".option").forEach(option => {
         option.addEventListener("click", () => {
-          // Остановить воспроизведение звука при выборе ответа
           birdAudio.pause();
           
           const selectedBird = option.getAttribute("data-name");
           if (selectedBird === randomBird.name) {
             resultDisplay.textContent = "Правильно!";
             correctAnswers++;
-            
-            // Подсветить фон вокруг изображения белым на 3 секунды
             imageContainer.classList.add("correct-answer");
             setTimeout(() => {
               imageContainer.classList.remove("correct-answer");
@@ -469,7 +459,6 @@
           } else {
             resultDisplay.textContent = `Неправильно! Правильный ответ: ${randomBird.name}`;
             incorrectAnswers++;
-			 // Подсветить фон вокруг изображения красным на 3 секунды
             imageContainer.classList.add("wrong-answer");
             setTimeout(() => {
               imageContainer.classList.remove("wrong-answer");
@@ -481,13 +470,13 @@
         });
       });
 
-      // Запуск таймера, если выбран режим с таймером
+      // Запуск таймера, если выбран режим с таймером (остается без изменений)
       if (timeLimit > 0) {
         startTimer(timeLimit);
       }
     }
 
-    // Функция для запуска таймера
+   // Функция для запуска таймера
     function startTimer(seconds) {
       let remainingTime = seconds;
       timerDisplay.textContent = `Осталось времени: ${remainingTime} сек.`;
@@ -534,7 +523,7 @@
       button.addEventListener("click", () => {
         window.location.href = "index2.html";
       });
-    });
+    });								  
   </script>
 </body>
 </html>
