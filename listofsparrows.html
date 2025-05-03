@@ -173,11 +173,16 @@
         .bird-list {
             margin-top: 10px;
             padding-left: 20px;
+            display: none;
         }
 
         .bird-list li {
             margin-bottom: 5px;
             color: var(--text-color);
+        }
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
         }
         footer {
             text-align: center;
@@ -947,7 +952,7 @@
         const filterButtons = document.querySelectorAll('.filter-btn');
 
         // Отображение семейств
-        function displayFamilies(familiesToShow = families) {
+        function displayFamilies(familiesToShow = families, searchTerm = '') {
             familyList.innerHTML = '';
             
             if (familiesToShow.length === 0) {
@@ -961,10 +966,29 @@
                 
                 let birdsHtml = '';
                 if (family.fullList) {
-                    birdsHtml = `<ul class="bird-list">${family.fullList.map(bird => `<li>${bird}</li>`).join('')}</ul>`;
+                    // Подсветка найденных птиц
+                    const birdsList = family.fullList.map(bird => {
+                        if (searchTerm && bird.toLowerCase().includes(searchTerm.toLowerCase())) {
+                            return `<li><span class="highlight">${bird}</span></li>`;
+                        }
+                        return `<li>${bird}</li>`;
+                    }).join('');
+                    
+                    birdsHtml = `<ul class="bird-list" style="display: none;">${birdsList}</ul>`;
+                }
+                
+                // Подсветка найденных названий семейств
+                let familyName = family.name;
+                if (searchTerm && familyName.toLowerCase().includes(searchTerm.toLowerCase())) {
+                    const startIdx = familyName.toLowerCase().indexOf(searchTerm.toLowerCase());
+                    const endIdx = startIdx + searchTerm.length;
+                    familyName = 
+                        familyName.substring(0, startIdx) + 
+                        `<span class="highlight">${familyName.substring(startIdx, endIdx)}</span>` + 
+                        familyName.substring(endIdx);
                 }
                 card.innerHTML = `
-                    <div class="family-name">${family.name}</div>
+                    <div class="family-name">${familyName}</div>
                     <div class="example">${family.example}</div>
                     ${birdsHtml}
                 `;
@@ -977,13 +1001,19 @@
                         birdsList.style.display = birdsList.style.display === 'none' ? 'block' : 'none';
                     }
                 });
+                
+                // Автоматически раскрываем список, если найдена птица
+                if (searchTerm && family.fullList && family.fullList.some(bird => 
+                    bird.toLowerCase().includes(searchTerm.toLowerCase()))) {
+                    card.querySelector('.bird-list').style.display = 'block';
+                }
                 familyList.appendChild(card);
             });
         }
 
         // Поиск и фильтрация
         function filterFamilies() {
-            const searchTerm = searchInput.value.toLowerCase();
+            const searchTerm = searchInput.value.trim();
             const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
             
             let filtered = families;
@@ -996,12 +1026,13 @@
             // Применяем поиск если есть запрос
             if (searchTerm.length >= 2) {
                 filtered = filtered.filter(family => 
-                    family.name.toLowerCase().includes(searchTerm) || 
-                    family.example.toLowerCase().includes(searchTerm)
+                    family.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                    family.example.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (family.fullList && family.fullList.some(bird => 
+                        bird.toLowerCase().includes(searchTerm.toLowerCase())))
                 );
-            }
-            
-            displayFamilies(filtered);
+            }        
+            displayFamilies(filtered, searchTerm);
         }
 
         // Обработчики событий
