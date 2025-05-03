@@ -133,6 +133,7 @@
             box-shadow: var(--shadow);
             transition: var(--transition);
             border-left: 4px solid var(--secondary-color);
+			cursor: pointer;				
         }
 
         .family-card:hover {
@@ -169,6 +170,15 @@
             font-size: 1.1rem;
         }
 
+        .bird-list {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .bird-list li {
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
         footer {
             text-align: center;
             margin-top: 40px;
@@ -255,103 +265,680 @@
 
     <script>
         // Полный список семейств с примерами и метаданными
-        const families = [
-            { name: "Accentoridae (Завирушковые)", example: "Лесная завирушка, Альпийская завирушка", size: "small", type: "common" },
-            { name: "Acanthisittidae (Новозеландские крапивники)", example: "Новозеландский крапивник", size: "small", type: "exotic" },
-            { name: "Acrocephalidae (Камышёвковые)", example: "Тростниковая камышёвка, Болотная камышёвка", size: "small", type: "common" },
-            { name: "Aegithalidae (Длиннохвостые синицы)", example: "Ополовник", size: "small", type: "common" },
-            { name: "Aegithinidae (Иоровые)", example: "Обыкновенная иора", size: "small", type: "exotic" },
-            { name: "Alaudidae (Жаворонковые)", example: "Полевой жаворонок, Хохлатый жаворонок", size: "small", type: "common" },
-            { name: "Artamidae (Ласточковые сорокопуты)", example: "Чернолицый ласточковый сорокопут", size: "medium", type: "exotic" },
-            { name: "Bombycillidae (Свиристелевые)", example: "Обыкновенный свиристель, Амурский свиристель", size: "medium", type: "common" },
-            { name: "Buphagidae (Воловьи птицы)", example: "Красноклювый волоклюй", size: "medium", type: "exotic" },
-            { name: "Calcariidae (Подорожниковые)", example: "Лапландский подорожник", size: "small", type: "common" },
-            { name: "Callaeidae (Новозеландские гусеобразные)", example: "Кокако, Гуйя (вымерший)", size: "medium", type: "exotic" },
-            { name: "Campephagidae (Личинкоедовые)", example: "Серый личинкоед", size: "small", type: "exotic" },
-            { name: "Cardinalidae (Кардиналовые)", example: "Красный кардинал", size: "medium", type: "exotic" },
-            { name: "Certhiidae (Пищуховые)", example: "Обыкновенная пищуха, Короткопалая пищуха", size: "small", type: "common" },
-            { name: "Cinclidae (Оляпковые)", example: "Оляпка обыкновенная", size: "small", type: "common" },
-            { name: "Cisticolidae (Цистиколы)", example: "Веерохвостая цистикола", size: "small", type: "exotic" },
-            { name: "Corvidae (Врановые)", example: "Сорока, Ворона, Сойка, Галка, Грач", size: "medium", type: "common" },
-            { name: "Cotingidae (Котинговые)", example: "Бразильский звонарь, Умbrellabird", size: "medium", type: "exotic" },
-            { name: "Dicaeidae (Цветоедовые)", example: "Огненный цветоед", size: "small", type: "exotic" },
-            { name: "Dicruridae (Дронговые)", example: "Чёрный дронго", size: "small", type: "exotic" },
-            { name: "Elachuridae (Пятнистые элахуры)", example: "Пятнистый элахур", size: "small", type: "exotic" },
-            { name: "Emberizidae (Овсянковые)", example: "Обыкновенная овсянка, Садовая овсянка", size: "small", type: "common" },
-            { name: "Estrildidae (Астрильдовые)", example: "Зебровая амадина, Рисовка", size: "small", type: "exotic" },
-            { name: "Eulacestomatidae (Плутовые птицы)", example: "Новогвинейская плутовая птица", size: "small", type: "exotic" },
-            { name: "Eurylaimidae (Ширококлювы)", example: "Черно-жёлтый ширококлюв", size: "medium", type: "exotic" },
-            { name: "Fringillidae (Вьюрковые)", example: "Зяблик, Щегол, Чиж, Чечётка", size: "small", type: "common" },
-            { name: "Furnariidae (Печниковые)", example: "Рыжий печник", size: "small", type: "exotic" },
-            { name: "Grallariidae (Питтовые муравьеловки)", example: "Большая питтовая муравьеловка", size: "small", type: "exotic" },
-            { name: "Hirundinidae (Ласточковые)", example: "Деревенская ласточка, Городская ласточка", size: "small", type: "common" },
-            { name: "Hyliotidae (Хилиотовые)", example: "Желтобрюхий хилиот", size: "small", type: "exotic" },
-            { name: "Hypocoliidae (Свиристелевые сорокопуты)", example: "Серый свиристелевый сорокопут", size: "medium", type: "exotic" },
-            { name: "Icteridae (Трупиаловые)", example: "Краснокрылый трупиал, Болотный кассик", size: "medium", type: "exotic" },
-            { name: "Ifritidae (Ифритовые)", example: "Синешапочная ифрита", size: "small", type: "exotic" },
-            { name: "Irenidae (Иреновые)", example: "Зелёная ирена", size: "small", type: "exotic" },
-            { name: "Laniidae (Сорокопутовые)", example: "Обыкновенный жулан, Серый сорокопут", size: "small", type: "common" },
-            { name: "Leiothrichidae (Кустарниковые тимелии)", example: "Серебряноклювая лейотрикс", size: "small", type: "exotic" },
-            { name: "Locustellidae (Сверчковые)", example: "Речной сверчок, Соловьиный сверчок", size: "small", type: "common" },
-            { name: "Macrosphenidae (Африканские славки)", example: "Желтобрюхий макроспен", size: "small", type: "exotic" },
-            { name: "Malaconotidae (Африканские сорокопуты)", example: "Чёрный бубу", size: "small", type: "exotic" },
-            { name: "Maluridae (Австралийские славки)", example: "Великолепный малюр", size: "small", type: "exotic" },
-            { name: "Melampittidae (Мелампитты)", example: "Малая мелампитта", size: "small", type: "exotic" },
-            { name: "Melanocharitidae (Ягодоеды)", example: "Полосатый ягодоед", size: "small", type: "exotic" },
-            { name: "Meliphagidae (Медососовые)", example: "Новозеландский медосос", size: "small", type: "exotic" },
-            { name: "Menuridae (Лирохвосты)", example: "Большой лирохвост", size: "medium", type: "exotic" },
-            { name: "Mimidae (Пересмешниковые)", example: "Многоголосый пересмешник", size: "medium", type: "exotic" },
-            { name: "Mohoidae (Гавайские медоеды)", example: "Гавайский медоед (вымерший)", size: "small", type: "exotic" },
-            { name: "Momatidae (Момоты)", example: "Синешапочный момот", size: "medium", type: "exotic" },
-            { name: "Motacillidae (Трясогузковые)", example: "Белая трясогузка, Жёлтая трясогузка", size: "small", type: "common" },
-            { name: "Muscicapidae (Мухоловковые)", example: "Серая мухоловка, Зарянка", size: "small", type: "common" },
-            { name: "Nectariniidae (Нектарницевые)", example: "Обыкновенная нектарница", size: "small", type: "exotic" },
-            { name: "Notiomystidae (Столбиковые медососы)", example: "Столбиковый медосос", size: "small", type: "exotic" },
-            { name: "Oriolidae (Иволговые)", example: "Обыкновенная иволга", size: "medium", type: "common" },
-            { name: "Orthonychidae (Штопорники)", example: "Австралийский штопорник", size: "small", type: "exotic" },
-            { name: "Pachycephalidae (Толстоголовые свистуны)", example: "Золотистый свистун", size: "small", type: "exotic" },
-            { name: "Panuridae (Усатые синицы)", example: "Усатая синица", size: "small", type: "common" },
-            { name: "Paradisaeidae (Райские птицы)", example: "Большая райская птица, Синяя райская птица", size: "medium", type: "exotic" },
-            { name: "Paridae (Синицевые)", example: "Большая синица, Лазоревка, Московка", size: "small", type: "common" },
-            { name: "Pellorneidae (Земляные тимелии)", example: "Пёстрая земляная тимелия", size: "small", type: "exotic" },
-            { name: "Petroicidae (Австралийские зарянки)", example: "Австралийская зарянка", size: "small", type: "exotic" },
-            { name: "Peucedramidae (Оливковые древесницы)", example: "Оливковая древесница", size: "small", type: "exotic" },
-            { name: "Philepittidae (Мадагаскарские питты)", example: "Чёрная филепитта", size: "small", type: "exotic" },
-            { name: "Phylloscopidae (Пеночковые)", example: "Весничка, Теньковка", size: "small", type: "common" },
-            { name: "Picathartidae (Лысые вороны)", example: "Сероголовая лысая ворона", size: "medium", type: "exotic" },
-            { name: "Pipridae (Манакиновые)", example: "Синеголовый манакин", size: "small", type: "exotic" },
-            { name: "Pittidae (Питтовые)", example: "Синекрылая питта", size: "small", type: "exotic" },
-            { name: "Pityriasidae (Бородатые вороны)", example: "Бородатая ворона", size: "medium", type: "exotic" },
-            { name: "Platysteiridae (Африканские мухоловки)", example: "Черноспинная платистейра", size: "small", type: "exotic" },
-            { name: "Ploceidae (Ткачиковые)", example: "Общественный ткач", size: "small", type: "exotic" },
-            { name: "Pnoepygidae (Пищуховые крапивники)", example: "Карликовый пищуховый крапивник", size: "small", type: "exotic" },
-            { name: "Polioptilidae (Комароловки)", example: "Сине-серая комароловка", size: "small", type: "exotic" },
-            { name: "Prionopidae (Очковые сорокопуты)", example: "Очковый сорокопут", size: "small", type: "exotic" },
-            { name: "Prunellidae (Завирушковые)", example: "Лесная завирушка", size: "small", type: "common" },
-            { name: "Psophodidae (Флейтистовые дрозды)", example: "Флейтистовый дрозд", size: "medium", type: "exotic" },
-            { name: "Ptilonorhynchidae (Беседковые птицы)", example: "Большая беседковая птица", size: "medium", type: "exotic" },
-            { name: "Regulidae (Корольковые)", example: "Желтоголовый королёк", size: "small", type: "common" },
-            { name: "Remizidae (Ремезовые)", example: "Обыкновенный ремез", size: "small", type: "common" },
-            { name: "Rhipiduridae (Веерохвостки)", example: "Серая веерохвостка", size: "small", type: "exotic" },
-            { name: "Rhagologidae (Пестрогрудые свистуны)", example: "Пестрогрудый свистун", size: "small", type: "exotic" },
-            { name: "Sapayoidae (Сапайоа)", example: "Сапайоа", size: "small", type: "exotic" },
-            { name: "Scotocercidae (Кустарниковые камышовки)", example: "Пёстрая кустарниковая камышовка", size: "small", type: "exotic" },
-            { name: "Sittidae (Поползневые)", example: "Обыкновенный поползень", size: "small", type: "common" },
-            { name: "Stenostiridae (Фантастические мухоловки)", example: "Лимонная фантастическая мухоловка", size: "small", type: "exotic" },
-            { name: "Sturnidae (Скворцовые)", example: "Обыкновенный скворец, Майна", size: "medium", type: "common" },
-            { name: "Sylviidae (Славковые)", example: "Славка-черноголовка, Камышовка", size: "small", type: "common" },
-            { name: "Tephrodornithidae (Лесные сорокопуты)", example: "Лесной сорокопут", size: "medium", type: "exotic" },
-            { name: "Thraupidae (Танагровые)", example: "Синяя танагра", size: "small", type: "exotic" },
-            { name: "Tichodromidae (Стенолазы)", example: "Стенолаз", size: "small", type: "common" },
-            { name: "Timaliidae (Тимелиевые)", example: "Кустарница", size: "small", type: "exotic" },
-            { name: "Troglodytidae (Крапивниковые)", example: "Домовый крапивник", size: "small", type: "common" },
-            { name: "Turdidae (Дроздовые)", example: "Певчий дрозд, Чёрный дрозд, Рябинник", size: "medium", type: "common" },
-            { name: "Tyrannidae (Тиранновые)", example: "Восточный феб", size: "small", type: "exotic" },
-            { name: "Urocynchramidae (Розовые вьюрки)", example: "Розовый вьюрок", size: "small", type: "exotic" },
-            { name: "Vangidae (Ванговые)", example: "Синий ванга", size: "medium", type: "exotic" },
-            { name: "Viduidae (Вдовушки)", example: "Райская вдовушка", size: "small", type: "exotic" },
-            { name: "Vireonidae (Виреоновые)", example: "Красноглазый виреон", size: "small", type: "exotic" },
-            { name: "Zosteropidae (Белоглазковые)", example: "Японская белоглазка", size: "small", type: "exotic" }
+																																													  
+		const families = [
+    { 
+        name: "Accentoridae (Завирушковые)", 
+        example: "Лесная завирушка, Альпийская завирушка", 
+        size: "small", 
+        type: "common",
+        fullList: ["Лесная завирушка", "Альпийская завирушка", "Сибирская завирушка", "Японская завирушка", "Черногорлая завирушка"]
+    },
+    { 
+        name: "Acanthisittidae (Новозеландские крапивники)", 
+        example: "Новозеландский крапивник", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Новозеландский крапивник"]
+    },
+    { 
+        name: "Acrocephalidae (Камышёвковые)", 
+        example: "Тростниковая камышёвка, Болотная камышёвка", 
+        size: "small", 
+        type: "common",
+        fullList: ["Тростниковая камышёвка", "Болотная камышёвка", "Садовая камышёвка", "Индийская камышёвка", "Дроздовидная камышёвка"]
+    },
+    { 
+        name: "Aegithalidae (Длиннохвостые синицы)", 
+        example: "Ополовник", 
+        size: "small", 
+        type: "common",
+        fullList: ["Ополовник", "Усатая синица", "Черноголовая длиннохвостая синица"]
+    },
+    { 
+        name: "Aegithinidae (Иоровые)", 
+        example: "Обыкновенная иора", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Обыкновенная иора", "Малая иора", "Зелёная иора"]
+    },
+    { 
+        name: "Alaudidae (Жаворонковые)", 
+        example: "Полевой жаворонок, Хохлатый жаворонок", 
+        size: "small", 
+        type: "common",
+        fullList: ["Полевой жаворонок", "Хохлатый жаворонок", "Степной жаворонок", "Рогатый жаворонок", "Лесной жаворонок"]
+    },
+    { 
+        name: "Artamidae (Ласточковые сорокопуты)", 
+        example: "Чернолицый ласточковый сорокопут", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Чернолицый ласточковый сорокопут", "Белогрудый ласточковый сорокопут", "Серый ласточковый сорокопут"]
+    },
+    { 
+        name: "Bombycillidae (Свиристелевые)", 
+        example: "Обыкновенный свиристель, Амурский свиристель", 
+        size: "medium", 
+        type: "common",
+        fullList: ["Обыкновенный свиристель", "Амурский свиристель", "Японский свиристель", "Кедровый свиристель"]
+    },
+    { 
+        name: "Buphagidae (Воловьи птицы)", 
+        example: "Красноклювый волоклюй", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Красноклювый волоклюй", "Желтоклювый волоклюй"]
+    },
+    { 
+        name: "Calcariidae (Подорожниковые)", 
+        example: "Лапландский подорожник", 
+        size: "small", 
+        type: "common",
+        fullList: ["Лапландский подорожник", "Снежный подорожник", "Маккензиев подорожник"]
+    },
+    { 
+        name: "Callaeidae (Новозеландские гусеобразные)", 
+        example: "Кокако, Гуйя (вымерший)", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Кокако", "Гуйя (вымерший)", "Новозеландский скворец"]
+    },
+    { 
+        name: "Campephagidae (Личинкоедовые)", 
+        example: "Серый личинкоед", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Серый личинкоед", "Чёрный личинкоед", "Красноплечий личинкоед", "Огненнобрюхий личинкоед"]
+    },
+    { 
+        name: "Cardinalidae (Кардиналовые)", 
+        example: "Красный кардинал", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Красный кардинал", "Розовый кардинал", "Синий кардинал", "Жёлтый кардинал"]
+    },
+    { 
+        name: "Certhiidae (Пищуховые)", 
+        example: "Обыкновенная пищуха, Короткопалая пищуха", 
+        size: "small", 
+        type: "common",
+        fullList: ["Обыкновенная пищуха", "Короткопалая пищуха", "Американская пищуха", "Гималайская пищуха"]
+    },
+    { 
+        name: "Cinclidae (Оляпковые)", 
+        example: "Оляпка обыкновенная", 
+        size: "small", 
+        type: "common",
+        fullList: ["Оляпка обыкновенная", "Американская оляпка", "Бурая оляпка", "Белоголовая оляпка"]
+    },
+    { 
+        name: "Cisticolidae (Цистиколы)", 
+        example: "Веерохвостая цистикола", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Веерохвостая цистикола", "Золотистая цистикола", "Красноголовая цистикола", "Певчая цистикола"]
+    },
+    { 
+        name: "Corvidae (Врановые)", 
+        example: "Сорока, Ворона, Сойка, Галка, Грач", 
+        size: "medium", 
+        type: "common",
+        fullList: ["Сорока", "Ворона", "Сойка", "Галка", "Грач", "Ворон", "Кедровка", "Кукша"]
+    },
+    { 
+        name: "Cotingidae (Котинговые)", 
+        example: "Бразильский звонарь, Умbrellabird", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Бразильский звонарь", "Умbrellabird", "Белокрылая котинга", "Пурпурногорлая котинга"]
+    },
+    { 
+        name: "Dicaeidae (Цветоедовые)", 
+        example: "Огненный цветоед", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Огненный цветоед", "Желтобрюхий цветоед", "Карликовый цветоед", "Оранжевогрудый цветоед"]
+    },
+    { 
+        name: "Dicruridae (Дронговые)", 
+        example: "Чёрный дронго", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Чёрный дронго", "Бронзовый дронго", "Хохлатый дронго", "Райский дронго"]
+    },
+    { 
+        name: "Elachuridae (Пятнистые элахуры)", 
+        example: "Пятнистый элахур", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Пятнистый элахур"]
+    },
+    { 
+        name: "Emberizidae (Овсянковые)", 
+        example: "Обыкновенная овсянка, Садовая овсянка", 
+        size: "small", 
+        type: "common",
+        fullList: ["Обыкновенная овсянка", "Садовая овсянка", "Камышовая овсянка", "Желчная овсянка", "Овсянка-ремез"]
+    },
+    { 
+        name: "Estrildidae (Астрильдовые)", 
+        example: "Зебровая амадина, Рисовка", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Зебровая амадина", "Рисовка", "Острохвостая амадина", "Бриллиантовая амадина", "Красногорлая амадина"]
+    },
+    { 
+        name: "Eulacestomatidae (Плутовые птицы)", 
+        example: "Новогвинейская плутовая птица", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Новогвинейская плутовая птица"]
+    },
+    { 
+        name: "Eurylaimidae (Ширококлювы)", 
+        example: "Черно-жёлтый ширококлюв", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Черно-жёлтый ширококлюв", "Зелёный ширококлюв", "Полосатый ширококлюв", "Длиннохвостый ширококлюв"]
+    },
+    { 
+        name: "Fringillidae (Вьюрковые)", 
+        example: "Зяблик, Щегол, Чиж, Чечётка", 
+        size: "small", 
+        type: "common",
+        fullList: ["Зяблик", "Щегол", "Чиж", "Чечётка", "Снегирь", "Зеленушка", "Коноплянка", "Клёст"]
+    },
+    { 
+        name: "Furnariidae (Печниковые)", 
+        example: "Рыжий печник", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Рыжий печник", "Полосатый печник", "Коричневый печник", "Тёмный печник"]
+    },
+    { 
+        name: "Grallariidae (Питтовые муравьеловки)", 
+        example: "Большая питтовая муравьеловка", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Большая питтовая муравьеловка", "Полосатая питтовая муравьеловка", "Рыжая питтовая муравьеловка"]
+    },
+    { 
+        name: "Hirundinidae (Ласточковые)", 
+        example: "Деревенская ласточка, Городская ласточка", 
+        size: "small", 
+        type: "common",
+        fullList: ["Деревенская ласточка", "Городская ласточка", "Береговая ласточка", "Рыжепоясничная ласточка", "Пурпурная ласточка"]
+    },
+    { 
+        name: "Hyliotidae (Хилиотовые)", 
+        example: "Желтобрюхий хилиот", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Желтобрюхий хилиот", "Золотистый хилиот", "Оливковый хилиот"]
+    },
+    { 
+        name: "Hypocoliidae (Свиристелевые сорокопуты)", 
+        example: "Серый свиристелевый сорокопут", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Серый свиристелевый сорокопут"]
+    },
+    { 
+        name: "Icteridae (Трупиаловые)", 
+        example: "Краснокрылый трупиал, Болотный кассик", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Краснокрылый трупиал", "Болотный кассик", "Жёлтоголовый трупиал", "Буйволовый трупиал"]
+    },
+    { 
+        name: "Ifritidae (Ифритовые)", 
+        example: "Синешапочная ифрита", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Синешапочная ифрита"]
+    },
+    { 
+        name: "Irenidae (Иреновые)", 
+        example: "Зелёная ирена", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Зелёная ирена", "Синяя ирена", "Чёрная ирена"]
+    },
+    { 
+        name: "Laniidae (Сорокопутовые)", 
+        example: "Обыкновенный жулан, Серый сорокопут", 
+        size: "small", 
+        type: "common",
+        fullList: ["Обыкновенный жулан", "Серый сорокопут", "Чернолобый сорокопут", "Красноголовый сорокопут"]
+    },
+    { 
+        name: "Leiothrichidae (Кустарниковые тимелии)", 
+        example: "Серебряноклювая лейотрикс", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Серебряноклювая лейотрикс", "Красноклювая лейотрикс", "Оранжевогрудая лейотрикс"]
+    },
+    { 
+        name: "Locustellidae (Сверчковые)", 
+        example: "Речной сверчок, Соловьиный сверчок", 
+        size: "small", 
+        type: "common",
+        fullList: ["Речной сверчок", "Соловьиный сверчок", "Пятнистый сверчок", "Короткокрылый сверчок"]
+    },
+    { 
+        name: "Macrosphenidae (Африканские славки)", 
+        example: "Желтобрюхий макроспен", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Желтобрюхий макроспен", "Зеленоголовый макроспен", "Красноголовый макроспен"]
+    },
+    { 
+        name: "Malaconotidae (Африканские сорокопуты)", 
+        example: "Чёрный бубу", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Чёрный бубу", "Красногрудый бубу", "Желтогрудый бубу"]
+    },
+    { 
+        name: "Maluridae (Австралийские славки)", 
+        example: "Великолепный малюр", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Великолепный малюр", "Краснокрылый малюр", "Синекрылый малюр"]
+    },
+    { 
+        name: "Melampittidae (Мелампитты)", 
+        example: "Малая мелампитта", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Малая мелампитта", "Большая мелампитта"]
+    },
+    { 
+        name: "Melanocharitidae (Ягодоеды)", 
+        example: "Полосатый ягодоед", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Полосатый ягодоед", "Чёрный ягодоед", "Желтобрюхий ягодоед"]
+    },
+    { 
+        name: "Meliphagidae (Медососовые)", 
+        example: "Новозеландский медосос", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Новозеландский медосос", "Краснолобый медосос", "Желтогорлый медосос", "Белоухий медосос"]
+    },
+    { 
+        name: "Menuridae (Лирохвосты)", 
+        example: "Большой лирохвост", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Большой лирохвост", "Малый лирохвост"]
+    },
+    { 
+        name: "Mimidae (Пересмешниковые)", 
+        example: "Многоголосый пересмешник", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Многоголосый пересмешник", "Тропический пересмешник", "Серый пересмешник"]
+    },
+    { 
+        name: "Mohoidae (Гавайские медоеды)", 
+        example: "Гавайский медоед (вымерший)", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Гавайский медоед (вымерший)", "Оахуский медоед (вымерший)"]
+    },
+    { 
+        name: "Momatidae (Момоты)", 
+        example: "Синешапочный момот", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Синешапочный момот", "Рыжий момот", "Зелёный момот"]
+    },
+    { 
+        name: "Motacillidae (Трясогузковые)", 
+        example: "Белая трясогузка, Жёлтая трясогузка", 
+        size: "small", 
+        type: "common",
+        fullList: ["Белая трясогузка", "Жёлтая трясогузка", "Горная трясогузка", "Древесная трясогузка"]
+    },
+    { 
+        name: "Muscicapidae (Мухоловковые)", 
+        example: "Серая мухоловка, Зарянка", 
+        size: "small", 
+        type: "common",
+        fullList: ["Серая мухоловка", "Зарянка", "Чёрный дрозд", "Певчий дрозд", "Синехвостка"]
+    },
+    { 
+        name: "Nectariniidae (Нектарницевые)", 
+        example: "Обыкновенная нектарница", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Обыкновенная нектарница", "Пурпурная нектарница", "Оранжевогрудая нектарница"]
+    },
+    { 
+        name: "Notiomystidae (Столбиковые медососы)", 
+        example: "Столбиковый медосос", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Столбиковый медосос"]
+    },
+    { 
+        name: "Oriolidae (Иволговые)", 
+        example: "Обыкновенная иволга", 
+        size: "medium", 
+        type: "common",
+        fullList: ["Обыкновенная иволга", "Чёрноголовая иволга", "Зелёная иволга"]
+    },
+    { 
+        name: "Orthonychidae (Штопорники)", 
+        example: "Австралийский штопорник", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Австралийский штопорник", "Новогвинейский штопорник"]
+    },
+    { 
+        name: "Pachycephalidae (Толстоголовые свистуны)", 
+        example: "Золотистый свистун", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Золотистый свистун", "Рыжий свистун", "Белоголовый свистун"]
+    },
+    { 
+        name: "Panuridae (Усатые синицы)", 
+        example: "Усатая синица", 
+        size: "small", 
+        type: "common",
+        fullList: ["Усатая синица"]
+    },
+    { 
+        name: "Paradisaeidae (Райские птицы)", 
+        example: "Большая райская птица, Синяя райская птица", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Большая райская птица", "Синяя райская птица", "Королевская райская птица", "Чудная райская птица"]
+    },
+    { 
+        name: "Paridae (Синицевые)", 
+        example: "Большая синица, Лазоревка, Московка", 
+        size: "small", 
+        type: "common",
+        fullList: ["Большая синица", "Лазоревка", "Московка", "Хохлатая синица", "Гренадерка"]
+    },
+    { 
+        name: "Pellorneidae (Земляные тимелии)", 
+        example: "Пёстрая земляная тимелия", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Пёстрая земляная тимелия", "Рыжая земляная тимелия", "Чёрная земляная тимелия"]
+    },
+    { 
+        name: "Petroicidae (Австралийские зарянки)", 
+        example: "Австралийская зарянка", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Австралийская зарянка", "Краснолобая зарянка", "Желтогрудая зарянка"]
+    },
+    { 
+        name: "Peucedramidae (Оливковые древесницы)", 
+        example: "Оливковая древесница", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Оливковая древесница"]
+    },
+    { 
+        name: "Philepittidae (Мадагаскарские питты)", 
+        example: "Чёрная филепитта", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Чёрная филепитта", "Желтобрюхая филепитта"]
+    },
+    { 
+        name: "Phylloscopidae (Пеночковые)", 
+        example: "Весничка, Теньковка", 
+        size: "small", 
+        type: "common",
+        fullList: ["Весничка", "Теньковка", "Зелёная пеночка", "Бурая пеночка", "Светлобрюхая пеночка"]
+    },
+    { 
+        name: "Picathartidae (Лысые вороны)", 
+        example: "Сероголовая лысая ворона", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Сероголовая лысая ворона", "Красноголовая лысая ворона"]
+    },
+    { 
+        name: "Pipridae (Манакиновые)", 
+        example: "Синеголовый манакин", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Синеголовый манакин", "Золотистый манакин", "Красноголовый манакин"]
+    },
+    { 
+        name: "Pittidae (Питтовые)", 
+        example: "Синекрылая питта", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Синекрылая питта", "Радужная питта", "Гигантская питта"]
+    },
+    { 
+        name: "Pityriasidae (Бородатые вороны)", 
+        example: "Бородатая ворона", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Бородатая ворона"]
+    },
+    { 
+        name: "Platysteiridae (Африканские мухоловки)", 
+        example: "Черноспинная платистейра", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Черноспинная платистейра", "Желтобрюхая платистейра", "Красноспинная платистейра"]
+    },
+    { 
+        name: "Ploceidae (Ткачиковые)", 
+        example: "Общественный ткач", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Общественный ткач", "Красноклювый ткач", "Огненный ткач", "Золотой ткач"]
+    },
+    { 
+        name: "Pnoepygidae (Пищуховые крапивники)", 
+        example: "Карликовый пищуховый крапивник", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Карликовый пищуховый крапивник", "Гималайский пищуховый крапивник"]
+    },
+    { 
+        name: "Polioptilidae (Комароловки)", 
+        example: "Сине-серая комароловка", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Сине-серая комароловка", "Тропическая комароловка", "Белохвостая комароловка"]
+    },
+    { 
+        name: "Prionopidae (Очковые сорокопуты)", 
+        example: "Очковый сорокопут", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Очковый сорокопут", "Белошапочный сорокопут", "Черноголовый сорокопут"]
+    },
+    { 
+        name: "Prunellidae (Завирушковые)", 
+        example: "Лесная завирушка", 
+        size: "small", 
+        type: "common",
+        fullList: ["Лесная завирушка", "Альпийская завирушка", "Сибирская завирушка"]
+    },
+    { 
+        name: "Psophodidae (Флейтистовые дрозды)", 
+        example: "Флейтистовый дрозд", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Флейтистовый дрозд", "Чёрный флейтист", "Белогрудый флейтист"]
+    },
+    { 
+        name: "Ptilonorhynchidae (Беседковые птицы)", 
+        example: "Большая беседковая птица", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Большая беседковая птица", "Золотая беседковая птица", "Зелёная беседковая птица"]
+    },
+    { 
+        name: "Regulidae (Корольковые)", 
+        example: "Желтоголовый королёк", 
+        size: "small", 
+        type: "common",
+        fullList: ["Желтоголовый королёк", "Красноголовый королёк", "Огненный королёк"]
+    },
+    { 
+        name: "Remizidae (Ремезовые)", 
+        example: "Обыкновенный ремез", 
+        size: "small", 
+        type: "common",
+        fullList: ["Обыкновенный ремез", "Черноголовый ремез", "Китайский ремез"]
+    },
+    { 
+        name: "Rhipiduridae (Веерохвостки)", 
+        example: "Серая веерохвостка", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Серая веерохвостка", "Белохвостая веерохвостка", "Рыжая веерохвостка"]
+    },
+    { 
+        name: "Rhagologidae (Пестрогрудые свистуны)", 
+        example: "Пестрогрудый свистун", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Пестрогрудый свистун"]
+    },
+    { 
+        name: "Sapayoidae (Сапайоа)", 
+        example: "Сапайоа", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Сапайоа"]
+    },
+    { 
+        name: "Scotocercidae (Кустарниковые камышовки)", 
+        example: "Пёстрая кустарниковая камышовка", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Пёстрая кустарниковая камышовка", "Бурая кустарниковая камышовка"]
+    },
+    { 
+        name: "Sittidae (Поползневые)", 
+        example: "Обыкновенный поползень", 
+        size: "small", 
+        type: "common",
+        fullList: ["Обыкновенный поползень", "Черноголовый поползень", "Гималайский поползень", "Карликовый поползень"]
+    },
+    { 
+        name: "Stenostiridae (Фантастические мухоловки)", 
+        example: "Лимонная фантастическая мухоловка", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Лимонная фантастическая мухоловка", "Синегрудая фантастическая мухоловка"]
+    },
+    { 
+        name: "Sturnidae (Скворцовые)", 
+        example: "Обыкновенный скворец, Майна", 
+        size: "medium", 
+        type: "common",
+        fullList: ["Обыкновенный скворец", "Майна", "Розовый скворец", "Блестящий скворец"]
+    },
+    { 
+        name: "Sylviidae (Славковые)", 
+        example: "Славка-черноголовка, Камышовка", 
+        size: "small", 
+        type: "common",
+        fullList: ["Славка-черноголовка", "Камышовка", "Садовая славка", "Ястребиная славка"]
+    },
+    { 
+        name: "Tephrodornithidae (Лесные сорокопуты)", 
+        example: "Лесной сорокопут", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Лесной сорокопут", "Белохвостый сорокопут", "Красноспинный сорокопут"]
+    },
+    { 
+        name: "Thraupidae (Танагровые)", 
+        example: "Синяя танагра", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Синяя танагра", "Золотая танагра", "Огненная танагра", "Радужная танагра"]
+    },
+    { 
+        name: "Tichodromidae (Стенолазы)", 
+        example: "Стенолаз", 
+        size: "small", 
+        type: "common",
+        fullList: ["Стенолаз"]
+    },
+    { 
+        name: "Timaliidae (Тимелиевые)", 
+        example: "Кустарница", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Кустарница", "Рыжая тимелия", "Чёрная тимелия"]
+    },
+    { 
+        name: "Troglodytidae (Крапивниковые)", 
+        example: "Домовый крапивник", 
+        size: "small", 
+        type: "common",
+        fullList: ["Домовый крапивник", "Каменный крапивник", "Тростниковый крапивник"]
+    },
+    { 
+        name: "Turdidae (Дроздовые)", 
+        example: "Певчий дрозд, Чёрный дрозд, Рябинник", 
+        size: "medium", 
+        type: "common",
+        fullList: ["Певчий дрозд", "Чёрный дрозд", "Рябинник", "Белозобый дрозд", "Дрозд-белобровик"]
+    },
+    { 
+        name: "Tyrannidae (Тиранновые)", 
+        example: "Восточный феб", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Восточный феб", "Западный феб", "Королевский тиранн", "Серый тиранн"]
+    },
+    { 
+        name: "Urocynchramidae (Розовые вьюрки)", 
+        example: "Розовый вьюрок", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Розовый вьюрок"]
+    },
+    { 
+        name: "Vangidae (Ванговые)", 
+        example: "Синий ванга", 
+        size: "medium", 
+        type: "exotic",
+        fullList: ["Синий ванга", "Полосатый ванга", "Хохлатый ванга"]
+    },
+    { 
+        name: "Viduidae (Вдовушки)", 
+        example: "Райская вдовушка", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Райская вдовушка", "Королевская вдовушка", "Длиннохвостая вдовушка"]
+    },
+	{ 
+        name: "Vireonidae (Виреоновые)", 
+        example: "Красноглазый виреон", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Красноглазый виреон", "Желтогорлый виреон", "Белоглазый виреон"]
+    },
+    { 
+        name: "Zosteropidae (Белоглазковые)", 
+        example: "Японская белоглазка", 
+        size: "small", 
+        type: "exotic",
+        fullList: ["Японская белоглазка", "Очковая белоглазка", "Желтобрюхая белоглазка"]
+    }
         ];
 
         // DOM элементы
@@ -371,10 +958,25 @@
             familiesToShow.forEach(family => {
                 const card = document.createElement('div');
                 card.className = 'family-card';
+                
+                let birdsHtml = '';
+                if (family.fullList) {
+                    birdsHtml = `<ul class="bird-list">${family.fullList.map(bird => `<li>${bird}</li>`).join('')}</ul>`;
+                }
                 card.innerHTML = `
                     <div class="family-name">${family.name}</div>
                     <div class="example">${family.example}</div>
+                    ${birdsHtml}
                 `;
+                // Добавляем обработчик клика
+                card.addEventListener('click', function() {
+                    if (!family.fullList) return;
+                    
+                    const birdsList = this.querySelector('.bird-list');
+                    if (birdsList) {
+                        birdsList.style.display = birdsList.style.display === 'none' ? 'block' : 'none';
+                    }
+                });
                 familyList.appendChild(card);
             });
         }
