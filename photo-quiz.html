@@ -289,7 +289,6 @@
   <div class="fixed-buttons">
     <button class="home-button" id="home-button">На главную</button>
   </div>			
-
   <script>
     // Данные для викторины
     const birds = [
@@ -515,6 +514,7 @@
       if (currentAudio) {
         currentAudio.pause();
       }
+	   
 
       const percentage = (correctAnswers / totalQuestions) * 100;
       if (percentage < 50) {
@@ -531,7 +531,30 @@
       button.addEventListener("click", () => {
         window.location.href = "index.html";
       });
+    // Добавьте этот обработчик в конец скрипта, после всех других обработчиков
+    document.getElementById("restart").addEventListener("click", () => {
+      // Сбросить результаты
+      correctAnswers = 0;
+      incorrectAnswers = 0;
+      currentQuestion = 0;
+      
+      // Сбросить доступных птиц
+      availableBirds = [...birds];
+      
+      // Скрыть результаты и показать настройки
+      results.style.display = "none";
+      settings.style.display = "block";
+      
+      // Остановить таймер, если он активен
+      clearInterval(timer);
+      
+      // Остановить аудио, если оно играет
+      if (currentAudio) {
+        currentAudio.pause();
+      }
     });
+	});
+
   </script>
 </body>
 </html>
