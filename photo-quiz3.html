@@ -530,6 +530,28 @@
       button.addEventListener("click", () => {
         window.location.href = "index3.html";
       });
+	 // Добавьте этот обработчик в конец скрипта, после всех других обработчиков
+    document.getElementById("restart").addEventListener("click", () => {
+      // Сбросить результаты
+      correctAnswers = 0;
+      incorrectAnswers = 0;
+      currentQuestion = 0;
+      
+      // Сбросить доступных птиц
+      availableBirds = [...birds];
+      
+      // Скрыть результаты и показать настройки
+      results.style.display = "none";
+      settings.style.display = "block";
+      
+      // Остановить таймер, если он активен
+      clearInterval(timer);
+      
+      // Остановить аудио, если оно играет
+      if (currentAudio) {
+        currentAudio.pause();
+      }
+    });    
     });						 
   </script>
 </body>
