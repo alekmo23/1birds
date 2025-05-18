@@ -252,161 +252,6 @@
             padding: 0 20px;
         }
 
-        /* Модальное окно */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 30px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            position: relative;
-        }
-
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #aaa;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: #333;
-        }
-
-        .modal-title {
-            margin-top: 0;
-            color: var(--secondary-color);
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #2980b9;
-        }
-
-        .access-control {
-            margin-top: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .access-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .access-item:last-child {
-            border-bottom: none;
-        }
-
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--primary-color);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-
-        .admin-message {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--accent-color);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            z-index: 1000;
-            display: none;
-            font-weight: bold;
-        }
-        
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -443,7 +288,7 @@
                     <img src="images/sirius.jpg" alt="Логотип Sirius">
                 </div>
                 <h1>Орнитологические ресурсы</h1>
-                <div class="logo-oval logo-right" id="admin-logo">
+                <div class="logo-oval logo-right">
                     <img src="images/IMG_541.jpg" alt="Логотип викторины">
                 </div>
             </div>
@@ -456,15 +301,15 @@
             <h2 class="section-title">Три части с эмблемой Сириус</h2>
             <div class="links-grid">
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/1birds/" target="_blank" class="resource-link" data-id="part1">Часть 1</a>
+                    <a href="https://alekmo23.github.io/1birds/" target="_blank">Часть 1</a>
                     <p>Первая часть материалов о птицах с подробным описанием видов</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/1birds/index2" target="_blank" class="resource-link" data-id="part2">Часть 2</a>
+                    <a href="https://alekmo23.github.io/1birds/index2" target="_blank">Часть 2</a>
                     <p>Вторая часть материалов о птицах с фотографиями и ареалами обитания</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/1birds/index3" target="_blank" class="resource-link" data-id="part3">Часть 3</a>
+                    <a href="https://alekmo23.github.io/1birds/index3" target="_blank">Часть 3</a>
                     <p>Третья часть материалов о птицах с интересными фактами и особенностями</p>
                 </div>
             </div>
@@ -474,15 +319,15 @@
             <h2 class="section-title">Поиск птиц в Яндекс</h2>
             <div class="links-grid">
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/1birds/poiskbird" target="_blank" class="resource-link" data-id="search1">Поиск птиц 1</a>
+                    <a href="https://alekmo23.github.io/1birds/poiskbird" target="_blank">Поиск птиц 1</a>
                     <p>Простые поисковые запросы о птицах для быстрого нахождения информации</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/1birds/poiskbird1" target="_blank" class="resource-link" data-id="search2">Поиск птиц 2</a>
+                    <a href="https://alekmo23.github.io/1birds/poiskbird1" target="_blank">Поиск птиц 2</a>
                     <p>Дополнительные поисковые запросы для углубленного изучения</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/1birds/poiskbird3" target="_blank" class="resource-link" data-id="search3">Поиск птиц 3</a>
+                    <a href="https://alekmo23.github.io/1birds/poiskbird3" target="_blank">Поиск птиц 3</a>
                     <p>Дополнительные поисковые запросы для углубленного изучения</p>
                 </div>
             </div>
@@ -492,31 +337,31 @@
             <h2 class="section-title">Тренажеры по семействам</h2>
             <div class="links-grid">
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/trainer/" target="_blank" class="resource-link" data-id="trainer1">Воробьиные</a>
+                    <a href="https://alekmo23.github.io/trainer/" target="_blank">Воробьиные</a>
                     <p>Интерактивный тренажер по птицам семейства Воробьиные</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/trainer1/" target="_blank" class="resource-link" data-id="trainer2">Воробьиные 2</a>
+                    <a href="https://alekmo23.github.io/trainer1/" target="_blank">Воробьиные 2</a>
                     <p>Дополнительный тренажер по Воробьиным с тестами и викторинами</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/trainer2/index-woodpeckers" target="_blank" class="resource-link" data-id="trainer3">Дятлы</a>
+                    <a href="https://alekmo23.github.io/trainer2/index-woodpeckers" target="_blank">Дятлы</a>
                     <p>Тренажер по птицам семейства Дятлы с аудиозаписями их стука</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/trainer3/" target="_blank" class="resource-link" data-id="trainer4">Ночные хищники</a>
+                    <a href="https://alekmo23.github.io/trainer3/" target="_blank">Ночные хищники</a>
                     <p>Тренажер по ночным хищным птицам с особенностями их биологии</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/trainer3/pigeontoothed" target="_blank" class="resource-link" data-id="trainer6">Голубеобразные</a>
+                    <a href="https://alekmo23.github.io/trainer3/pigeontoothed" target="_blank">Голубеобразные</a>
                     <p>Тренажер по птицам семейства Голубеобразные с особенностями их строения</p>
                 </div>
                 <div class="link-card">
-                    <a href="bird_anatomy_dict.html" target="_blank" class="resource-link" data-id="trainer7">Анатомия птиц: русско-английский словарь</a>
+                    <a href="bird_anatomy_dict.html" target="_blank">Анатомия птиц: русско-английский словарь</a>
                     <p>Интерактивный словарь терминов по анатомии птиц на русском и английском языках</p>
                 </div>
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/bi1/bi15/index" target="_blank" class="resource-link" data-id="trainer5">Дополнительный ресурс</a>
+                    <a href="https://alekmo23.github.io/bi1/bi15/index" target="_blank">Дополнительный ресурс</a>
                     <p>Биологический тренажер с комплексными заданиями</p>
                 </div>
             </div>
@@ -526,7 +371,7 @@
             <h2 class="section-title">Игры для тренировки памяти</h2>
             <div class="links-grid">
                 <div class="link-card">
-                    <a href="https://alekmo23.github.io/1birds/memory" target="_blank" class="resource-link" data-id="game1">Найди пары птиц</a>
+                    <a href="https://alekmo23.github.io/1birds/memory" target="_blank">Найди пары птиц</a>
                     <p>Игра на память - находите парные карточки с изображениями птиц</p>
                 </div>
             </div>
@@ -536,211 +381,5 @@
     <div class="footer">
         <p>© 2025 Орнитологические ресурсы. Трофимова Александра. Все права защищены.</p>
     </div>
-
-    <!-- Модальное окно администрирования -->
-    <div id="admin-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 class="modal-title">Управление доступом</h2>
-            <div id="login-form">
-                <div class="form-group">
-                    <label for="admin-password">Пароль администратора:</label>
-                    <input type="password" id="admin-password" placeholder="Введите пароль">
-                </div>
-                <button id="login-btn" class="btn">Войти</button>
-            </div>
-            <div id="access-control" class="access-control" style="display: none;">
-                <h3>Управление доступом к ресурсам:</h3>
-                <div id="access-list"></div>
-                <button id="save-btn" class="btn" style="margin-top: 20px;">Сохранить изменения</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Сообщение о запрете доступа -->
-    <div id="admin-message" class="admin-message">
-        Запрет администратора
-    </div>
-
-    <!-- Подключаем Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
-    <script>
-        // Инициализация Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyC1wF4YRcMGeePWWlLK5Ssrx1bejveUrmY",
-            authDomain: "mvabirds.firebaseapp.com",
-            projectId: "mvabirds",
-            storageBucket: "mvabirds.firebasestorage.app",
-            messagingSenderId: "1067512868654",
-            appId: "1:1067512868654:web:ff4679821fa8a39087d4bf",
-            measurementId: "G-8Y4B87XFR0"
-        };
-        
-        // Инициализируем Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Элементы модального окна
-            const adminLogo = document.getElementById('admin-logo');
-            const modal = document.getElementById('admin-modal');
-            const closeBtn = document.querySelector('.close');
-            const loginBtn = document.getElementById('login-btn');
-            const saveBtn = document.getElementById('save-btn');
-            const passwordInput = document.getElementById('admin-password');
-            const loginForm = document.getElementById('login-form');
-            const accessControl = document.getElementById('access-control');
-            const accessList = document.getElementById('access-list');
-            const adminMessage = document.getElementById('admin-message');
-            
-            // Пароль администратора (можно изменить)
-            const ADMIN_PASSWORD = "admin123";
-            
-            // Состояние доступа к ресурсам
-            let accessState = {};
-            
-            // Список всех ресурсов
-            const resources = [
-                { id: "part1", name: "Часть 1", url: "https://alekmo23.github.io/1birds/" },
-                { id: "part2", name: "Часть 2", url: "https://alekmo23.github.io/1birds/index2" },
-                { id: "part3", name: "Часть 3", url: "https://alekmo23.github.io/1birds/index3" },
-                { id: "search1", name: "Поиск птиц 1", url: "https://alekmo23.github.io/1birds/poiskbird" },
-                { id: "search2", name: "Поиск птиц 2", url: "https://alekmo23.github.io/1birds/poiskbird1" },
-                { id: "search3", name: "Поиск птиц 3", url: "https://alekmo23.github.io/1birds/poiskbird3" },
-                { id: "trainer1", name: "Воробьиные", url: "https://alekmo23.github.io/trainer/" },
-                { id: "trainer2", name: "Воробьиные 2", url: "https://alekmo23.github.io/trainer1/" },
-                { id: "trainer3", name: "Дятлы", url: "https://alekmo23.github.io/trainer2/index-woodpeckers" },
-                { id: "trainer4", name: "Ночные хищники", url: "https://alekmo23.github.io/trainer3/" },
-                { id: "trainer5", name: "Дополнительный ресурс", url: "https://alekmo23.github.io/bi1/bi15/index" },
-                { id: "trainer6", name: "Голубеобразные", url: "https://alekmo23.github.io/trainer3/pigeontoothed.html" },
-                { id: "trainer7", name: "Анатомия птиц: русско-английский словарь", url: "bird_anatomy_dict.html" },
-                { id: "game1", name: "Найди пары птиц", url: "https://alekmo23.github.io/1birds/memory" }
-            ];
-            
-            // Загружаем состояние доступа из Firebase
-            function loadAccessState() {
-                database.ref('accessState').once('value').then((snapshot) => {
-                    const data = snapshot.val();
-                    if (data) {
-                        accessState = data;
-                    } else {
-                        // По умолчанию все ресурсы разрешены
-                        resources.forEach(resource => {
-                            accessState[resource.id] = true;
-                        });
-                        saveAccessState();
-                    }
-                });
-            }
-            
-            // Сохраняем состояние доступа в Firebase
-            function saveAccessState() {
-                database.ref('accessState').set(accessState);
-            }
-            
-            // Обновляем интерфейс управления доступом
-            function updateAccessControlUI() {
-                accessList.innerHTML = '';
-                resources.forEach(resource => {
-                    const accessItem = document.createElement('div');
-                    accessItem.className = 'access-item';
-                    
-                    const label = document.createElement('span');
-                    label.textContent = resource.name;
-                    
-                    const toggle = document.createElement('label');
-                    toggle.className = 'toggle-switch';
-                    
-                    const input = document.createElement('input');
-                    input.type = 'checkbox';
-                    input.checked = accessState[resource.id] || false;
-                    input.dataset.id = resource.id;
-                    
-                    const slider = document.createElement('span');
-                    slider.className = 'slider';
-                    
-                    toggle.appendChild(input);
-                    toggle.appendChild(slider);
-                    accessItem.appendChild(label);
-                    accessItem.appendChild(toggle);
-                    accessList.appendChild(accessItem);
-                });
-            }
-            
-            // Обработчик клика по ссылке ресурса
-            function handleResourceClick(e) {
-                const link = e.currentTarget;
-                const resourceId = link.dataset.id;
-                
-                if (!accessState[resourceId]) {
-                    e.preventDefault();
-                    showAdminMessage();
-                }
-            }
-            
-            // Показываем сообщение о запрете доступа
-            function showAdminMessage() {
-                adminMessage.style.display = 'block';
-                setTimeout(() => {
-                    adminMessage.style.display = 'none';
-                }, 2000);
-            }
-            
-            // Инициализация
-            function init() {
-                loadAccessState();
-                
-                // Назначаем обработчики клика на все ссылки ресурсов
-                document.querySelectorAll('.resource-link').forEach(link => {
-                    link.addEventListener('click', handleResourceClick);
-                });
-                
-                // Открываем модальное окно при клике на правый логотип
-                adminLogo.addEventListener('click', () => {
-                    modal.style.display = 'block';
-                    loginForm.style.display = 'block';
-                    accessControl.style.display = 'none';
-                    passwordInput.value = '';
-                });
-                
-                // Закрываем модальное окно
-                closeBtn.addEventListener('click', () => {
-                    modal.style.display = 'none';
-                });
-                
-                // Обработчик входа
-                loginBtn.addEventListener('click', () => {
-                    if (passwordInput.value === ADMIN_PASSWORD) {
-                        loginForm.style.display = 'none';
-                        accessControl.style.display = 'block';
-                        updateAccessControlUI();
-                    } else {
-                        alert('Неверный пароль!');
-                    }
-                });
-                
-                // Обработчик сохранения изменений
-                saveBtn.addEventListener('click', () => {
-                    document.querySelectorAll('#access-list input[type="checkbox"]').forEach(input => {
-                        accessState[input.dataset.id] = input.checked;
-                    });
-                    saveAccessState();
-                    modal.style.display = 'none';
-                    alert('Изменения сохранены!');
-                });
-                
-                // Закрываем модальное окно при клике вне его
-                window.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        modal.style.display = 'none';
-                    }
-                });
-            }
-            
-            init();
-        });
-    </script>
 </body>
 </html>
