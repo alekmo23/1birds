@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Орнитологические ресурсы</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
+        
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #f8f9fa;
+            --dark-color: #333;
+            --text-muted: #7f8c8d;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            padding: 30px 20px 40px;
+            background: linear-gradient(135deg, #1a3a5f 0%, #2c3e50 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #e74c3c, #f39c12, #2ecc71, #3498db, #9b59b6);
+        }
+        
+        .header::after {
+            content: "";
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 15px;
+        }
+
+        .logo-oval {
+            width: 130px;
+            height: 180px;
+            border-radius: 50% / 60% 60% 40% 40%;
+            overflow: hidden;
+            border: 4px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex-shrink: 0;
+            position: relative;
+            top: 55px;
+            cursor: pointer;
+        }
+        
+        /* Специальные стили для правого логотипа */
+        .logo-oval.logo-right img {
+            width: 140%;
+            height: 140%;
+            transform: translateY(0%);
+        }
+        
+        .logo-oval:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .logo-oval img {
+            width: 110%;
+            height: 110%;
+            object-fit: contain;
+            transform: translateY(-5%);
+        }
+        
+        .header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
+            margin: 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            position: relative;
+            display: inline-block;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
+        
+        .header h1::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: var(--accent-color);
+            border-radius: 3px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding: 25px;
+            margin: 0 auto 30px;
+            max-width: 1200px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), #9b59b6);
+        }
+        
+        .section-title {
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        .section-title::before {
+            content: "🦅";
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+        }
+        
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .link-card {
+            background-color: var(--light-color);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .link-card::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(52,152,219,0.1) 0%, rgba(231,76,60,0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            background-color: #e8f4fc;
+        }
+        
+        .link-card:hover::after {
+            opacity: 1;
+        }
+        
+        .link-card a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .link-card a:hover {
+            color: #1a5276;
+            text-decoration: underline;
+        }
+        
+        .link-card p {
+            margin: 8px 0 0;
+            color: var(--text-muted);
+            font-size: 0.95em;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.9em;
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .modal-title {
+            margin-top: 0;
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .access-control {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .access-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .access-item:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .admin-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--accent-color);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+                order: 1;
+            }
+            
+            .logo-oval {
+                width: 80px;
+                height: 110px;
+                order: 2;
+                top: 0;
+            }
+            
+            .logo-oval:first-child {
+                order: 0;
+            }
+            
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-oval">
+                    <img src="images/sirius.jpg" alt="Логотип Sirius">
+                </div>
+                <h1>Орнитологические ресурсы</h1>
+                <div class="logo-oval logo-right" id="admin-logo">
+                    <img src="images/IMG_541.jpg" alt="Логотип викторины">
+                </div>
+            </div>
+            <p>Изучайте мир птиц с нашими образовательными материалами</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <h2 class="section-title">Три части с эмблемой Сириус</h2>
+            <div class="links-grid">
+                <div class="link-card">
+                    <a href="https://alekmo23.github.io/1birds/" target="_blank" class="resource-link" data-id="part1">Часть 1</a>
+                    <p>Первая часть материалов о птицах с подробным описанием видов</p>
+                </div>
+                <div class="link-card">
+                    <a href="https://alekmo23.github.io/1birds/index2" target="_blank" class="resource-link" data-id="part2">Часть 2</a>
+                    <p>Вторая часть материалов о птицах с фотографиями и ареалами обитания</p>
+                </div>
+                <div class="link-card">
+                    <a href="https://alekmo23.github.io/1birds/index3" target="_blank" class="resource-link" data-id="part3">Часть 3</a>
+                    <p>Третья часть материалов о птицах с интересными фактами и особенностями</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Поиск птиц в Яндекс</h2>
+            <div class="links-grid">
+                <div class="link-card">
+                    <a href="https://alekmo23.github.io/1birds/poiskbird" target="_blank" class="resource-link" data-id="search1">Поиск птиц 1</a>
+                    <p>Простые поисковые запросы о птицах для быстрого нахождения информации</p>
+                </div>
+                <div class="link-card">
+                    <a href="https://alekmo23.github.io/1birds/poiskbird1" target="_blank" class="resource-link" data-id="search2">Поиск птиц 2</a>
+                    <p>Дополнительные поисковые запросы для углубленного изучения</p>
+                </div>
+                <div class="link-card">
+                    <a href="https://alekmo23.github.io/1birds/poiskbird3" target="_blank" class="resource-link" data-id="search3">Поиск птиц 3</a>
+                    <p>Дополнительные поисковые запросы для углубленного изучения</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Тренажеры по семействам</h2>
+            <div class="links-grid">
+                <div class="link-card">
+                    <a href="https://alekmo23.github.io/trainer/" target="_blank" class="resource-link" data-id="trainer1">Воробьиные</a>
+                    <p>Интерактивный тренажер по птицам семейства Воробьиные</p>
+                </div>
+                <div class="link-card">
+                    <a href="https://alekmo23.github.io/trainer1/" target="_blank" class="resource-link" data-id="trainer2">Воробьиные 2</a>
+                    <p>Дополнительный тренажер по Воробьиным с тестами и викторинами</p>
+                </div>
+                <div class="link-card">
+                    <a href="https://alekmo23.github.io/trainer2/index-woodpeckers" target="_blank" class="resource-link" data-id="trainer3">Дятлы</a>
+                    <p>Тренажер по птицам семейства Дятлы с аудиозаписями их стука</p>
+                </div>
+                <div class="link-card">
+                    <a href="https://alekmo23.github.io/trainer3/" target="_blank" class="resource-link" data-id="trainer4">Ночные хищники</a>
+                    <p>Тренажер по ночным хищным птицам с особенностями их биологии</p>
+                </div>
+                <div class="link-card">
+                    <a href="pigeontoothed.html" target="_blank" class="resource-link" data-id="trainer6">Голубеобразные</a>
+                    <p>Тренажер по птицам семейства Голубеобразные с особенностями их строения</p>
+                </div>
+                <div class="link-card">
+                    <a href="bird_anatomy_dict.html" target="_blank" class="resource-link" data-id="trainer7">Анатомия птиц: русско-английский словарь</a>
+                    <p>Интерактивный словарь терминов по анатомии птиц на русском и английском языках</p>
+                </div>
+                <div class="link-card">
+                    <a href="https://alekmo23.github.io/bi1/bi15/index" target="_blank" class="resource-link" data-id="trainer5">Дополнительный ресурс</a>
+                    <p>Биологический тренажер с комплексными заданиями</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Игры для тренировки памяти</h2>
+            <div class="links-grid">
+                <div class="link-card">
+                    <a href="https://alekmo23.github.io/1birds/memory" target="_blank" class="resource-link" data-id="game1">Найди пары птиц</a>
+                    <p>Игра на память - находите парные карточки с изображениями птиц</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2025 Орнитологические ресурсы. Трофимова Александра. Все права защищены.</p>
+    </div>
+
+    <!-- Модальное окно администрирования -->
+    <div id="admin-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 class="modal-title">Управление доступом</h2>
+            <div id="login-form">
+                <div class="form-group">
+                    <label for="admin-password">Пароль администратора:</label>
+                    <input type="password" id="admin-password" placeholder="Введите пароль">
+                </div>
+                <button id="login-btn" class="btn">Войти</button>
+            </div>
+            <div id="access-control" class="access-control" style="display: none;">
+                <h3>Управление доступом к ресурсам:</h3>
+                <div id="access-list"></div>
+                <button id="save-btn" class="btn" style="margin-top: 20px;">Сохранить изменения</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Сообщение о запрете доступа -->
+    <div id="admin-message" class="admin-message">
+        Запрет администратора
+    </div>
+
+    <!-- Подключаем Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+        // Инициализация Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC1wF4YRcMGeePWWlLK5Ssrx1bejveUrmY",
+            authDomain: "mvabirds.firebaseapp.com",
+            projectId: "mvabirds",
+            storageBucket: "mvabirds.firebasestorage.app",
+            messagingSenderId: "1067512868654",
+            appId: "1:1067512868654:web:ff4679821fa8a39087d4bf",
+            measurementId: "G-8Y4B87XFR0"
+        };
+        
+        // Инициализируем Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Элементы модального окна
+            const adminLogo = document.getElementById('admin-logo');
+            const modal = document.getElementById('admin-modal');
+            const closeBtn = document.querySelector('.close');
+            const loginBtn = document.getElementById('login-btn');
+            const saveBtn = document.getElementById('save-btn');
+            const passwordInput = document.getElementById('admin-password');
+            const loginForm = document.getElementById('login-form');
+            const accessControl = document.getElementById('access-control');
+            const accessList = document.getElementById('access-list');
+            const adminMessage = document.getElementById('admin-message');
+            
+            // Пароль администратора (можно изменить)
+            const ADMIN_PASSWORD = "admin123";
+            
+            // Состояние доступа к ресурсам
+            let accessState = {};
+            
+            // Список всех ресурсов
+            const resources = [
+                { id: "part1", name: "Часть 1", url: "https://alekmo23.github.io/1birds/" },
+                { id: "part2", name: "Часть 2", url: "https://alekmo23.github.io/1birds/index2" },
+                { id: "part3", name: "Часть 3", url: "https://alekmo23.github.io/1birds/index3" },
+                { id: "search1", name: "Поиск птиц 1", url: "https://alekmo23.github.io/1birds/poiskbird" },
+                { id: "search2", name: "Поиск птиц 2", url: "https://alekmo23.github.io/1birds/poiskbird1" },
+                { id: "search3", name: "Поиск птиц 3", url: "https://alekmo23.github.io/1birds/poiskbird3" },
+                { id: "trainer1", name: "Воробьиные", url: "https://alekmo23.github.io/trainer/" },
+                { id: "trainer2", name: "Воробьиные 2", url: "https://alekmo23.github.io/trainer1/" },
+                { id: "trainer3", name: "Дятлы", url: "https://alekmo23.github.io/trainer2/index-woodpeckers" },
+                { id: "trainer4", name: "Ночные хищники", url: "https://alekmo23.github.io/trainer3/" },
+                { id: "trainer5", name: "Дополнительный ресурс", url: "https://alekmo23.github.io/bi1/bi15/index" },
+                { id: "trainer6", name: "Голубеобразные", url: "pigeontoothed.html" },
+                { id: "trainer7", name: "Анатомия птиц: русско-английский словарь", url: "bird_anatomy_dict.html" },
+                { id: "game1", name: "Найди пары птиц", url: "https://alekmo23.github.io/1birds/memory" }
+            ];
+            
+            // Загружаем состояние доступа из Firebase
+            function loadAccessState() {
+                database.ref('accessState').once('value').then((snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        accessState = data;
+                    } else {
+                        // По умолчанию все ресурсы разрешены
+                        resources.forEach(resource => {
+                            accessState[resource.id] = true;
+                        });
+                        saveAccessState();
+                    }
+                });
+            }
+            
+            // Сохраняем состояние доступа в Firebase
+            function saveAccessState() {
+                database.ref('accessState').set(accessState);
+            }
+            
+            // Обновляем интерфейс управления доступом
+            function updateAccessControlUI() {
+                accessList.innerHTML = '';
+                resources.forEach(resource => {
+                    const accessItem = document.createElement('div');
+                    accessItem.className = 'access-item';
+                    
+                    const label = document.createElement('span');
+                    label.textContent = resource.name;
+                    
+                    const toggle = document.createElement('label');
+                    toggle.className = 'toggle-switch';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.checked = accessState[resource.id] || false;
+                    input.dataset.id = resource.id;
+                    
+                    const slider = document.createElement('span');
+                    slider.className = 'slider';
+                    
+                    toggle.appendChild(input);
+                    toggle.appendChild(slider);
+                    accessItem.appendChild(label);
+                    accessItem.appendChild(toggle);
+                    accessList.appendChild(accessItem);
+                });
+            }
+            
+            // Обработчик клика по ссылке ресурса
+            function handleResourceClick(e) {
+                const link = e.currentTarget;
+                const resourceId = link.dataset.id;
+                
+                if (!accessState[resourceId]) {
+                    e.preventDefault();
+                    showAdminMessage();
+                }
+            }
+            
+            // Показываем сообщение о запрете доступа
+            function showAdminMessage() {
+                adminMessage.style.display = 'block';
+                setTimeout(() => {
+                    adminMessage.style.display = 'none';
+                }, 2000);
+            }
+            
+            // Инициализация
+            function init() {
+                loadAccessState();
+                
+                // Назначаем обработчики клика на все ссылки ресурсов
+                document.querySelectorAll('.resource-link').forEach(link => {
+                    link.addEventListener('click', handleResourceClick);
+                });
+                
+                // Открываем модальное окно при клике на правый логотип
+                adminLogo.addEventListener('click', () => {
+                    modal.style.display = 'block';
+                    loginForm.style.display = 'block';
+                    accessControl.style.display = 'none';
+                    passwordInput.value = '';
+                });
+                
+                // Закрываем модальное окно
+                closeBtn.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                });
+                
+                // Обработчик входа
+                loginBtn.addEventListener('click', () => {
+                    if (passwordInput.value === ADMIN_PASSWORD) {
+                        loginForm.style.display = 'none';
+                        accessControl.style.display = 'block';
+                        updateAccessControlUI();
+                    } else {
+                        alert('Неверный пароль!');
+                    }
+                });
+                
+                // Обработчик сохранения изменений
+                saveBtn.addEventListener('click', () => {
+                    document.querySelectorAll('#access-list input[type="checkbox"]').forEach(input => {
+                        accessState[input.dataset.id] = input.checked;
+                    });
+                    saveAccessState();
+                    modal.style.display = 'none';
+                    alert('Изменения сохранены!');
+                });
+                
+                // Закрываем модальное окно при клике вне его
+                window.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            }
+            
+            init();
+        });
+    </script>
+</body>
+</html>
