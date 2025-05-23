@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Полное филогенетическое древо птиц</title>
+    <style>
+        /* (Стили остаются без изменений, как в предыдущем примере) */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --text-color: #2c3e50;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .content-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .visualization-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .info-section {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .tree-container {
+            position: relative;
+            width: 100%;
+            height: 800px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e0e0e0;
+        }
+        
+        #phylogenetic-tree {
+            width: 100%;
+            height: 100%;
+            background-image: url('bird-silhouettes.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-blend-mode: multiply;
+            background-color: rgba(245, 245, 245, 0.9);
+        }
+        
+        .node {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            border: 2px solid white;
+        }
+        
+        .node:hover {
+            transform: translate(-50%, -50%) scale(1.3);
+            z-index: 100;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        }
+        
+        .branch {
+            position: absolute;
+            height: 2px;
+            background-color: #95a5a6;
+            transform-origin: 0 0;
+            z-index: 1;
+        }
+        
+        .order-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+        }
+        
+        .order-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+        }
+        
+        .order-card .scientific-name {
+            font-style: italic;
+            color: #7f8c8d;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+        
+        .order-card .characteristics {
+            margin-bottom: 1rem;
+        }
+        
+        .order-card .characteristics li {
+            margin-bottom: 0.4rem;
+            position: relative;
+            padding-left: 1.2rem;
+        }
+        
+        .order-card .characteristics li:before {
+            content: "•";
+            color: var(--secondary-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        .examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        
+        .example {
+            background-color: #e8f4fc;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+        
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+            max-width: 300px;
+            text-align: left;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .control-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.6rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .highlight {
+            background-color: #fffde7;
+            box-shadow: 0 0 0 2px #ffeb3b;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            background-color: var(--text-color);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+            
+            .tree-container {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Полное филогенетическое древо птиц</h1>
+            <p class="subtitle">Все основные отряды птиц с их эволюционными связями</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="controls">
+            <button class="control-btn" id="zoom-in">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <line x1="11" y1="8" x2="11" y2="14"></line>
+                    <line x1="8" y1="11" x2="14" y2="11"></line>
+                </svg>
+                Увеличить
+            </button>
+            <button class="control-btn" id="zoom-out">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <line x1="8" y1="11" x2="14" y2="11"></line>
+                </svg>
+                Уменьшить
+            </button>
+            <button class="control-btn" id="reset-view">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                    <path d="M21 3v5h-5"></path>
+                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                    <path d="M8 16H3v5"></path>
+                </svg>
+                Сбросить
+            </button>
+            <input type="text" class="search-box" id="search-box" placeholder="Поиск отряда или птицы...">
+        </div>
+        
+        <div class="content-wrapper">
+            <section class="visualization-section">
+                <h2>Полное филогенетическое древо</h2>
+                <p>Нажмите на узлы, чтобы увидеть подробную информацию о каждом отряде птиц.</p>
+                
+                <div class="tree-container">
+                    <div id="phylogenetic-tree"></div>
+                    <div class="tooltip" id="tree-tooltip"></div>
+                </div>
+                
+                <div class="evolution-info">
+                    <h3>Основные эволюционные ветви</h3>
+                    <p>Современные птицы (Neornithes) включают следующие основные клады:</p>
+                    <ul>
+                        <li><strong>Paleognathae</strong> - бескилевые птицы</li>
+                        <li><strong>Neognathae</strong> - все остальные современные птицы</li>
+                        <ul>
+                            <li><strong>Galloanserae</strong> - курообразные и гусеобразные</li>
+                            <li><strong>Neoaves</strong> - все остальные отряды (~95% видов)</li>
+                        </ul>
+                    </ul>
+                </div>
+            </section>
+            
+            <section class="info-section">
+                <h2>Подробная информация об отрядах</h2>
+                <p>Выберите отряд на древе или в списке ниже для просмотра деталей.</p>
+                
+                <div id="order-info">
+                    <div class="order-card" id="default-info">
+                        <h3>Выберите отряд птиц</h3>
+                        <p>Нажмите на любой узел на филогенетическом древе или выберите отряд из списка ниже, чтобы увидеть подробную информацию.</p>
+                        <p>Всего в системе представлено 23 основных отряда современных птиц.</p>
+                    </div>
+                </div>
+                
+                <div class="quick-links">
+                    <h3>Основные отряды птиц:</h3>
+                    <div class="examples">
+                        <button class="example" data-order="paleognathae">Бескилевые</button>
+                        <button class="example" data-order="anseriformes">Гусеобразные</button>
+                        <button class="example" data-order="galliformes">Курообразные</button>
+                        <button class="example" data-order="sphenisciformes">Пингвины</button>
+                        <button class="example" data-order="procellariiformes">Буревестники</button>
+                        <button class="example" data-order="pelecaniformes">Пеликанообразные</button>
+                        <button class="example" data-order="ciconiiformes">Аистообразные</button>
+                        <button class="example" data-order="suliformes">Олушеобразные</button>
+                        <button class="example" data-order="charadriiformes">Ржанкообразные</button>
+                        <button class="example" data-order="gruiformes">Журавлеобразные</button>
+                        <button class="example" data-order="columbiformes">Голубеобразные</button>
+                        <button class="example" data-order="cuculiformes">Кукушкообразные</button>
+                        <button class="example" data-order="strigiformes">Совообразные</button>
+                        <button class="example" data-order="caprimulgiformes">Козодоеобразные</button>
+                        <button class="example" data-order="apodiformes">Стрижеобразные</button>
+                        <button class="example" data-order="coraciiformes">Ракшеобразные</button>
+                        <button class="example" data-order="piciformes">Дятлообразные</button>
+                        <button class="example" data-order="falconiformes">Соколообразные</button>
+                        <button class="example" data-order="psittaciformes">Попугаеобразные</button>
+                        <button class="example" data-order="passeriformes">Воробьинообразные</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2023 Полная филогенетическая классификация птиц | На основе последних молекулярных исследований</p>
+            <p>Источники данных: IOC World Bird List, BirdLife International, Nature, Science</p>
+        </div>
+    </footer>
+
+    <script>
+        // Расширенные данные об отрядах птиц (23 основных отряда)
+        const birdOrders = {
+            paleognathae: {
+                name: "Бескилевые птицы",
+                scientificName: "Paleognathae",
+                description: "Древняя группа нелетающих или плохо летающих птиц с плоской грудной костью без киля.",
+                characteristics: [
+                    "Примитивное строение нёба (палеогнатизм)",
+                    "Крупные размеры у нелетающих видов",
+                    "Редукция или отсутствие киля на грудине",
+                    "Распространены в Южном полушарии"
+                ],
+                examples: ["Страус", "Эму", "Нанду", "Казуар", "Киви", "Тинаму"],
+                color: "#9b59b6",
+                position: { x: 15, y: 15 }
+            },
+            galliformes: {
+                name: "Курообразные",
+                scientificName: "Galliformes",
+                description: "Наземные птицы с крепким телосложением, важные для человека как источник мяса и яиц.",
+                characteristics: [
+                    "Крепкое телосложение, приспособленное к наземной жизни",
+                    "Короткие закругленные крылья",
+                    "Сильные ноги для копания и бега",
+                    "Ярко выраженный половой диморфизм"
+                ],
+                examples: ["Фазан", "Куропатка", "Тетерев", "Глухарь", "Перепел", "Цесарка"],
+                color: "#3498db",
+                position: { x: 25, y: 25 }
+            },
+            anseriformes: {
+                name: "Гусеобразные",
+                scientificName: "Anseriformes",
+                description: "Водоплавающие птицы с перепончатыми лапами, включая уток, гусей и лебедей.",
+                characteristics: [
+                    "Перепончатые лапы для плавания",
+                    "Плоский широкий клюв с фильтрующими пластинками",
+                    "Плотное водонепроницаемое оперение",
+                    "Моногамия у многих видов"
+                ],
+                examples: ["Лебедь", "Гусь", "Утка", "Казарка", "Гоголь", "Крохаль"],
+                color: "#2980b9",
+                position: { x: 35, y: 25 }
+            },
+            sphenisciformes: {
+                name: "Пингвинообразные",
+                scientificName: "Sphenisciformes",
+                description: "Нелетающие морские птицы Южного полушария, превосходно приспособленные к плаванию.",
+                characteristics: [
+                    "Крылья преобразованы в ласты для плавания",
+                    "Обтекаемое тело с плотным оперением",
+                    "Способны нырять на глубину до 500 м",
+                    "Живут большими колониями"
+                ],
+                examples: ["Императорский пингвин", "Королевский пингвин", "Пингвин Адели", "Хохлатый пингвин"],
+                color: "#34495e",
+                position: { x: 85, y: 15 }
+            },
+            procellariiformes: {
+                name: "Буревестникообразные",
+                scientificName: "Procellariiformes",
+                description: "Океанические птицы с трубчатыми ноздрями, включая альбатросов и буревестников.",
+                characteristics: [
+                    "Трубчатые ноздри для выведения солей",
+                    "Длинные узкие крылья для парящего полета",
+                    "Отличное обоняние для поиска пищи",
+                    "Гнездятся на отдаленных островах"
+                ],
+                examples: ["Альбатрос", "Буревестник", "Качурка", "Глупыш"],
+                color: "#8e44ad",
+                position: { x: 75, y: 25 }
+            },
+            pelecaniformes: {
+                name: "Пеликанообразные",
+                scientificName: "Pelecaniformes",
+                description: "Крупные водные птицы с перепончатыми лапами и горловыми мешками.",
+                characteristics: [
+                    "Кожаный горловой мешок для ловли рыбы",
+                    "Перепонки между всеми четырьмя пальцами",
+                    "Длинные клювы с крючком на конце",
+                    "Колониальные гнездовья"
+                ],
+                examples: ["Пеликан", "Олуша", "Фрегат", "Баклан", "Змеешейка"],
+                color: "#16a085",
+                position: { x: 45, y: 35 }
+            },
+            ciconiiformes: {
+                name: "Аистообразные",
+                scientificName: "Ciconiiformes",
+                description: "Крупные болотные и околоводные птицы с длинными ногами и шеями.",
+                characteristics: [
+                    "Длинные ноги для бродячего образа жизни",
+                    "Длинные заостренные клювы",
+                    "Часто гнездятся на деревьях или скалах",
+                    "Многие виды перелетные"
+                ],
+                examples: ["Аист", "Цапля", "Ибис", "Колпица", "Выпь"],
+                color: "#27ae60",
+                position: { x: 55, y: 45 }
+            },
+            suliformes: {
+                name: "Олушеобразные",
+                scientificName: "Suliformes",
+                description: "Морские птицы, родственные пеликанам, но с более обтекаемыми телами.",
+                characteristics: [
+                    "Обтекаемые тела для ныряния за рыбой",
+                    "Ярко окрашенные лапы и клювы",
+                    "Гнездятся большими колониями",
+                    "Спектральная чувствительность зрения"
+                ],
+                examples: ["Олуша", "Фрегат", "Баклан", "Змеешейка"],
+                color: "#1abc9c",
+                position: { x: 65, y: 35 }
+            },
+            charadriiformes: {
+                name: "Ржанкообразные",
+                scientificName: "Charadriiformes",
+                description: "Разнообразная группа околоводных птиц, включая чаек, куликов и чистиковых.",
+                characteristics: [
+                    "Разнообразные адаптации к водной среде",
+                    "Часто длинные ноги для бродячего образа жизни",
+                    "Различные стратегии добычи пищи",
+                    "Многие виды дальние мигранты"
+                ],
+                examples: ["Чайка", "Кулик", "Плавунчик", "Крачка", "Чистик", "Тупик"],
+                color: "#f39c12",
+                position: { x: 35, y: 55 }
+            },
+            gruiformes: {
+                name: "Журавлеобразные",
+                scientificName: "Gruiformes",
+                description: "Разнообразная группа птиц, включая журавлей, пастушков и дроф.",
+                characteristics: [
+                    "Разнообразные размеры и формы тела",
+                    "Часто длинные ноги и шеи",
+                    "Многие виды обитают на болотах",
+                    "Сложные брачные ритуалы у журавлей"
+                ],
+                examples: ["Журавль", "Дрофа", "Пастушок", "Лысуха", "Султанка", "Кагу"],
+                color: "#d35400",
+                position: { x: 45, y: 65 }
+            },
+            columbiformes: {
+                name: "Голубеобразные",
+                scientificName: "Columbiformes",
+                description: "Птицы с плотным телом и короткой шеей, включая голубей и горлиц.",
+                characteristics: [
+                    "Способность к `голубиному молочку`",
+                    "Хорошо развитые зобы",
+                    "Быстрый прямой полет",
+                    "Моногамия и забота о птенцах"
+                ],
+                examples: ["Голубь", "Горлица", "Вяхирь", "Клинтух", "Земляной голубь"],
+                color: "#7f8c8d",
+                position: { x: 55, y: 75 }
+            },
+            cuculiformes: {
+                name: "Кукушкообразные",
+                scientificName: "Cuculiformes",
+                description: "Птицы, известные гнездовым паразитизмом у некоторых видов.",
+                characteristics: [
+                    "Гнездовой паразитизм у многих видов",
+                    "Длинные хвосты и обтекаемые тела",
+                    "Специфические вокализации",
+                    "Питаются волосатыми гусеницами"
+                ],
+                examples: ["Кукушка", "Турако", "Гоацин", "Ани", "Кукушка-подорожник"],
+                color: "#2c3e50",
+                position: { x: 65, y: 85 }
+            },
+            strigiformes: {
+                name: "Совообразные",
+                scientificName: "Strigiformes",
+                description: "Ночные хищные птицы с уникальными адаптациями для ночной охоты.",
+                characteristics: [
+                    "Фронтально расположенные глаза",
+                    "Бесшумный полет благодаря особому оперению",
+                    "Превосходный слух с асимметричными ушами",
+                    "Способность поворачивать голову на 270°"
+                ],
+                examples: ["Сова", "Филин", "Сыч", "Сипуха", "Неясыть", "Сплюшка"],
+                color: "#8e44ad",
+                position: { x: 75, y: 55 }
+            },
+            caprimulgiformes: {
+                name: "Козодоеобразные",
+                scientificName: "Caprimulgiformes",
+                description: "Ночные и сумеречные птицы с большими ртами для ловли насекомых.",
+                characteristics: [
+                    "Криптическая окраска под кору или листья",
+                    "Огромные рты для ловли насекомых в полете",
+                    "Слабые ноги, почти не ходят по земле",
+                    "Некоторые виды впадают в оцепенение"
+                ],
+                examples: ["Козодой", "Гуахаро", "Лягушкорот", "Совиный козодой"],
+                color: "#16a085",
+                position: { x: 85, y: 65 }
+            },
+            apodiformes: {
+                name: "Стрижеобразные",
+                scientificName: "Apodiformes",
+                description: "Птицы с исключительными способностями к полету, включая стрижей и колибри.",
+                characteristics: [
+                    "Короткие слабые ноги, почти не ходят",
+                    "Длинные серповидные крылья",
+                    "Очень высокая скорость полета",
+                    "У колибри - способность к зависанию"
+                ],
+                examples: ["Стриж", "Колибри", "Древесный стриж", "Салангана"],
+                color: "#e74c3c",
+                position: { x: 65, y: 45 }
+            },
+            coraciiformes: {
+                name: "Ракшеобразные",
+                scientificName: "Coraciiformes",
+                description: "Ярко окрашенные птицы, включая зимородков, щурок и сизоворонок.",
+                characteristics: [
+                    "Яркое контрастное оперение",
+                    "Крепкие клювы для ловли добычи",
+                    "Часто гнездятся в норах",
+                    "Некоторые виды - отличные рыбаки"
+                ],
+                examples: ["Зимородок", "Щурка", "Сизоворонка", "Удод", "Птица-носорог"],
+                color: "#f1c40f",
+                position: { x: 55, y: 55 }
+            },
+            piciformes: {
+                name: "Дятлообразные",
+                scientificName: "Piciformes",
+                description: "Птицы, приспособленные к жизни на деревьях, многие виды долбят древесину.",
+                characteristics: [
+                    "Крепкий клюв для долбления древесины",
+                    "Жесткие хвостовые перья для опоры",
+                    "Длинный липкий язык для добычи насекомых",
+                    "Зигодактильные лапы (2 пальца вперед, 2 назад)"
+                ],
+                examples: ["Дятел", "Тукана", "Бородатка", "Якамара", "Медоуказчик"],
+                color: "#e67e22",
+                position: { x: 45, y: 75 }
+            },
+            falconiformes: {
+                name: "Соколообразные",
+                scientificName: "Falconiformes",
+                description: "Дневные хищные птицы с острым зрением и мощными когтями.",
+                characteristics: [
+                    "Крючковатый клюв для разрывания мяса",
+                    "Острое зрение (в 2-6 раз лучше человеческого)",
+                    "Мощные когти (когти)",
+                    "Высокая скорость полета у соколов"
+                ],
+                examples: ["Орел", "Ястреб", "Сокол", "Канюк", "Гриф", "Коршун"],
+                color: "#c0392b",
+                position: { x: 35, y: 35 }
+            },
+            psittaciformes: {
+                name: "Попугаеобразные",
+                scientificName: "Psittaciformes",
+                description: "Ярко окрашенные птицы с сильными изогнутыми клювами, известные способностью к имитации звуков.",
+                characteristics: [
+                    "Сильный изогнутый клюв для разгрызания",
+                    "Зигодактильные лапы (2 пальца вперед, 2 назад)",
+                    "Высокий интеллект и способность к обучению",
+                    "Яркое оперение у большинства видов"
+                ],
+                examples: ["Ара", "Какаду", "Жако", "Амазон", "Волнистый попугай", "Лори"],
+                color: "#2ecc71",
+                position: { x: 25, y: 65 }
+            },
+            passeriformes: {
+                name: "Воробьинообразные",
+                scientificName: "Passeriformes",
+                description: "Самая многочисленная группа птиц, включающая более половины всех видов птиц.",
+                characteristics: [
+                    "Развитый голосовой аппарат (певчие птицы)",
+                    "Три пальца направлены вперед, один назад",
+                    "Малые и средние размеры",
+                    "Разнообразные экологические ниши"
+                ],
+                examples: ["Воробей", "Синица", "Дрозд", "Скворец", "Ворона", "Соловей", "Ласточка"],
+                color: "#e74c3c",
+                position: { x: 25, y: 85 }
+            },
+            podicipediformes: {
+                name: "Поганкообразные",
+                scientificName: "Podicipediformes",
+                description: "Водоплавающие птицы с лопастными пальцами, отличные ныряльщики.",
+                characteristics: [
+                    "Лопастные перепонки на пальцах",
+                    "Способность регулировать плавучесть",
+                    "Сложные брачные ритуалы на воде",
+                    "Гнезда плавающие или на мелководье"
+                ],
+                examples: ["Поганка", "Чомга", "Красношейная поганка", "Малая поганка"],
+                color: "#3498db",
+                position: { x: 15, y: 45 }
+            },
+            phaethontiformes: {
+                name: "Фаэтонообразные",
+                scientificName: "Phaethontiformes",
+                description: "Тропические морские птицы с длинными хвостовыми перьями.",
+                characteristics: [
+                    "Длинные рулевые перья у взрослых птиц",
+                    "Питаются рыбой и кальмарами",
+                    "Гнездятся в расщелинах скал",
+                    "Элегантный парящий полет"
+                ],
+                examples: ["Красноклювый фаэтон", "Белохвостый фаэтон", "Краснохвостый фаэтон"],
+                color: "#9b59b6",
+                position: { x: 85, y: 35 }
+            },
+            musophagiformes: {
+                name: "Туракообразные",
+                scientificName: "Musophagiformes",
+                description: "Ярко окрашенные африканские птицы с уникальными пигментами в оперении.",
+                characteristics: [
+                    "Содержат уникальные медные пигменты",
+                    "Полузигодактильные лапы",
+                    "Питаются преимущественно фруктами",
+                    "Громкие крики"
+                ],
+                examples: ["Турако", "Гоацин", "Бананноед", "Фиолетовый турако"],
+                color: "#1abc9c",
+                position: { x: 15, y: 75 }
+            }
+        };
+
+        // Инициализация дерева
+        document.addEventListener('DOMContentLoaded', function() {
+            const treeContainer = document.getElementById('phylogenetic-tree');
+            const tooltip = document.getElementById('tree-tooltip');
+            const orderInfo = document.getElementById('order-info');
+            const defaultInfo = document.getElementById('default-info');
+            const searchBox = document.getElementById('search-box');
+            let currentScale = 1;
+            
+            // Создаем узлы и ветви
+            Object.entries(birdOrders).forEach(([id, order]) => {
+                createNode(id, order);
+            });
+            
+            // Создаем основные ветви между узлами (упрощенная филогения)
+            createBranch(birdOrders.paleognathae, birdOrders.galliformes);
+            createBranch(birdOrders.galliformes, birdOrders.anseriformes);
+            createBranch(birdOrders.paleognathae, birdOrders.podicipediformes);
+            createBranch(birdOrders.podicipediformes, birdOrders.sphenisciformes);
+            createBranch(birdOrders.sphenisciformes, birdOrders.procellariiformes);
+            createBranch(birdOrders.procellariiformes, birdOrders.phaethontiformes);
+            createBranch(birdOrders.podicipediformes, birdOrders.pelecaniformes);
+            createBranch(birdOrders.pelecaniformes, birdOrders.suliformes);
+            createBranch(birdOrders.suliformes, birdOrders.ciconiiformes);
+            createBranch(birdOrders.ciconiiformes, birdOrders.charadriiformes);
+            createBranch(birdOrders.charadriiformes, birdOrders.gruiformes);
+            createBranch(birdOrders.gruiformes, birdOrders.musophagiformes);
+            createBranch(birdOrders.musophagiformes, birdOrders.cuculiformes);
+            createBranch(birdOrders.cuculiformes, birdOrders.passeriformes);
+            createBranch(birdOrders.charadriiformes, birdOrders.columbiformes);
+            createBranch(birdOrders.columbiformes, birdOrders.caprimulgiformes);
+            createBranch(birdOrders.caprimulgiformes, birdOrders.apodiformes);
+            createBranch(birdOrders.apodiformes, birdOrders.coraciiformes);
+            createBranch(birdOrders.coraciiformes, birdOrders.piciformes);
+            createBranch(birdOrders.piciformes, birdOrders.falconiformes);
+            createBranch(birdOrders.falconiformes, birdOrders.psittaciformes);
+            createBranch(birdOrders.psittaciformes, birdOrders.strigiformes);
+            
+            // Функция создания узла
+            function createNode(id, order) {
+                const node = document.createElement('div');
+                node.className = 'node';
+                node.id = `node-${id}`;
+                node.textContent = order.examples[0].charAt(0);
+                node.style.backgroundColor = order.color;
+                node.style.left = `${order.position.x}%`;
+                node.style.top = `${order.position.y}%`;
+                
+                node.addEventListener('mouseover', function(e) {
+                    showTooltip(order, e.pageX, e.pageY);
+                });
+                
+                node.addEventListener('mouseout', function() {
+                    hideTooltip();
+                });
+                
+                node.addEventListener('click', function() {
+                    showOrderInfo(order);
+                });
+                
+                treeContainer.appendChild(node);
+            }
+            
+            // Функция создания ветви
+            function createBranch(order1, order2) {
+                const branch = document.createElement('div');
+                branch.className = 'branch';
+                
+                const x1 = order1.position.x;
+                const y1 = order1.position.y;
+                const x2 = order2.position.x;
+                const y2 = order2.position.y;
+                
+                const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)) * 0.8;
+                const angle = Math.atan2(y2 - y1, x2 - x1);
+                
+                branch.style.width = `${length}%`;
+                branch.style.left = `${x1}%`;
+                branch.style.top = `${y1}%`;
+                branch.style.transform = `rotate(${angle}rad)`;
+                
+                treeContainer.appendChild(branch);
+            }
+            
+            // Показать подсказку
+            function showTooltip(order, x, y) {
+                tooltip.innerHTML = `
+                    <strong>${order.name}</strong>
+                    <p>${order.description}</p>
+                    <small>Нажмите для подробностей</small>
+                `;
+                tooltip.style.left = `${x + 15}px`;
+                tooltip.style.top = `${y + 15}px`;
+                tooltip.style.opacity = 1;
+            }
+            
+            // Скрыть подсказку
+            function hideTooltip() {
+                tooltip.style.opacity = 0;
+            }
+            
+            // Показать информацию об отряде
+            function showOrderInfo(order) {
+                defaultInfo.style.display = 'none';
+                
+                orderInfo.innerHTML = `
+                    <div class="order-card highlight">
+                        <h3>${order.name}</h3>
+                        <span class="scientific-name">${order.scientificName}</span>
+                        <p>${order.description}</p>
+                        
+                        <h4>Характерные особенности:</h4>
+                        <ul class="characteristics">
+                            ${order.characteristics.map(c => `<li>${c}</li>`).join('')}
+                        </ul>
+                        
+                        <h4>Примеры видов:</h4>
+                        <div class="examples">
+                            ${order.examples.map(ex => `<span class="example">${ex}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                // Прокрутка к информации
+                orderInfo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // Подсветка узла
+                document.querySelectorAll('.node').forEach(n => n.style.transform = 'translate(-50%, -50%) scale(1)');
+                const node = document.getElementById(`node-${order.scientificName.toLowerCase()}`);
+                if (node) {
+                    node.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                }
+            }
+            
+            // Управление масштабом
+            document.getElementById('zoom-in').addEventListener('click', function() {
+                currentScale = Math.min(currentScale + 0.1, 1.5);
+                treeContainer.style.transform = `scale(${currentScale})`;
+            });
+            
+            document.getElementById('zoom-out').addEventListener('click', function() {
+                currentScale = Math.max(currentScale - 0.1, 0.7);
+                treeContainer.style.transform = `scale(${currentScale})`;
+            });
+            
+            document.getElementById('reset-view').addEventListener('click', function() {
+                currentScale = 1;
+                treeContainer.style.transform = `scale(${currentScale})`;
+            });
+            
+            // Поиск
+            searchBox.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                if (searchTerm.length < 2) {
+                    document.querySelectorAll('.node').forEach(n => n.style.opacity = '1');
+                    return;
+                }
+                
+                let found = false;
+                Object.entries(birdOrders).forEach(([id, order]) => {
+                    const node = document.getElementById(`node-${id}`);
+                    const matches = order.name.toLowerCase().includes(searchTerm) || 
+                                   order.scientificName.toLowerCase().includes(searchTerm) ||
+                                   order.examples.some(ex => ex.toLowerCase().includes(searchTerm));
+                    
+                    node.style.opacity = matches ? '1' : '0.2';
+                    if (matches) found = true;
+                });
+                
+                if (found && searchTerm.length > 3) {
+                    const firstMatch = Object.values(birdOrders).find(order => 
+                        order.name.toLowerCase().includes(searchTerm) || 
+                        order.scientificName.toLowerCase().includes(searchTerm) ||
+                        order.examples.some(ex => ex.toLowerCase().includes(searchTerm))
+                    );
+                    if (firstMatch) showOrderInfo(firstMatch);
+                }
+            });
+            
+            // Быстрые ссылки на отряды
+            document.querySelectorAll('.example[data-order]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const orderId = this.getAttribute('data-order');
+                    const order = birdOrders[orderId];
+                    if (order) showOrderInfo(order);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
