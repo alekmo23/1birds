@@ -165,7 +165,7 @@
         }
         
         .section-title::before {
-            content: "🦅";
+            content: "";
             position: absolute;
             left: -10px;
             top: 50%;
@@ -252,22 +252,6 @@
             padding: 0 20px;
         }
 
-        /* Стили для филогенетического древа */
-        .phylogenetic-tree {
-            width: 100%;
-            height: 600px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: auto;
-            margin-top: 20px;
-            background-color: #f9f9f9;
-        }
-
-        .tree-container {
-            padding: 20px;
-            min-height: 100%;
-        }
-
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -292,10 +276,6 @@
             
             .links-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .phylogenetic-tree {
-                height: 400px;
             }
         }
     </style>
@@ -392,12 +372,9 @@
             <h2 class="section-title">Филогенетическое древо птиц</h2>
             <div class="links-grid">
                 <div class="link-card">
-                    <a href="Complete_Bird_Family_Tree.html" target="_blank">Открыть древо в полном окне</a>
-                    <p>Полная интерактивная версия филогенетического древа птиц</p>
+                    <a href="Complete_Bird_Family_Tree.html" target="_blank">Полное филогенетическое древо птиц</a>
+                    <p>Интерактивная визуализация эволюционных взаимоотношений между различными семействами птиц</p>
                 </div>
-            </div>
-            <div class="phylogenetic-tree">
-                <iframe src="Complete_Bird_Family_Tree.html" style="width: 100%; height: 100%; border: none;"></iframe>
             </div>
         </div>
 
