@@ -22,22 +22,22 @@
             color: #4682b4;
             text-align: center;
             margin-top: 0;
-            margin-bottom: 30px;
         }
         .cycle-container {
             position: relative;
             width: 700px;
             height: 700px;
-            margin: 20px auto;
+            margin: 30px auto;
         }
         .stage {
             position: absolute;
             width: 160px;
-            height: 200px;
+            height: 190px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
+            transform: translate(-50%, -50%);
         }
         .stage img {
             width: 130px;
@@ -49,50 +49,48 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .stage p {
-            margin-top: 12px;
-            font-size: 13px;
+            margin-top: 10px;
+            font-size: 14px;
             font-weight: bold;
             color: #2f4f4f;
             background-color: rgba(255,255,255,0.9);
-            padding: 6px 8px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 5px 8px;
+            border-radius: 5px;
             width: 140px;
-            line-height: 1.3;
         }
         .description {
             max-width: 800px;
-            margin: 30px auto;
-            padding: 20px;
+            margin: 20px auto;
+            padding: 15px;
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            line-height: 1.5;
         }
         .arrow {
             position: absolute;
             width: 40px;
             height: 40px;
-            opacity: 0.6;
-            z-index: -1;
+            opacity: 0.7;
+            transform-origin: center;
         }
         .center-circle {
-            position: absolute; 
-            top: 300px; 
-            left: 300px; 
-            width: 120px; 
-            height: 120px; 
-            background: linear-gradient(135deg, #4682b4, #2e8b57); 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            color: white; 
-            font-weight: bold; 
-            text-align: center; 
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #4682b4, #2e8b57);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            text-align: center;
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             border: 3px solid white;
-            z-index: 1;
+            z-index: 10;
+            transform: translate(-50%, -50%);
         }
     </style>
 </head>
@@ -101,53 +99,104 @@
     <h2>Круговой процесс сезонных изменений</h2>
     
     <div class="cycle-container">
-        <!-- Этапы расположены по кругу с большими промежутками -->
-        <div class="stage" style="top: 40px; left: 280px;">
-            <img src="весна.jfif" alt="Подготовка к размножению">
-            <p>1. Подготовка к размножению (весна)</p>
-        </div>
-        
-        <div class="stage" style="top: 140px; left: 480px;">
-            <img src="гнездо.jfif" alt="Размножение">
-            <p>2. Размножение (строительство гнезд, уход за потомством)</p>
-        </div>
-        
-        <div class="stage" style="top: 340px; left: 510px;">
-            <img src="линька.jfif" alt="Линька">
-            <p>3. Послегнездовая линька (смена перьев перед зимой)</p>
-        </div>
-        
-        <div class="stage" style="top: 470px; left: 480px;">
-            <img src="миграция2.jfif" alt="Осенняя миграция">
-            <p>4. Осенняя миграция (перелёт на зимовку)</p>
-        </div>
-        
-        <div class="stage" style="top: 470px; left: 280px;">
-            <img src="зима.jfif" alt="Зимовка">
-            <p>5. Зимовка (поиск пищи и укрытий)</p>
-        </div>
-        
-        <div class="stage" style="top: 340px; left: 50px;">
-            <img src="миграция1.jfif" alt="Весенняя миграция">
-            <p>6. Весенняя миграция (возвращение к местам гнездования)</p>
-        </div>
-        
         <!-- Центральный элемент -->
         <div class="center-circle">
             Годовой<br>цикл<br>птиц
         </div>
         
+        <!-- Этапы расположены по кругу с углом 60° между ними -->
+        <!-- Новый порядок: -->
+        <!-- 1. Зимовка -->
+        <div class="stage" id="stage1">
+            <img src="winter.jfif" alt="Зимовка">
+            <p>1. Зимовка (выживание в холода)</p>
+        </div>
+        
+        <!-- 2. Весенняя миграция -->
+        <div class="stage" id="stage2">
+            <img src="migration1.jfif" alt="Весенняя миграция">
+            <p>2. Весенняя миграция</p>
+        </div>
+        
+        <!-- 3. Подготовка к размножению -->
+        <div class="stage" id="stage3">
+            <img src="spring.jfif" alt="Подготовка к размножению">
+            <p>3. Подготовка к размножению</p>
+        </div>
+        
+        <!-- 4. Размножение -->
+        <div class="stage" id="stage4">
+            <img src="nest.jfif" alt="Размножение">
+            <p>4. Размножение (гнездование)</p>
+        </div>
+        
+        <!-- 5. Линька -->
+        <div class="stage" id="stage5">
+            <img src="molt.jfif" alt="Линька">
+            <p>5. Послегнездовая линька</p>
+        </div>
+        
+        <!-- 6. Осенняя миграция -->
+        <div class="stage" id="stage6">
+            <img src="migration2.jfif" alt="Осенняя миграция">
+            <p>6. Осенняя миграция</p>
+        </div>
+        
         <!-- Стрелки между этапами -->
-        <img class="arrow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTgsNUwxNSwxMkw4LDE5VjVaIiBmaWxsPSIjNDY4MmI0Ii8+PC9zdmc+" style="top: 100px; left: 370px; transform: rotate(30deg);">
-        <img class="arrow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTgsNUwxNSwxMkw4LDE5VjVaIiBmaWxsPSIjNDY4MmI0Ii8+PC9zdmc+" style="top: 220px; left: 470px; transform: rotate(80deg);">
-        <img class="arrow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTgsNUwxNSwxMkw4LDE5VjVaIiBmaWxsPSIjNDY4MmI0Ii8+PC9zdmc+" style="top: 390px; left: 470px; transform: rotate(130deg);">
-        <img class="arrow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTgsNUwxNSwxMkw4LDE5VjVaIiBmaWxsPSIjNDY4MmI0Ii8+PC9zdmc+" style="top: 470px; left: 370px; transform: rotate(180deg);">
-        <img class="arrow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTgsNUwxNSwxMkw4LDE5VjVaIiBmaWxsPSIjNDY4MmI0Ii8+PC9zdmc+" style="top: 390px; left: 170px; transform: rotate(230deg);">
-        <img class="arrow" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTgsNUwxNSwxMkw4LDE5VjVaIiBmaWxsPSIjNDY4MmI0Ii8+PC9zdmc+" style="top: 220px; left: 170px; transform: rotate(280deg);">
+        <img class="arrow" id="arrow1" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTgsNUwxNSwxMkw4LDE5VjVaIiBmaWxsPSIjNDY4MmI0Ii8+PC9zdmc+" />
+        <img class="arrow" id="arrow2" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTgsNUwxNSwxMkw4LDE5VjVaIiBmaWxsPSIjNDY4MmI0Ii8+PC9zdmc+" />
+        <img class="arrow" id="arrow3" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTgsNUwxNSwxMkw4LDE5VjVaIiBmaWxsPSIjNDY4MmI0Ii8+PC9zdmc+" />
+        <img class="arrow" id="arrow4" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTgsNUwxNSwxMkw4LDE5VjVaIiBmaWxsPSIjNDY4MmI0Ii8+PC9zdmc+" />
+        <img class="arrow" id="arrow5" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTgsNUwxNSwxMkw4LDE5VjVaIiBmaWxsPSIjNDY4MmI0Ii8+PC9zdmc+" />
+        <img class="arrow" id="arrow6" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTgsNUwxNSwxMkw4LDE5VjVaIiBmaWxsPSIjNDY4MmI0Ii8+PC9zdmc+" />
     </div>
     
     <div class="description">
-        <p><strong>Годовой жизненный цикл птиц</strong> — это непрерывный процесс сезонных изменений, включающий две миграции (весеннюю и осеннюю), размножение, линьку и зимовку. Птицы чутко реагируют на изменения окружающей среды, такие как температура, продолжительность светового дня и доступность корма, что определяет их годовой цикл жизни.</p>
+        <p><strong>Годовой жизненный цикл птиц</strong> — это непрерывный процесс сезонных изменений, начинающийся с зимовки, затем весенней миграции, подготовки к размножению, самого размножения, послегнездовой линьки и завершающийся осенней миграцией. Птицы чутко реагируют на изменения окружающей среды, что определяет их годовой цикл жизни.</p>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const radius = 250;
+            const arrowRadius = 180;
+            const center = { x: 350, y: 350 };
+            
+            // Новый порядок этапов с начальным углом -90° (12 часов)
+            const stages = [
+                { id: "stage1", angle: -90,  name: "Зимовка", img: "winter.jfif" },
+                { id: "stage2", angle: -30,  name: "Весенняя миграция", img: "migration1.jfif" },
+                { id: "stage3", angle: 30,   name: "Подготовка к размножению", img: "spring.jfif" },
+                { id: "stage4", angle: 90,   name: "Размножение", img: "nest.jfif" },
+                { id: "stage5", angle: 150,  name: "Послегнездовая линька", img: "molt.jfif" },
+                { id: "stage6", angle: 210,  name: "Осенняя миграция", img: "migration2.jfif" }
+            ];
+            
+            // Позиционирование этапов
+            stages.forEach(stage => {
+                const element = document.getElementById(stage.id);
+                const angleRad = stage.angle * Math.PI / 180;
+                const x = center.x + radius * Math.cos(angleRad);
+                const y = center.y + radius * Math.sin(angleRad);
+                element.style.left = x + 'px';
+                element.style.top = y + 'px';
+            });
+            
+            // Позиционирование стрелок
+            for (let i = 0; i < stages.length; i++) {
+                const current = stages[i];
+                const next = stages[(i + 1) % stages.length];
+                const midAngle = (current.angle + next.angle) / 2;
+                
+                const angleRad = midAngle * Math.PI / 180;
+                const x = center.x + arrowRadius * Math.cos(angleRad);
+                const y = center.y + arrowRadius * Math.sin(angleRad);
+                
+                const arrow = document.getElementById(`arrow${i + 1}`);
+                arrow.style.left = x + 'px';
+                arrow.style.top = y + 'px';
+                arrow.style.transform = `rotate(${midAngle}deg)`;
+            }
+        });
+    </script>
 </body>
 </html>
