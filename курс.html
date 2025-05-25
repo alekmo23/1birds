@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Курс по изучению птиц</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+            touch-action: pan-y;
+        }
+        
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%);
+            color: #333;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .slide.active {
+            transform: translateX(0);
+        }
+        
+        .slide.prev {
+            transform: translateX(-100%);
+        }
+        
+        .slide-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #2E8B57;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 100%;
+        }
+        
+        .slide-subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #4682B4;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .slide-content {
+            width: 95%;
+            max-width: 900px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        .slide-list {
+            width: 95%;
+            max-width: 800px;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin: 15px 0;
+            text-align: left;
+            padding-left: 20px;
+        }
+        
+        .slide-list li {
+            margin-bottom: 8px;
+        }
+        
+        .slide-image {
+            max-width: 95%;
+            max-height: 40vh;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            margin: 15px 0;
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+            width: 95%;
+        }
+        
+        .image-grid img {
+            width: 100%;
+            border-radius: 6px;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+            background-color: rgba(255,255,255,0.7);
+            padding: 5px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .control-btn {
+            padding: 8px 15px;
+            background-color: #4682B4;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+            min-width: 80px;
+        }
+        
+        .control-btn:hover {
+            background-color: #3a6d99;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            z-index: 100;
+        }
+        
+        table {
+            width: 95%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            display: block;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #2E8B57;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .fact-box {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 8px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 95%;
+        }
+        
+        .bird-features {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 15px 0;
+            width: 95%;
+        }
+        
+        .feature {
+            width: 100%;
+            margin: 5px 0;
+        }
+        
+        .qr-code {
+            width: 120px;
+            height: 120px;
+            background-color: white;
+            padding: 8px;
+            margin: 15px auto;
+            border: 1px solid #ddd;
+            font-size: 0.7rem;
+        }
+        
+        .comparison {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 15px 0;
+            width: 95%;
+        }
+        
+        .comparison-item {
+            width: 100%;
+            margin: 5px 0;
+        }
+        
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 1px 3px;
+            border-radius: 2px;
+        }
+        
+        .note-box, .warning-box, .tip-box {
+            padding: 10px;
+            margin: 10px 0;
+            text-align: left;
+            width: 95%;
+            border-radius: 5px;
+            font-size: 0.95rem;
+        }
+        
+        .note-box {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .warning-box {
+            background-color: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+        
+        .tip-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .key-point {
+            font-weight: bold;
+            color: #2E8B57;
+        }
+        
+        /* Адаптация для маленьких экранов */
+        @media (max-width: 480px) {
+            .slide-title {
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+            }
+            
+            .slide-subtitle {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            
+            .slide-content {
+                font-size: 1rem;
+            }
+            
+            .slide-list {
+                font-size: 0.95rem;
+                padding-left: 15px;
+            }
+            
+            .controls {
+                bottom: 5px;
+                padding: 3px;
+            }
+            
+            .control-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                min-width: 70px;
+            }
+            
+            .slide-counter {
+                top: 5px;
+                right: 5px;
+                font-size: 0.7rem;
+            }
+            
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Горизонтальная ориентация */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .slide {
+                padding: 5px;
+                justify-content: flex-start;
+            }
+            
+            .slide-title {
+                font-size: 1.3rem;
+                margin-bottom: 5px;
+            }
+            
+            .slide-content, .slide-list {
+                font-size: 0.9rem;
+                margin-bottom: 5px;
+            }
+            
+            .slide-image {
+                max-height: 30vh;
+                margin: 5px 0;
+            }
+            
+            .controls {
+                bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="slide-counter">1 / 20</div>
+        
+        <!-- Слайд 1: Введение -->
+        <div class="slide active" style="background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('https://images.unsplash.com/photo-1550853024-fae8cd4be47f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');">
+            <h1 class="slide-title">Курс по изучению птиц</h1>
+            <p class="slide-content">Мир птиц очень разнообразен. На Земле около 10 000 видов птиц, из них в нашей стране можно встретить более 800. Разные виды пернатых могут очень сильно отличаться друг от друга по размерам, окраске, голосу, поведению.</p>
+            
+            <div class="comparison">
+                <div class="fact-box comparison-item">
+                    <h3>Желтоголовый королёк</h3>
+                    <p>Самая маленькая птица России</p>
+                    <p>Длина: до 10 см</p>
+                    <p>Вес: 4-7 грамм</p>
+                </div>
+                <div class="fact-box comparison-item">
+                    <h3>Чёрный гриф</h3>
+                    <p>Один из крупнейших пернатых</p>
+                    <p>Размах крыльев: до 2.5 м</p>
+                    <p>Вес: до 12 кг</p>
+                </div>
+            </div>
+            
+            <p class="slide-content">Этот курс поможет вам сделать первые шаги в удивительном мире орнитологии.</p>
+        </div>
+        
+        <!-- Слайд 2: Начало наблюдений -->
+        <div class="slide" style="background-color: #e6f3ec;">
+            <h1 class="slide-title">С чего начать?</h1>
+            <p class="slide-content">Познание мира птиц можно начать с похода в ближайший парк или просто с исследования жителей своего сада. Первые шаги даются тяжелее всего — так трудно разобраться в огромном разнообразии птиц, научиться определять их!</p>
+            
+            <div class="tip-box">
+                <p>Со временем интерес к птицам может расшириться до изучения всех видов родного края. А там недалеко уже до ближних и дальних путешествий, изучения самых разнообразных уголков нашей планеты.</p>
+            </div>
+            
+            <img src="https://images.unsplash.com/photo-1585435557343-3b92c03c9a8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Наблюдение за птицами" class="slide-image">
+        </div>
+        
+        <!-- Слайд 3: Основы определения птиц -->
+        <div class="slide" style="background-color: #f0f8ff;">
+            <h1 class="slide-title">Как научиться определять птиц?</h1>
+            <p class="slide-content">Учиться определять птиц мы начинаем в раннем детстве. Маленьким детям не составляет труда показать голубя, воробья, аиста, утку или дятла. К сожалению, многие взрослые остаются на том же уровне.</p>
+            
+            <div class="note-box">
+                <p>Начинающие любители птиц с удивлением сталкиваются с тем разнообразием видов, которые живут вокруг нас. «Синички» разделяются на лазоревок, московок, больших синиц и других, «воробушки» — на полевых и домовых воробьев.</p>
+            </div>
+            
+            <p class="slide-content">А еще, оказывается, есть славки, камышевки, пеночки, пересмешки, коньки, пищухи!.. С чего же начать любителю птиц?</p>
+        </div>
+        
+        <!-- Слайд 4: Систематика птиц -->
+        <div class="slide" style="background-color: #fffaf0;">
+            <h1 class="slide-title">Систематика птиц</h1>
+            <p class="slide-content">Все знания человека о птицах систематизированы. Знать, хотя бы в общем виде, классификацию птиц очень полезно — это позволяет понять различия между ними и облегчает их определение.</p>
+            
+            <div class="slide-list">
+                <li><span class="key-point">Соколообразные</span> - хищные птицы (кроме сов) с острым загнутым клювом, острыми когтями, часто парящие в воздухе</li>
+                <li><span class="key-point">Ржанкообразные</span> - кулики с длинными ногами и клювами для кормления на мелководье</li>
+                <li><span class="key-point">Стрижеобразные</span> - птицы с длинными узкими крыльями для быстрого полета</li>
+                <li><span class="key-point">Воробьинообразные</span> - самая многочисленная группа, включающая более половины всех видов птиц</li>
+            </div>
+            
+            <div class="tip-box">
+                <p>Внешний облик любого живого существа тесно связан с его образом жизни. Например, у куликов длинный клюв и ноги для кормления на мелководье, а у стрижей - обтекаемое тело и длинные крылья для быстрого полета.</p>
+            </div>
+        </div>
+        
+        <!-- Слайд 5: Определители птиц -->
+        <div class="slide" style="background-color: #f5f5f5;">
+            <h1 class="slide-title">Определители птиц</h1>
+            <p class="slide-content">Основными помощниками современного любителя птиц становятся различные справочники-определители, как в бумажном формате, так и в электронном.</p>
+            
+            <div class="note-box">
+                <p>Чтобы пользоваться определителем, необходимо изучить названия отдельных частей тела птиц. В помощь начинающим любителям птиц практически в каждом определителе публикуется схема с указанием названий частей тела.</p>
+            </div>
+            
+            <div class="warning-box">
+                <p>Определителей выпускается много: хороших и разных. Качественные рисунки предпочтительнее фотографий. В хорошем определителе обязательно указаны ареалы птиц, даны подробные описания и самое главное — подчеркнуты различия схожих видов.</p>
+            </div>
+        </div>
+        
+        <!-- Слайд 6: Технические средства -->
+        <div class="slide" style="background-color: #e6f7ff;">
+            <h1 class="slide-title">Технические средства</h1>
+            <p class="slide-content">Фотоаппарат, видеокамера и диктофон позволяют переложить труд по определению птицы на специалистов. Кроме того, снимки или записи голоса могут послужить доказательством встречи с редкими видами птиц.</p>
+            
+            <div class="tip-box">
+                <p>Но если вы хотите стать действительно хорошим знатоком птиц, нарабатывайте собственный опыт определения, а помощь специалистов используйте только для подтверждения сомнительных встреч.</p>
+            </div>
+            
+            <div class="bird-features">
+                <div class="feature fact-box">
+                    <h3>Бинокль</h3>
+                    <p>8×42 - универсальный вариант</p>
+                </div>
+                <div class="feature fact-box">
+                    <h3>Фотоаппарат</h3>
+                    <p>С хорошим зумом для документирования</p>
+                </div>
+                <div class="feature fact-box">
+                    <h3>Диктофон</h3>
+                    <p>Для записи голосов птиц</p>
+                </div>
+                <div class="feature fact-box">
+                    <h3>Полевой дневник</h3>
+                    <p>Для записей наблюдений</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Слайд 7: Стратегия наблюдений -->
+        <div class="slide" style="background-color: #f0fff0;">
+            <h1 class="slide-title">Стратегия наблюдений</h1>
+            <p class="slide-content">Зная, какие виды птиц могут встречаться в вашем регионе, вы сразу же «отсекаете» лишние. Например, в Московской области встречается всего три вида трясогузок (белая, желтая и желтоголовая).</p>
+            
+            <div class="note-box">
+                <p>Не менее важно понимать статус нахождения птицы в вашем регионе: является ли птица гнездящейся, пролетной, зимующей или очень редко залетает в интересующий вас регион.</p>
+            </div>
+            
+            <div class="slide-list">
+                <li><span class="key-point">Гнездящийся</span> - кулик-воробей в Мурманской области</li>
+                <li><span class="key-point">Пролетный</span> - кулик-воробей в Краснодарском крае</li>
+                <li><span class="key-point">Зимующий</span> - свиристель в средней полосе</li>
+                <li><span class="key-point">Залетный</span> - фламинго в Подмосковье</li>
+            </div>
+        </div>
+        
+        <!-- Слайд 8: Определение по внешнему виду -->
+        <div class="slide" style="background-color: #fff0f5;">
+            <h1 class="slide-title">Определение по внешнему виду</h1>
+            <p class="slide-content">При определении птиц в природе важно рассмотреть размеры, форму и силуэт птицы, окраску и особенности оперения.</p>
+            
+            <div class="slide-list">
+                <li><span class="key-point">Размер:</span> Сравните с известными птицами (воробей, голубь, ворона)</li>
+                <li><span class="key-point">Силуэт:</span> Форма тела, крыльев, хвоста в полете</li>
+                <li><span class="key-point">Окраска:</span> Цвет оперения, рисунок, особые отметины</li>
+                <li><span class="key-point">Особые приметы:</span> Хохолки, удлиненные перья, форма клюва</li>
+            </div>
+            
+            <div class="tip-box">
+                <p>Определение размеров птиц в природе не столь легко, как кажется. Например, мелкий самец тетеревятника ненамного больше крупной самки перепелятника.</p>
+            </div>
+        </div>
+        
+        <!-- Слайд 9: Силуэты в полете -->
+        <div class="slide" style="background-color: #f8f8ff;">
+            <h1 class="slide-title">Силуэты в полете</h1>
+            <p class="slide-content">При определении птиц в полете очень важно рассмотреть их силуэт на фоне неба. Разные группы птиц имеют характерные силуэты:</p>
+            
+            <div class="comparison">
+                <div class="fact-box comparison-item">
+                    <h3>Цапля</h3>
+                    <p>S-образно сложенная шея</p>
+                    <p>Длинные вытянутые ноги</p>
+                    <p>Медленные взмахи крыльев</p>
+                </div>
+                <div class="fact-box comparison-item">
+                    <h3>Журавль</h3>
+                    <p>Прямая шея</p>
+                    <p>Ноги вытянуты назад</p>
+                    <p>Парящий полет</p>
+                </div>
+            </div>
+            
+            <div class="note-box">
+                <p>По силуэту хорошо определяются хищные птицы. Например, коршуны имеют удлиненные крылья и относительно длинный хвост с треугольной вырезкой на конце.</p>
+            </div>
+        </div>
+        
+        <!-- Слайд 10: Характерные признаки -->
+        <div class="slide" style="background-color: #e6f3ec;">
+            <h1 class="slide-title">Характерные признаки птиц</h1>
+            <p class="slide-content">Если есть возможность рассмотреть птицу с близкого расстояния, стоит обратить внимание на форму и размеры отдельных частей тела:</p>
+            
+            <div class="slide-list">
+                <li><span class="key-point">Длинные ноги</span> - цапли, аисты, журавли</li>
+                <li><span class="key-point">Длинный прямой клюв</span> - кулики</li>
+                <li><span class="key-point">Клюв, загнутый вниз</span> - каравайка, кроншнепы</li>
+                <li><span class="key-point">Клюв, загнутый вверх</span> - шилоклювка</li>
+                <li><span class="key-point">Мощный клюв</span> - дубонос, клест</li>
+                <li><span class="key-point">Длинный хвост</span> - ополовник, сорока</li>
+                <li><span class="key-point">Хохол</span> - чибис, удод, свиристель</li>
+            </div>
+        </div>
+        
+        <!-- Слайд 11: Окраска птиц -->
+        <div class="slide" style="background-color: #f0f8ff;">
+            <h1 class="slide-title">Окраска птиц</h1>
+            <p class="slide-content">Основной признак любой птицы — окраска. При описании птиц оперируют следующими признаками:</p>
+            
+            <div class="slide-list">
+                <li>Цвет тела, груди, спины</li>
+                <li>Окраска надхвостья и подхвостья</li>
+                <li>Окраска зеркальца на крыле (у уток)</li>
+                <li>Цвет кроющих перьев крыла</li>
+                <li>Окраска хвоста</li>
+            </div>
+            
+            <div class="note-box">
+                <p>Некоторые птицы настолько похожи, что отличить их по окраске сможет только опытный специалист.</p>
+            </div>
+        </div>
+        
+        <!-- Слайд 12: Вариации окраски -->
+        <div class="slide" style="background-color: #fffaf0;">
+            <h1 class="slide-title">Вариации окраски</h1>
+            <p class="slide-content">Определение птиц по окраске усложняется тем фактом, что цвет оперения может зависеть от множества факторов:</p>
+            
+            <div class="comparison">
+                <div class="fact-box comparison-item">
+                    <h3>Половой диморфизм</h3>
+                    <p>Самцы часто ярче самок</p>
+                    <p>Примеры: снегирь, утки</p>
+                </div>
+                <div class="fact-box comparison-item">
+                    <h3>Сезонные изменения</h3>
+                    <p>Линька перед зимой</p>
+                    <p>Примеры: поганки, чайки</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Слайд 13: Поведенческие признаки -->
+        <div class="slide" style="background-color: #f5f5f5;">
+            <h1 class="slide-title">Поведенческие признаки</h1>
+            <p class="slide-content">При определении птиц важно учитывать особенности поведения:</p>
+            
+            <div class="slide-list">
+                <li><span class="key-point">Задранный хвост</span> - крапивник, утка-савка</li>
+                <li><span class="key-point">Подергивание хвостом</span> - трясогузки, коньки</li>
+                <li><span class="key-point">Волнообразный полет</span> - дятлы</li>
+                <li><span class="key-point">Парящий полет</span> - хищные птицы</li>
+                <li><span class="key-point">Быстрый полет</span> - стрижи, ласточки</li>
+                <li><span class="key-point">Ныряние</span> - нырковые утки, гагары</li>
+            </div>
+        </div>
+        
+        <!-- Слайд 14: Определение по голосу -->
+        <div class="slide" style="background-color: #e6f7ff;">
+            <h1 class="slide-title">Определение по голосу</h1>
+            <p class="slide-content">Звуки имеют важнейшее значение в жизни птиц. Чаще всего мы слышим именно голос птицы, а уже потом находим ее глазами.</p>
+            
+            <div class="note-box">
+                <p>Многие виды птиц трудно отличить в поле, но по песням и позывкам они отличаются замечательно.</p>
+            </div>
+            
+            <div class="slide-list">
+                <li><span class="key-point">Пение</span> - для привлечения самок</li>
+                <li><span class="key-point">Позывки</span> - для общения</li>
+                <li><span class="key-point">Сигналы тревоги</span> - предупреждение</li>
+            </div>
+        </div>
+        
+        <!-- Слайд 15: Особенности голосовой активности -->
+        <div class="slide" style="background-color: #f0fff0;">
+            <h1 class="slide-title">Особенности голосовой активности</h1>
+            <p class="slide-content">Голосовая активность птиц зависит от многих факторов:</p>
+            
+            <div class="slide-list">
+                <li><span class="key-point">Время года</span> - большинство поет весной</li>
+                <li><span class="key-point">Время суток</span> - максимум утром</li>
+                <li><span class="key-point">Погода</span> - в дождь активность снижается</li>
+                <li><span class="key-point">Наличие конкурентов</span> - при высокой плотности поют чаще</li>
+            </div>
+        </div>
+        
+        <!-- Слайд 16: Пересмешники -->
+        <div class="slide" style="background-color: #fff0f5;">
+            <h1 class="slide-title">Пересмешники</h1>
+            <p class="slide-content">Некоторые виды птиц включают в свою песню голоса других видов, порой необычайно мастерски. Такие птицы называются пересмешниками.</p>
+            
+            <div class="warning-box">
+                <p>Определить таких птиц по голосу иногда затруднительно. Например, скворец хорошо имитирует голоса других птиц.</p>
+            </div>
+            
+            <div class="slide-list">
+                <li><span class="key-point">Скворец</span> - имитирует многих птиц</li>
+                <li><span class="key-point">Зеленая пересмешка</span> - включает чужие звуки</li>
+                <li><span class="key-point">Сойка</span> - подражает хищникам</li>
+                <li><span class="key-point">Варакушка</span> - включает чужие элементы</li>
+            </div>
+        </div>
+        
+        <!-- Слайд 17: Запоминание голосов -->
+        <div class="slide" style="background-color: #f8f8ff;">
+            <h1 class="slide-title">Как запоминать голоса птиц?</h1>
+            <p class="slide-content">Для запоминания голосов птиц полезны следующие методы:</p>
+            
+            <div class="slide-list">
+                <li><span class="key-point">Ассоциации</span> - сравнение с известными звуками</li>
+                <li><span class="key-point">Ритм и мелодия</span> - запоминание рисунка песни</li>
+                <li><span class="key-point">Записи</span> - прослушивание аудио материалов</li>
+                <li><span class="key-point">Практика</span> - попытки определить каждую услышанную птицу</li>
+            </div>
+            
+            <div class="qr-code">
+                <p>Ресурсы с голосами птиц:</p>
+                <p>xeno-canto.org</p>
+                <p>birdnet.cornell.edu</p>
+            </div>
+        </div>
+        
+        <!-- Слайд 18: Технические средства для записи -->
+        <div class="slide" style="background-color: #e6f3ec;">
+            <h1 class="slide-title">Технические средства для записи</h1>
+            <p class="slide-content">Техническая оснащенность наблюдателя сильно увеличивает эффективность его работы:</p>
+            
+            <div class="slide-list">
+                <li><span class="key-point">Диктофон</span> - для записи голосов</li>
+                <li><span class="key-point">Плеер</span> - для сравнения с записями</li>
+                <li><span class="key-point">Мобильные приложения</span> - для определения</li>
+            </div>
+        </div>
+        
+        <!-- Слайд 19: Практические советы -->
+        <div class="slide" style="background-color: #f0f8ff;">
+            <h1 class="slide-title">Практические советы</h1>
+            
+            <div class="slide-list">
+                <li><span class="key-point">Ведите дневник</span> - записывайте наблюдения</li>
+                <li><span class="key-point">Фотографируйте</span> - даже плохие снимки могут помочь</li>
+                <li><span class="key-point">Записывайте голоса</span> - используйте смартфон</li>
+                <li><span class="key-point">Начинайте с простого</span> - сначала учите распространенные виды</li>
+                <li><span class="key-point">Общайтесь</span> - с опытными орнитологами</li>
+                <li><span class="key-point">Участвуйте в учетах</span> - это отличная практика</li>
+            </div>
+        </div>
+        
+        <!-- Слайд 20: Заключение -->
+        <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1444464666168-49d633b86797?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'); color: white;">
+            <h1 class="slide-title" style="color: white;">В добрый путь в мир птиц!</h1>
+            
+            <div class="fact-box" style="background-color: rgba(255,255,255,0.2); color: white;">
+                <p>Этот курс дал вам основы для начала наблюдений за птицами. Теперь вы знаете:</p>
+                <ul style="text-align: left; margin-left: 20px; margin-top: 10px;">
+                    <li>Как выбирать оборудование</li>
+                    <li>Как пользоваться определителями</li>
+                    <li>На какие признаки обращать внимание</li>
+                    <li>Как определять птиц</li>
+                    <li>Как избежать ошибок</li>
+                </ul>
+            </div>
+            
+            <p class="slide-content" style="margin-top: 20px; color: white;">Наблюдение за птицами - это увлекательное хобби, которое может стать делом всей жизни.</p>
+            
+            <p class="slide-content" style="margin-top: 15px; font-size: 1.2rem; color: white;">Возьмите бинокль и отправляйтесь в ближайший парк - мир птиц ждет вас!</p>
+        </div>
+        
+        <div class="controls">
+            <button class="control-btn" id="prevBtn">Назад</button>
+            <button class="control-btn" id="nextBtn">Вперёд</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.querySelector('.slide-counter');
+            
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+            
+            // Инициализация
+            updateSlideCounter();
+            
+            // Показать текущий слайд
+            function showSlide(n) {
+                slides.forEach(slide => {
+                    slide.classList.remove('active', 'prev');
+                });
+                
+                currentSlide = (n + totalSlides) % totalSlides;
+                
+                slides[currentSlide].classList.add('active');
+                
+                // Обновляем счётчик
+                updateSlideCounter();
+            }
+            
+            // Обновить счётчик слайдов
+            function updateSlideCounter() {
+                slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+            }
+            
+            // Следующий слайд
+            function nextSlide() {
+                // Добавляем класс 'prev' к текущему слайду перед переходом
+                slides[currentSlide].classList.add('prev');
+                showSlide(currentSlide + 1);
+            }
+            
+            // Предыдущий слайд
+            function prevSlide() {
+                showSlide(currentSlide - 1);
+            }
+            
+            // Кнопки
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+            
+            // Клавиши клавиатуры
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            });
+            
+            // Swipe для мобильных устройств
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            document.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            }, false);
+            
+            document.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, false);
+            
+            function handleSwipe() {
+                if (touchEndX < touchStartX - 50) {
+                    nextSlide();
+                }
+                if (touchEndX > touchStartX + 50) {
+                    prevSlide();
+                }
+            }
+            
+            // Оптимизация для мобильных устройств
+            if ('ontouchstart' in window) {
+                // Уменьшаем задержки для touch-устройств
+                document.documentElement.style.setProperty('--transition-time', '0.3s');
+                
+                // Предотвращаем масштабирование
+                document.addEventListener('touchmove', function(e) {
+                    if (e.scale !== 1) { e.preventDefault(); }
+                }, { passive: false });
+            }
+        });
+    </script>
+</body>
+</html>
